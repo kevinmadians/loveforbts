@@ -5,6 +5,7 @@ import { ReunionCountdown } from "@/app/components/features/reunion-countdown"
 import { HomepageCTA } from "@/app/components/features/HomepageCTA"
 import { BTSEras } from "@/app/components/features/BTSEras"
 import { ARMYLove } from "@/app/components/features/ARMYLove"
+import { MembersCTA } from "@/app/components/features/MembersCTA"
 
 export default function Home() {
   return (
@@ -26,6 +27,9 @@ export default function Home() {
       <div id="countdown">
         <ReunionCountdown />
       </div>
+      
+      {/* Members CTA Section */}
+      <MembersCTA />
       
       {/* BTS Eras Section */}
       <BTSEras />

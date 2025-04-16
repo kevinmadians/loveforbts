@@ -64,6 +64,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - For React 19 compatibility issues with packages like react-day-picker, use --legacy-peer-deps or downgrade to React 18.2.0
 - When renaming React component functions, maintain backward compatibility with additional named exports
 - In Next.js sitemap.ts files, use 'as const' type assertion for changeFrequency values to match the expected literal types in MetadataRoute.Sitemap
+- In Next.js projects with aliased imports (@/hooks, @/components), make sure to maintain proper directory structures and use re-export files to maintain backward compatibility when refactoring.
 
 ## Message Box UI Pattern
 - Container: White background, black border (2px), rounded corners (16px)
@@ -306,3 +307,25 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Implemented workaround for client component pages using separate metadata.ts files
   - [X] Added lesson about client components and metadata in Next.js
   - [X] Added lesson about sitemap.ts changeFrequency type constraints
+
+[X] Fix incorrect import paths and hook locations
+  - [X] Created proper hook files in the root hooks directory
+  - [X] Added re-export from app/components/ui/use-toast.ts to hooks/use-toast.ts
+  - [X] Added re-export from app/components/ui/use-mobile.tsx to hooks/use-mobile.ts
+  - [X] Fixed import path issue in toaster.tsx and sidebar.tsx
+  - [X] Created lib/utils.ts re-export to standardize utility imports
+  - [X] Corrected inconsistent import paths without changing functionality
+  - [X] Preserved all existing functionality without changing any layouts
+  - [X] Added lesson about proper path aliasing and hook organization
+  - [X] Updated .cursorrules to document the completed cleanup
+
+[X] Fix reunion countdown progress bar and add Members CTA
+  - [X] Updated reunion-countdown.tsx to fix progress bar direction
+  - [X] Modified calculations for days, hours, minutes, seconds progress to decrease over time
+  - [X] Created a new MembersCTA component with grid layout of member photos
+  - [X] Added proper styling with BTS official yellow color
+  - [X] Added new MembersCTA component to homepage between countdown and BTS Musical Journey
+  - [X] Ensured responsive design for all screen sizes
+  - [X] Used consistent styling with the rest of the site
+  - [X] Verified that all components render correctly in proper order
+  - [X] Updated .cursorrules file to document the changes

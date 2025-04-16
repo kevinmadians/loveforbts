@@ -3,7 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import { ArmyCardGenerator } from "@/app/components/features/army-card-generator"
-import { HeartHandshake } from "lucide-react"
+import { HeartHandshake, Book, MessageCircle } from "lucide-react"
 import { CTAContainer } from "@/app/components/ui/cta-container"
 import { PageCTA } from "@/app/components/ui/page-cta"
 
@@ -26,6 +26,33 @@ export default function ArmyCardPage() {
       <div className="bg-white rounded-2xl border-2 border-black p-6 mb-8">
         <ArmyCardGenerator />
       </div>
+      
+      {/* Cross-promotion CTAs */}
+      <CTAContainer title="Explore More" className="mt-12 border-t-2 border-gray-100 pt-12 mb-12">
+        <PageCTA
+          title="Share Your ARMY Story"
+          description="Tell your journey with BTS and connect with fellow fans through heartfelt stories."
+          href="/army-story"
+          icon={Book}
+          color="purple"
+        />
+        
+        <PageCTA
+          title="Message Board"
+          description="Share your thoughts and read messages from ARMY around the world."
+          href="/messages"
+          icon={MessageCircle}
+          color="green"
+        />
+        
+        <PageCTA
+          title="Support Our Community"
+          description="Help us keep this space thriving with your support. Every contribution strengthens our BTS fan community."
+          href="/support"
+          icon={HeartHandshake}
+          color="yellow"
+        />
+      </CTAContainer>
       
       {/* Support CTA */}
       <div className="my-12 bg-gradient-to-r from-purple-100 to-[#fff9cc] rounded-xl border-2 border-black p-6">

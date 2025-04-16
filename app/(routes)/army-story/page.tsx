@@ -221,6 +221,14 @@ export default function ArmyStoryPage() {
       {/* Cross-promotion CTAs */}
       <CTAContainer title="Explore More" className="mt-16 border-t-2 border-gray-100 pt-12">
         <PageCTA
+          title="Create Your ARMY Card"
+          description="Generate a personalized ARMY ID card to showcase your bias and fan credentials."
+          href="/army-card"
+          icon={IdCard}
+          color="purple"
+        />
+        
+        <PageCTA
           title="Message Board"
           description="Share your thoughts and read messages from ARMY around the world."
           href="/messages"
@@ -229,19 +237,11 @@ export default function ArmyStoryPage() {
         />
         
         <PageCTA
-          title="Create Your ARMY Card"
-          description="Generate a personalized ARMY ID card to showcase your bias and fan credentials."
-          href="/army-card"
-          icon={IdCard}
-          color="blue"
-        />
-        
-        <PageCTA
           title="Support ARMY Community"
           description="Help us keep this space thriving with your support. Every contribution strengthens our BTS fan community."
           href="/support"
           icon={HeartHandshake}
-          color="purple"
+          color="yellow"
         />
       </CTAContainer>
     </div>

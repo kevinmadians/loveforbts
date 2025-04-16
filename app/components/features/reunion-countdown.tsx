@@ -6,10 +6,13 @@ import { updateHeartClicks, getHeartClicks } from "../../lib/supabase-service"
 import { toast } from "sonner"
 import Image from "next/image"
 import { getCurrentDateInKST, formatKSTDate } from "../../lib/timezone-utils"
+import { Calendar } from "lucide-react"
 
 type CountdownUnit = {
   value: number
   label: string
+  max: number
+  progress: number
 }
 
 export function ReunionCountdown() {
@@ -115,10 +118,10 @@ export function ReunionCountdown() {
       // If we're on the server or haven't hydrated yet, return static values
       if (!isClient) {
         return [
-          { value: 0, label: "Days" },
-          { value: 0, label: "Hours" },
-          { value: 0, label: "Minutes" },
-          { value: 0, label: "Seconds" }
+          { value: 0, label: "Days", max: 365, progress: 0 },
+          { value: 0, label: "Hours", max: 24, progress: 0 },
+          { value: 0, label: "Minutes", max: 60, progress: 0 },
+          { value: 0, label: "Seconds", max: 60, progress: 0 }
         ]
       }
       
@@ -129,19 +132,29 @@ export function ReunionCountdown() {
       const minutes = Math.floor((totalSeconds % 3600) / 60)
       const seconds = Math.floor(totalSeconds % 60)
       
+      // Calculate progress percentages for each unit
+      // For days, we're using the total days from now to reunion
+      const maxDays = 548 // Approximately 18 months total service time
+      const daysProgress = 100 - ((days / maxDays) * 100)
+      
+      // For other units, we use their natural cycles
+      const hoursProgress = 100 - ((hours / 24) * 100)
+      const minutesProgress = 100 - ((minutes / 60) * 100)
+      const secondsProgress = 100 - ((seconds / 60) * 100)
+      
       return [
-        { value: days, label: "Days" },
-        { value: hours, label: "Hours" },
-        { value: minutes, label: "Minutes" },
-        { value: seconds, label: "Seconds" }
+        { value: days, label: "Days", max: maxDays, progress: daysProgress },
+        { value: hours, label: "Hours", max: 24, progress: hoursProgress },
+        { value: minutes, label: "Minutes", max: 60, progress: minutesProgress },
+        { value: seconds, label: "Seconds", max: 60, progress: secondsProgress }
       ]
     } catch (error) {
       console.error("Error calculating countdown:", error)
       return [
-        { value: 0, label: "Days" },
-        { value: 0, label: "Hours" },
-        { value: 0, label: "Minutes" },
-        { value: 0, label: "Seconds" }
+        { value: 0, label: "Days", max: 365, progress: 0 },
+        { value: 0, label: "Hours", max: 24, progress: 0 },
+        { value: 0, label: "Minutes", max: 60, progress: 0 },
+        { value: 0, label: "Seconds", max: 60, progress: 0 }
       ]
     }
   }, [currentDate, reunionDate, isClient])
@@ -170,6 +183,11 @@ export function ReunionCountdown() {
   // Format number with commas for thousands
   const formatNumber = (num: number) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+
+  // Get countdown gradient color based on progress
+  const getProgressGradient = (progress: number) => {
+    return `linear-gradient(to right, #9F7AEA, #3182CE ${progress}%, rgba(0, 0, 0, 0.1) ${progress}%)`
   }
 
   return (
@@ -217,7 +235,7 @@ export function ReunionCountdown() {
           <span className="font-bold text-purple-600">{formattedReunionDate}</span>
         </h3>
         
-        {/* Animated progress bar - client-side only rendering for the actual progress */}
+        {/* Main progress bar - client-side only rendering for the actual progress */}
         <div
           className="h-4 bg-black/10 rounded-full mb-6 overflow-hidden border border-black/10"
           role="progressbar"
@@ -288,6 +306,15 @@ export function ReunionCountdown() {
                   {unit.label}
                 </span>
                 
+                {/* Unit-specific progress bar */}
+                <div 
+                  className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-[#FFDE00] to-purple-500 transition-all duration-500"
+                  style={{ 
+                    width: `${unit.progress}%`,
+                    opacity: 0.7
+                  }}
+                ></div>
+                
                 {/* Hover effect */}
                 <div 
                   className="absolute inset-0 bg-purple-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
@@ -300,6 +327,52 @@ export function ReunionCountdown() {
         
         {/* Interactive heart button and stats */}
         <div className="mt-8 text-center">
+          {/* Add to Calendar Button */}
+          <button
+            onClick={() => {
+              // Create calendar event data
+              const eventTitle = "BTS Full Group Reunion"
+              const eventDescription = "All BTS members have completed their military service and are reunited as a full group."
+              const eventLocation = "South Korea"
+              const eventStartDate = "2025-06-21T00:00:00+09:00"
+              const eventEndDate = "2025-06-22T00:00:00+09:00"
+              
+              // Generate .ics file content
+              const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+SUMMARY:${eventTitle}
+DESCRIPTION:${eventDescription}
+LOCATION:${eventLocation}
+DTSTART:${new Date(eventStartDate).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')}
+DTEND:${new Date(eventEndDate).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')}
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR`;
+              
+              // Create the download
+              const element = document.createElement('a');
+              element.setAttribute('href', 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent));
+              element.setAttribute('download', 'bts-reunion.ics');
+              element.style.display = 'none';
+              document.body.appendChild(element);
+              element.click();
+              document.body.removeChild(element);
+              
+              toast.success("BTS Reunion date added to your calendar!", {
+                duration: 3000,
+                position: "bottom-center"
+              });
+            }}
+            className="inline-flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-2 px-4 rounded-lg mb-4 hover:bg-purple-900 transition-colors black-han-sans border-2 border-[#FFDE00]"
+            aria-label="Add BTS reunion to your calendar"
+          >
+            <Calendar size={18} />
+            <span>Add to Calendar</span>
+          </button>
+          
           <p className="text-base sm:text-lg font-medium mb-4">Show your support for BTS!</p>
           
           <div>

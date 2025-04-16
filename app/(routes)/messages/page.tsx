@@ -221,19 +221,19 @@ export default function MessagesPage() {
       {/* Cross-promotion CTAs */}
       <CTAContainer title="Explore More" className="mt-16 border-t-2 border-gray-100 pt-12">
         <PageCTA
-          title="Share Your ARMY Story"
-          description="Tell your journey with BTS and connect with fellow fans through heartfelt stories."
-          href="/army-story"
-          icon={Book}
-          color="purple"
-        />
-        
-        <PageCTA
           title="Create Your ARMY Card"
           description="Generate a personalized ARMY ID card to showcase your bias and fan credentials."
           href="/army-card"
           icon={IdCard}
-          color="blue"
+          color="purple"
+        />
+        
+        <PageCTA
+          title="Share Your ARMY Story"
+          description="Tell your journey with BTS and connect with fellow fans through heartfelt stories."
+          href="/army-story"
+          icon={Book}
+          color="green"
         />
         
         <PageCTA

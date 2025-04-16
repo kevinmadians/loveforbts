@@ -53,9 +53,13 @@ export default function DiscographyPage() {
     <div className="w-full max-w-6xl mx-auto">
       {/* Hero Section */}
       <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-8 text-center black-han-sans">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 text-center black-han-sans">
           BTS Discography
         </h1>
+        <p className="text-lg mb-6 text-center max-w-3xl mx-auto">
+          Explore BTS's musical journey from debut to present, including studio albums, mini-albums, singles, and compilations. 
+          Discover their evolution across multiple languages and genres as they went from Korean newcomers to global superstars.
+        </p>
       </div>
       
       {/* Filters Section */}

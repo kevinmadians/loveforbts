@@ -88,19 +88,37 @@ export function HomepageCTA() {
       
       {/* Featured / Spotlight Section */}
       <div className="mt-12 bg-gradient-to-r from-purple-100 to-[#fff9cc] rounded-2xl border-2 border-black p-6 relative overflow-hidden">
-        <div className="relative z-10 max-w-2xl">
-          <h3 className="text-2xl font-bold mb-4 black-han-sans">
-            The Countdown Has Begun!
-          </h3>
-          <p className="text-lg mb-6">
-            BTS will reunite after their military service is complete. Join our community to track important dates, celebrate milestones, and prepare for their return together.
-          </p>
-          <Link 
-            href="/#countdown" 
-            className="bg-black text-[#FFDE00] py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
-          >
-            See the Countdown
-          </Link>
+        <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+          <div className="flex-shrink-0 md:w-1/3">
+            <div className="relative">
+              <div className="absolute -top-2 -left-2 w-full h-full bg-black rounded-2xl"></div>
+              <div className="relative border-2 border-black bg-white p-4 rounded-2xl shadow-lg">
+                <div className="aspect-square relative overflow-hidden rounded-xl">
+                  <Image 
+                    src="/images/bts-group-reunion.jpg" 
+                    alt="BTS Group Reunion" 
+                    width={400} 
+                    height={400}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="md:w-2/3">
+            <h3 className="text-2xl font-bold mb-4 black-han-sans">
+              The Countdown Has Begun!
+            </h3>
+            <p className="text-lg mb-6">
+              BTS will reunite after their military service is complete. Join our community to track important dates, celebrate milestones, and prepare for their return together.
+            </p>
+            <Link 
+              href="/#countdown" 
+              className="bg-black text-[#FFDE00] py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
+            >
+              See the Countdown
+            </Link>
+          </div>
         </div>
         
         {/* Decorative Elements */}
@@ -140,4 +158,4 @@ export function HomepageCTA() {
       </div>
     </div>
   )
-} 
+}

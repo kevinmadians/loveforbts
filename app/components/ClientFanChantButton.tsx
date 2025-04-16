@@ -15,7 +15,7 @@ export function ClientFanChantButton() {
     if (showNotification) {
       timer = setTimeout(() => {
         setShowNotification(false);
-      }, 5000);
+      }, 9000);
     }
     return () => {
       if (timer) clearTimeout(timer);
