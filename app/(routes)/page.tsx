@@ -15,7 +15,7 @@ export default function Home() {
       {/* Welcome and Hero Section */}
       <section className="mb-2 md:mb-4 pt-0 mt-0">
         <h1 className="text-4xl md:text-6xl font-bold mb-2 md:mb-4 text-center black-han-sans">
-          Welcome to Love for BTS
+          Welcome to <span className="text-purple-600">Love for BTS</span>
         </h1>
         <p className="text-lg text-center mb-4 md:mb-8 max-w-3xl mx-auto">
           A fan community celebrating our seven favorite stars and connecting ARMY from around the world as we await their return.

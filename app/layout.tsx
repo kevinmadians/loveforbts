@@ -8,6 +8,7 @@ import { NotificationProvider } from "./lib/notification-context"
 import { Navbar } from "./components/layout/navbar"
 import { Footer } from "./components/layout/footer"
 import { FanChantButtonWrapper } from "./components/FanChantButtonWrapper"
+import GoogleAnalytics from "./lib/google-analytics"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -95,6 +96,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
       </head>
       <body className={`${inter.variable} font-sans min-h-screen bg-white`}>
+        {/* Google Analytics */}
+        <GoogleAnalytics />
+        
         <NotificationProvider>
           <ArmyStoryProvider>
             <MessageProvider>
