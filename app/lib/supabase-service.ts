@@ -311,4 +311,82 @@ export async function getHeartClicks(): Promise<{ today: number, total: number }
 export function setupMessageCleanup(): void {
   // No need to run a cleanup function anymore
   // This function is kept for compatibility but doesn't do anything
+}
+
+/**
+ * Get messages with pagination
+ */
+export async function getPaginatedMessages(page: number = 1, pageSize: number = 10): Promise<{ data: SupabaseMessage[], total: number }> {
+  try {
+    // Get total count first
+    const { count, error: countError } = await supabase
+      .from('messages')
+      .select('*', { count: 'exact', head: true });
+    
+    if (countError) {
+      console.error('Error counting messages:', countError);
+      return { data: [], total: 0 };
+    }
+    
+    // Calculate pagination
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    
+    // Get paginated data
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    
+    if (error) {
+      console.error('Error fetching paginated messages:', error);
+      return { data: [], total: 0 };
+    }
+    
+    return { data: data || [], total: count || 0 };
+  } catch (error) {
+    console.error('Error in getPaginatedMessages:', error);
+    return { data: [], total: 0 };
+  }
+}
+
+/**
+ * Search messages by content, name, or country
+ */
+export async function searchMessages(query: string, page: number = 1, pageSize: number = 10): Promise<{ data: SupabaseMessage[], total: number }> {
+  try {
+    // Get total count first
+    const { count, error: countError } = await supabase
+      .from('messages')
+      .select('*', { count: 'exact', head: true })
+      .or(`message.ilike.%${query}%,name.ilike.%${query}%,country.ilike.%${query}%`);
+    
+    if (countError) {
+      console.error('Error counting search results:', countError);
+      return { data: [], total: 0 };
+    }
+    
+    // Calculate pagination
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    
+    // Get paginated data
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .or(`message.ilike.%${query}%,name.ilike.%${query}%,country.ilike.%${query}%`)
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    
+    if (error) {
+      console.error('Error searching messages:', error);
+      return { data: [], total: 0 };
+    }
+    
+    return { data: data || [], total: count || 0 };
+  } catch (error) {
+    console.error('Error in searchMessages:', error);
+    return { data: [], total: 0 };
+  }
 } 

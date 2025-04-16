@@ -41,7 +41,6 @@ const nextConfig = {
   },
   experimental: {
     webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
   // Customize webpack config to ensure compatibility with React 19

@@ -51,6 +51,8 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - For Next.js page layouts, set specific max-width constraints instead of relying on container classes to maintain consistent widths across different screen sizes.
 - For image creation in canvas contexts, use `document.createElement('img')` instead of `new Image()` to avoid TypeScript errors.
 - Use Unicode escape sequences like `\u201C` (left double quote) and `\u201D` (right double quote) for special characters in TypeScript/JavaScript to avoid syntax and linter errors.
+- When deploying to hosting platforms like Netlify or Vercel, ensure that all necessary environment variables (such as Supabase credentials) are configured in the platform's environment settings.
+- For mobile-friendly spacing in Next.js layouts, use responsive padding classes (e.g., pt-0 md:pt-8) to reduce space between navbar and content on small screens while maintaining appropriate spacing on larger displays.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries
@@ -160,3 +162,64 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Updated .gitignore to exclude unnecessary files from repository
   - [X] Added detailed deployment instructions for Vercel
   - [X] Updated .cursorrules to document the task
+
+[X] Fix heading spacing between navbar and page headings on mobile
+  - [X] Identified spacing issues in hero sections across multiple pages
+  - [X] Updated homepage hero section with responsive spacing classes
+  - [X] Updated members page hero section with improved mobile spacing
+  - [X] Updated discography page to reduce spacing on mobile screens
+  - [X] Fixed member detail pages spacing with the MemberDetailLayout component
+  - [X] Updated ARMY Story page with consistent mobile-friendly spacing
+  - [X] Updated Messages page with improved spacing on mobile
+  - [X] Updated ARMY Card generator page with responsive spacing
+  - [X] Updated About page hero section with mobile-friendly spacing
+  - [X] Standardized spacing pattern across all pages with responsive classes
+  - [X] Added lesson about environment variables for Netlify/Vercel deployments
+
+[X] Fix layout spacing for improved mobile visibility
+  - [X] Identified the root cause in the main layout files
+  - [X] Updated app/layout.tsx to remove top padding on mobile (pt-0 md:pt-8)
+  - [X] Updated app/(routes)/layout.tsx to reduce excessive padding (from py-12 to pt-0 md:pt-4)
+  - [X] Maintained proper spacing on desktop/tablet while tightening mobile layout
+  - [X] Added a lesson about using responsive padding classes for mobile-friendly layouts
+  - [X] Updated .cursorrules to document the completed task
+
+[X] Fix mobile navbar hamburger menu
+  - [X] Modified navbar to show the mobile menu as an overlay instead of pushing content down
+  - [X] Added a fixed position to the mobile menu
+  - [X] Added a semi-transparent backdrop to improve visibility and user experience
+  - [X] Made the backdrop clickable to dismiss the menu
+  - [X] Added proper styling (border, shadow) to match the site design
+  - [X] Updated .cursorrules to document the completed task
+
+[X] Improve Share Your Story button on mobile
+  - [X] Replaced full-width button design with a fixed-width centered button
+  - [X] Changed the button color to the official BTS yellow (#FFDE00) with black text for better visibility
+  - [X] Added proper borders and shadow for enhanced visual appearance
+  - [X] Added proper spacing and margin to the container
+  - [X] Ensured the button stands out on mobile screens while maintaining the site's design language
+  - [X] Updated .cursorrules to document the completed task
+
+[X] Redesign Messages Page to match ARMY Story page style
+  - [X] Removed comment form from messages page and created new /messages/create route
+  - [X] Created MessageCard component with similar styling to StoryCard
+  - [X] Implemented pagination with 10 messages per page
+  - [X] Added enhanced search functionality with live search
+  - [X] Updated message-context.tsx to support pagination and searching
+  - [X] Added paginated message retrieval and search to supabase-service.ts
+  - [X] Created featured message highlight for the first message on each page
+  - [X] Added "Write a Message" button linking to message creation page
+  - [X] Created dedicated message creation page with form and guidelines
+  - [X] Implemented redirect to messages page after successful submission
+  - [X] Ensured consistent styling with the ARMY Story page
+  - [X] Added empty and loading states for better user experience
+
+[X] Fix card rotation and add cross-page CTAs
+  - [X] Removed rotation effect from highlighted cards on both /messages and /army-story pages
+  - [X] Created reusable PageCTA component for cross-page promotion
+  - [X] Created CTAContainer component to organize multiple CTAs
+  - [X] Added CTAs to /messages page for ARMY Story and ARMY Card features
+  - [X] Added CTAs to /army-story page for Message Board and ARMY Card features
+  - [X] Ensured responsive design with appropriate grid layouts for all screen sizes
+  - [X] Used consistent styling with the color theme of each feature
+  - [X] Placed CTAs at the bottom of each page with clear section separation

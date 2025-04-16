@@ -15,8 +15,8 @@ export function MemberDetailLayout({ member, customHeading, customDescription }:
   return (
     <div className="w-full max-w-6xl mx-auto">
       {/* Custom Heading and Description */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 black-han-sans">
+      <div className="mb-4 md:mb-8 text-center pt-0 mt-0">
+        <h1 className="text-3xl md:text-4xl font-bold mb-2 md:mb-4 black-han-sans">
           {customHeading || member.name}
         </h1>
         {customDescription && (

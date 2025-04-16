@@ -54,9 +54,11 @@ export function StoryDetail({ story }: StoryDetailProps) {
   return (
     <>
       {/* Main Heading */}
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold mb-3 black-han-sans">ARMY Stories</h1>
-        <p className="text-lg mb-4 max-w-2xl mx-auto">
+      <div className="text-center mb-4 md:mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
+          ARMY Stories
+        </h1>
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
           This is a story shared by a fellow ARMY. These personal experiences reflect the diverse global BTS community. 💜
         </p>
         
@@ -120,7 +122,7 @@ export function StoryDetail({ story }: StoryDetailProps) {
         </div>
         
         {/* Sharing Options */}
-        <div className="mt-8 pt-4 border-t border-gray-200">
+        <div className="mt-6 md:mt-8 pt-4 border-t border-gray-200">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="text-sm md:text-base font-medium text-gray-700">
               Shared with 💜 by {story.name}

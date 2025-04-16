@@ -71,29 +71,37 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Overlay style */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-2 pb-4">
-            <div className="flex flex-col space-y-2">
-              <MobileNavLink href="/members" active={pathname.startsWith("/members")} icon={<Users size={18} />}>
-                Members
-              </MobileNavLink>
-              <MobileNavLink href="/discography" active={pathname.startsWith("/discography")} icon={<Disc size={18} />}>
-                Discography
-              </MobileNavLink>
-              <MobileNavLink href="/messages" active={pathname === "/messages"} icon={<MessageSquare size={18} />}>
-                Messages
-              </MobileNavLink>
-              <MobileNavLink href="/army-story" active={pathname.startsWith("/army-story")} icon={<Heart size={18} />}>
-                Story
-              </MobileNavLink>
-              <MobileNavLink href="/army-card" active={pathname === "/army-card"} icon={<IdCard size={18} />}>
-                ARMY Card
-              </MobileNavLink>
-              <MobileNavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
-                About
-              </MobileNavLink>
+          <div className="fixed inset-x-0 top-16 z-50 md:hidden">
+            <div className="bg-[#FFDE00] border-b-2 border-x-2 border-black shadow-lg py-2 pb-4">
+              <div className="flex flex-col space-y-2">
+                <MobileNavLink href="/members" active={pathname.startsWith("/members")} icon={<Users size={18} />}>
+                  Members
+                </MobileNavLink>
+                <MobileNavLink href="/discography" active={pathname.startsWith("/discography")} icon={<Disc size={18} />}>
+                  Discography
+                </MobileNavLink>
+                <MobileNavLink href="/messages" active={pathname === "/messages"} icon={<MessageSquare size={18} />}>
+                  Messages
+                </MobileNavLink>
+                <MobileNavLink href="/army-story" active={pathname.startsWith("/army-story")} icon={<Heart size={18} />}>
+                  Story
+                </MobileNavLink>
+                <MobileNavLink href="/army-card" active={pathname === "/army-card"} icon={<IdCard size={18} />}>
+                  ARMY Card
+                </MobileNavLink>
+                <MobileNavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
+                  About
+                </MobileNavLink>
+              </div>
             </div>
+            {/* Overlay backdrop to capture clicks outside the menu */}
+            <div 
+              className="fixed inset-0 bg-black/20 -z-10"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
           </div>
         )}
       </div>

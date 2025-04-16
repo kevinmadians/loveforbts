@@ -15,12 +15,12 @@ export default function MembersDirectoryPage() {
       <ARMYLove />
       
       {/* Hero Section */}
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center black-han-sans">
+      <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
           BTS Members
         </h1>
         
-        <p className="text-lg mb-8 text-center max-w-3xl mx-auto">
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
           Meet the seven incredible talents that make up BTS. Each member brings their unique skills, 
           personality, and artistic vision to create the global phenomenon we know and love.
         </p>
@@ -52,7 +52,7 @@ export default function MembersDirectoryPage() {
         </div>
       </div>
       
-      {/* BTS Eras */}
+      {/* BTS Eras Timeline */}
       <BTSEras />
       
       {/* BTS Milestones */}

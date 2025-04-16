@@ -52,12 +52,12 @@ export default function DiscographyPage() {
   return (
     <div className="w-full max-w-6xl mx-auto">
       {/* Hero Section */}
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center black-han-sans">
+      <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
           BTS Discography
         </h1>
         
-        <p className="text-lg mb-8 text-center max-w-3xl mx-auto">
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
           Explore BTS's musical journey from their debut to their latest releases. Discover the evolution of 
           their sound and artistry through their diverse album catalog.
         </p>

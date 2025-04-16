@@ -9,7 +9,7 @@ export default function RoutesLayout({
 }) {
   return (
     <>
-      <main className="w-full py-12 flex flex-col items-center justify-center">
+      <main className="w-full py-4 md:py-8 flex flex-col items-center justify-center">
         {children}
       </main>
     </>

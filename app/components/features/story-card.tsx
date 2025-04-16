@@ -53,7 +53,7 @@ export function StoryCard({ story, isHighlighted = false, className = "" }: Stor
       className={`
         block bg-white border-2 border-black rounded-xl overflow-hidden transition-all hover:shadow-lg
         ${isHighlighted 
-          ? "transform-gpu md:scale-105 shadow-md md:-rotate-1"
+          ? "transform-gpu md:scale-105 shadow-md"
           : "hover:-translate-y-1"
         }
         ${className}

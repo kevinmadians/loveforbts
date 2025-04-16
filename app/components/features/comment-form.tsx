@@ -5,7 +5,7 @@ import { z } from "zod"
 import { CountrySelect } from "../ui/country-select"
 import { useMessages } from "@/app/lib/message-context"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 // Define form schema using Zod
@@ -24,7 +24,9 @@ interface CommentFormProps {
 export function CommentForm({ onSubmit }: CommentFormProps) {
   const { addMessage } = useMessages()
   const pathname = usePathname()
+  const router = useRouter()
   const isMessagesPage = pathname === "/messages"
+  const isCreateMessagePage = pathname === "/messages/create"
   
   const [formData, setFormData] = useState<CommentFormData>({
     name: "",
@@ -116,13 +118,28 @@ export function CommentForm({ onSubmit }: CommentFormProps) {
         })
         
         setSubmitSuccess(true)
-        setTimeout(() => setSubmitSuccess(false), 5000)
         
-        // Show success toast (updated message)
-        toast.success("Message sent successfully!", {
-          description: "Your message has been added to our community wall.",
-          duration: 4000,
-        })
+        // If we're on the create page, redirect to the messages page
+        if (isCreateMessagePage) {
+          toast.success("Message sent successfully!", {
+            description: "Redirecting to messages page...",
+            duration: 2000,
+          })
+          
+          // Delay redirect slightly to allow toast to be seen
+          setTimeout(() => {
+            router.push("/messages")
+          }, 1500)
+        } else {
+          // Otherwise just show the success state
+          setTimeout(() => setSubmitSuccess(false), 5000)
+          
+          // Show success toast (updated message)
+          toast.success("Message sent successfully!", {
+            description: "Your message has been added to our community wall.",
+            duration: 4000,
+          })
+        }
       } else {
         toast.error("Failed to send message", {
           description: "Please try again later.",
@@ -140,7 +157,9 @@ export function CommentForm({ onSubmit }: CommentFormProps) {
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-black comment-form">
-      <h2 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-center black-han-sans">Leave a Message for BTS</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-center black-han-sans">
+        {isCreateMessagePage ? "Share Your Message" : "Leave a Message for BTS"}
+      </h2>
 
       {submitSuccess && (
         <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">

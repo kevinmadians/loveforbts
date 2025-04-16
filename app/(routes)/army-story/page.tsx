@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { StoryCard } from '@/app/components/features/story-card'
 import { StorySearch } from '@/app/components/features/story-search'
 import { useArmyStories } from '@/app/lib/army-story-context'
-import { PenSquare } from 'lucide-react'
+import { PenSquare, MessageCircle, IdCard } from 'lucide-react'
 import { type SupabaseArmyStory } from '@/app/lib/supabase'
 import { Pagination } from '@/app/components/ui/pagination'
+import { CTAContainer } from "@/app/components/ui/cta-container"
+import { PageCTA } from "@/app/components/ui/page-cta"
 
 export default function ArmyStoryPage() {
   const { 
@@ -92,25 +94,30 @@ export default function ArmyStoryPage() {
   const showLoading = isLoading && localLoading
   
   return (
-    <div className="container mx-auto px-4 py-6">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-3 black-han-sans">ARMY Stories</h1>
-        <p className="text-lg mb-6 max-w-2xl mx-auto">
-          Read how fans became part of the BTS ARMY and share your own journey. Every ARMY has a story!
-        </p>
+    <div className="w-full max-w-6xl mx-auto">
+      {/* Hero Section */}
+      <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
+          ARMY Stories
+        </h1>
         
-        <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-          <StorySearch onSearch={handleSearch} className="w-full md:max-w-md" />
-          
-          <Link 
-            href="/army-story/create" 
-            className="flex items-center justify-center px-5 py-3 bg-black text-[#FFDE00] rounded-lg transition-colors hover:bg-purple-900 black-han-sans w-full md:w-auto"
-          >
-            <PenSquare size={18} className="mr-2" />
-            <span>Share Your Story</span>
-          </Link>
-        </div>
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
+          Share your journey as an ARMY and read heartwarming stories from fellow fans around the world. 
+          Every ARMY has a unique story - what's yours?
+        </p>
+      </div>
+      
+      {/* Submit Story Form */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+        <StorySearch onSearch={handleSearch} className="w-full md:max-w-md" />
+        
+        <Link 
+          href="/army-story/create" 
+          className="flex items-center justify-center px-5 py-3 bg-[#FFDE00] text-black border-2 border-black rounded-lg transition-colors hover:bg-[#E5C700] black-han-sans mx-auto md:mx-0 min-w-[200px] shadow-md"
+        >
+          <PenSquare size={18} className="mr-2" />
+          <span>Share Your Story</span>
+        </Link>
       </div>
       
       {/* Search Results Indicator */}
@@ -210,6 +217,25 @@ export default function ArmyStoryPage() {
           </div>
         </>
       )}
+      
+      {/* Cross-promotion CTAs */}
+      <CTAContainer title="Explore More" className="mt-16 border-t-2 border-gray-100 pt-12">
+        <PageCTA
+          title="Message Board"
+          description="Share your thoughts and read messages from ARMY around the world."
+          href="/messages"
+          icon={MessageCircle}
+          color="green"
+        />
+        
+        <PageCTA
+          title="Create Your ARMY Card"
+          description="Generate a personalized ARMY ID card to showcase your bias and fan credentials."
+          href="/army-card"
+          icon={IdCard}
+          color="blue"
+        />
+      </CTAContainer>
     </div>
   )
 } 

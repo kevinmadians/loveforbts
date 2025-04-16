@@ -5,17 +5,23 @@ import { ArmyCardGenerator } from "@/app/components/features/army-card-generator
 
 export default function ArmyCardPage() {
   return (
-    <main className="flex flex-col w-full max-w-5xl px-2 py-4 md:px-4 gap-8">
-      <div className="bg-white rounded-2xl border-2 border-black p-6 mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-6 black-han-sans">
+    <div className="w-full max-w-6xl mx-auto">
+      {/* Hero Section */}
+      <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
           Create Your ARMY Card
         </h1>
-        <p className="text-lg text-center mb-8">
-          Create your personalized ARMY card, select your bias, and share your love for BTS with the world!
-        </p>
         
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
+          Generate a personalized ARMY membership card with your name, bias, and other details. 
+          Download and share your card with fellow fans!
+        </p>
+      </div>
+      
+      {/* Card Generator Section */}
+      <div className="bg-white rounded-2xl border-2 border-black p-6 mb-8">
         <ArmyCardGenerator />
       </div>
-    </main>
+    </div>
   )
 } 

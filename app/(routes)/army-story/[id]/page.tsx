@@ -45,7 +45,7 @@ export default function StoryDetailPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 pt-0 md:pt-4">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
           <p className="mt-2">Loading story...</p>
@@ -57,7 +57,7 @@ export default function StoryDetailPage() {
   // Error state
   if (error || !story) {
     return (
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 pt-0 md:pt-4">
         <div className="bg-white rounded-2xl border-2 border-black p-6 shadow-md text-center">
           <h1 className="text-2xl font-bold mb-4 black-han-sans">Story Not Found</h1>
           <p className="mb-6 text-gray-600">{error || 'This story could not be found.'}</p>
@@ -74,7 +74,7 @@ export default function StoryDetailPage() {
   
   // Render story detail
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 pt-0 md:pt-4">
       <StoryDetail story={story} />
     </div>
   )

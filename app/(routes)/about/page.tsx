@@ -3,11 +3,19 @@ import Link from "next/link"
 
 export default function AboutPage() {
   return (
-    <div className="w-full max-w-4xl">
-      <h1 className="text-4xl md:text-6xl font-bold mb-8 text-black text-center black-han-sans">
-        About Our Community
-      </h1>
-
+    <div className="w-full max-w-6xl mx-auto">
+      {/* Hero Section */}
+      <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
+          About Us
+        </h1>
+        
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
+          Learn about our fan site dedicated to BTS and connecting ARMY from around the world.
+          Created with love by fans, for fans.
+        </p>
+      </div>
+      
       <div className="bg-white rounded-lg shadow-xl overflow-hidden border-2 border-black p-6 mb-8">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="md:w-1/2">
