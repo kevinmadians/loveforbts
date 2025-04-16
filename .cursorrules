@@ -1,0 +1,162 @@
+# Instructions
+
+During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section so you will not make the same mistake again.
+
+Use the `.cursorrules` file as a Scratchpad to organize your thoughts. When receiving a new task, review the content, clear old tasks if necessary, explain the current task, and plan steps to complete it. Use todo markers to indicate progress:
+[X] Task 1
+[ ] Task 2
+
+Update progress in the Scratchpad when finishing subtasks or milestones to maintain a big picture of the task.
+
+# Tools
+
+All tools are in python3. For batch processing, consult the python files and write your own script if needed.
+
+## Screenshot Verification
+```bash
+venv/bin/python3 tools/screenshot_utils.py URL [--output OUTPUT] [--width WIDTH] [--height HEIGHT]
+venv/bin/python3 tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic} --image path/to/screenshot.png
+```
+
+## LLM
+```bash
+venv/bin/python3 ./tools/llm_api.py --prompt "What is the capital of France?" --provider "anthropic"
+```
+
+Supported providers:
+- OpenAI (default, model: gpt-4o)
+- Azure OpenAI (model: configured via AZURE_OPENAI_MODEL_DEPLOYMENT)
+- DeepSeek (model: deepseek-chat)
+- Anthropic (model: claude-3-sonnet-20240229)
+- Gemini (model: gemini-pro)
+- Local LLM (model: Qwen/Qwen2.5-32B-Instruct-AWQ)
+
+## Web browser
+```bash
+venv/bin/python3 ./tools/web_scraper.py --max-concurrent 3 URL1 URL2 URL3
+```
+
+## Search engine
+```bash
+venv/bin/python3 ./tools/search_engine.py "your search keywords"
+```
+
+# Lessons
+
+## User Specified Lessons
+- Use python venv in ./venv for development. Check for 'uv' with `which uv`. If available, use `uv pip install`; otherwise, use `pip`.
+- For git multiline commit messages, write to a file and use `git commit -F <filename>`. Include "[Cursor] " in commit messages and PR titles.
+- The official BTS brand color is #FFDE00 (yellow) and should be used for branded elements instead of purple.
+- When customizing Sonner library toast notifications, use standard properties in ExternalToast type and avoid non-standard properties like 'descriptionStyle'.
+- For Next.js page layouts, set specific max-width constraints instead of relying on container classes to maintain consistent widths across different screen sizes.
+- For image creation in canvas contexts, use `document.createElement('img')` instead of `new Image()` to avoid TypeScript errors.
+- Use Unicode escape sequences like `\u201C` (left double quote) and `\u201D` (right double quote) for special characters in TypeScript/JavaScript to avoid syntax and linter errors.
+
+## Cursor learned
+- Handle UTF-8 encoding properly for international search queries
+- Use 'seaborn-v0_8' instead of 'seaborn' due to recent version changes
+- Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
+- In Next.js, `dynamic` imports with `{ ssr: false }` cannot be used directly in Server Components. Create a client component wrapper with "use client" that handles the dynamic import.
+- For React 19 compatibility issues with packages like react-day-picker, use --legacy-peer-deps or downgrade to React 18.2.0
+- When renaming React component functions, maintain backward compatibility with additional named exports
+
+## Message Box UI Pattern
+- Container: White background, black border (2px), rounded corners (16px)
+- Heading: "Black Han Sans" font, ~32px, black, center-aligned
+- Form Layout: Vertical stack with ~16-20px spacing
+- Input Fields: Black border (2px), white background, rounded corners (8px), padding (12px)
+- Submit Button: Black background, yellow text (#FFDE00), purple heart emoji, full width, rounded (8px)
+- Labels: Bold, black text, slightly larger than input text
+- Textarea: Taller than regular inputs, same styling pattern
+
+# Scratchpad
+
+[X] Fix homepage container width issues to match screenshot
+  - Identified issue in app/(routes)/layout.tsx using container class with auto margins
+  - Updated app/(routes)/layout.tsx to use full width without auto margins
+  - Added max-width constraint to app/(routes)/page.tsx to maintain proper component width
+  - Added lesson about Next.js page layouts to maintain consistent widths
+
+[X] Fix member additional content container width
+  - Identified issue with AdditionalContent components not matching MemberDetailLayout width
+  - Updated all seven member AdditionalContent components with w-full max-w-6xl mx-auto wrapper
+  - Maintained all existing content and functionality while fixing the container width
+  - Ensured consistent width across all member detail pages
+
+[X] Create ARMY Card Generator feature
+  - [X] Create new route and page component for /army-card
+  - [X] Design card generator form with:
+    - [X] Name input
+    - [X] Bias selection dropdown (from members data)
+    - [X] Country selection with flags
+    - [X] Custom message input
+  - [X] Implement card generation using HTML canvas
+  - [X] Fix member image rendering in downloaded cards
+  - [X] Add country flags to the card
+  - [X] Add loveforbts.com branding to the card
+  - [X] Improve text and layout styling:
+    - [X] Remove ARMY Since field to create more space
+    - [X] Increase font sizes for better readability
+    - [X] Add yellow bullet points for visual interest
+    - [X] Make message section more prominent
+    - [X] Make loveforbts.com text subtle and uppercase
+  - [X] Add download functionality to save as image
+  - [X] Add social media sharing options
+  - [X] Update navbar to include new Army Card link
+  - [X] Ensure mobile-friendly design (9:16 ratio)
+  - [X] Match existing site styling (fonts, colors, UI patterns)
+
+[X] Add pet information to member detail pages
+  - [X] Created engaging section about Jungkook's Doberman Bam in JungkookAdditionalContent.tsx
+  - [X] Created detailed section about V's Pomeranian Yeontan (Tannie) in VAdditionalContent.tsx
+  - [X] Added image placeholders for both pets to be filled in later
+  - [X] Included personality traits, memorable moments, and the special bond with their owners
+  - [X] Maintained consistent styling with the rest of the site (cards, colors, layout)
+
+[X] Modify ARMY Card Generator
+  - [X] Remove custom message field and its result from preview and downloaded image
+  - [X] Add ARMY Since field with year selection options from 2013-2025
+  - [X] Update form validation schema to include required armySince field
+  - [X] Update card preview and download image to show ARMY Since instead of custom message
+  - [X] Maintain consistent styling with bullet points and layout
+  - [X] Update .cursorrules to document the task
+
+[X] Create policy pages and update footer
+  - [X] Create Privacy Policy page with standard legal sections and site-specific content
+  - [X] Create Terms of Use page with appropriate legal sections for a fan site
+  - [X] Create Cookie Policy page with information about cookie types and usage
+  - [X] Create Contact page with a contact form and site information
+  - [X] Update footer by removing newsletter section and adding links to new pages
+  - [X] Maintain consistent styling across all new pages (fonts, colors, layout)
+  - [X] Ensure responsive design for all pages
+  - [X] Update .cursorrules to document the task
+
+[X] Add CTAs to homepage for main site features
+  - [X] Created reusable CTA card component with consistent styling
+  - [X] Added CTAs for Members, ARMY Story, Messages, and ARMY Card pages
+  - [X] Implemented visually engaging UI with icons, color coding, and hover effects
+  - [X] Added welcome section with site introduction
+  - [X] Added spotlight/featured section for the reunion countdown
+  - [X] Integrated BTS Eras component for additional content value
+  - [X] Maintained consistent styling with the rest of the site (colors, typography, borders)
+  - [X] Ensured responsive design across all viewport sizes
+  - [X] Added direct navigation link to the countdown section
+  - [X] Positioned CTAs at the bottom of the homepage after the comment form
+  - [X] Updated .cursorrules to document the task
+
+[X] Fix duplicate floating buttons and standardize notifications
+  - [X] Modified ARMYLove component to remove the floating purple heart button completely
+  - [X] Kept only the particle effect functionality in ARMYLove
+  - [X] Removed showButton prop as it's no longer needed
+  - [X] Verified that the FanChantButton already uses the proper toast notification style
+  - [X] Confirmed both homepage and members page still have the particle effects without duplicate buttons
+  - [X] Updated .cursorrules to document the task
+
+[X] Prepare for GitHub and Vercel deployment
+  - [X] Created professional README.md with detailed project information
+  - [X] Added tech stack badges and improved formatting for better presentation
+  - [X] Updated Next.js configuration to include remote image domains
+  - [X] Added webpack configuration for React 19 compatibility
+  - [X] Updated .gitignore to exclude unnecessary files from repository
+  - [X] Added detailed deployment instructions for Vercel
+  - [X] Updated .cursorrules to document the task
