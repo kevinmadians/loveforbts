@@ -53,66 +53,59 @@ export default function DiscographyPage() {
     <div className="w-full max-w-6xl mx-auto">
       {/* Hero Section */}
       <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-8 text-center black-han-sans">
           BTS Discography
         </h1>
-        
-        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
-          Explore BTS's musical journey from their debut to their latest releases. Discover the evolution of 
-          their sound and artistry through their diverse album catalog.
-        </p>
       </div>
       
       {/* Filters Section */}
-      <div className="bg-white rounded-2xl border-2 border-black p-6 mb-8">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold black-han-sans mb-4 sm:mb-0">
-            Filter Albums
-          </h2>
+      <div className="bg-white rounded-xl border-2 border-black p-4 mb-6">
+        <h2 className="text-xl font-bold black-han-sans mb-3 text-center">
+          Filter Albums
+        </h2>
+        
+        <div className="flex flex-wrap gap-2 justify-center">
+          <select 
+            className="bg-white border-2 border-black rounded-lg px-3 py-2 text-sm flex-1 min-w-[120px] max-w-[180px]"
+            value={filterYear || ""}
+            onChange={(e) => setFilterYear(e.target.value ? parseInt(e.target.value) : null)}
+            aria-label="Filter by year"
+          >
+            <option value="">All Years</option>
+            {years.map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
           
-          <div className="flex flex-wrap gap-3">
-            <select 
-              className="bg-white border-2 border-black rounded-lg px-3 py-2 text-sm"
-              value={filterYear || ""}
-              onChange={(e) => setFilterYear(e.target.value ? parseInt(e.target.value) : null)}
-              aria-label="Filter by year"
-            >
-              <option value="">All Years</option>
-              {years.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-            
-            <select 
-              className="bg-white border-2 border-black rounded-lg px-3 py-2 text-sm"
-              value={filterType || ""}
-              onChange={(e) => setFilterType(e.target.value || null)}
-              aria-label="Filter by album type"
-            >
-              <option value="">All Types</option>
-              {albumTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-            
-            <button 
-              onClick={resetFilters}
-              className="bg-black text-white rounded-lg px-4 py-2 text-sm"
-              aria-label="Reset all filters"
-            >
-              Reset
-            </button>
-          </div>
+          <select 
+            className="bg-white border-2 border-black rounded-lg px-3 py-2 text-sm flex-1 min-w-[120px] max-w-[180px]"
+            value={filterType || ""}
+            onChange={(e) => setFilterType(e.target.value || null)}
+            aria-label="Filter by album type"
+          >
+            <option value="">All Types</option>
+            {albumTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+          
+          <button 
+            onClick={resetFilters}
+            className="bg-black text-white rounded-lg px-4 py-2 text-sm"
+            aria-label="Reset all filters"
+          >
+            Reset
+          </button>
         </div>
         
         {/* Album count display */}
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-sm">
+        <div className="mt-3 text-center">
+          <p className="text-sm font-medium">
             <span className="font-bold">{filteredAlbums.length}</span> {filteredAlbums.length === 1 ? 'album' : 'albums'} found
           </p>
           
           {(filterYear || filterType) && (
-            <p className="text-sm">
+            <p className="text-xs text-gray-600 mt-1">
               Showing: {filterYear ? `Year: ${filterYear}` : ''} 
               {filterYear && filterType ? ' | ' : ''}
               {filterType ? `Type: ${filterType}` : ''}

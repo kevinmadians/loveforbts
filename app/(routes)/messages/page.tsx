@@ -5,7 +5,7 @@ import Link from "next/link"
 import { MessageCard } from "@/app/components/features/message-card"
 import { EnhancedMessageSearch } from "@/app/components/features/enhanced-message-search"
 import { useMessages } from "@/app/lib/message-context"
-import { PenSquare, Book, IdCard } from "lucide-react"
+import { PenSquare, Book, IdCard, HeartHandshake } from "lucide-react"
 import { Pagination } from "@/app/components/ui/pagination"
 import { type Message } from "@/app/lib/message-context"
 import { CTAContainer } from "@/app/components/ui/cta-container"
@@ -234,6 +234,14 @@ export default function MessagesPage() {
           href="/army-card"
           icon={IdCard}
           color="blue"
+        />
+        
+        <PageCTA
+          title="Support Our Community"
+          description="Your contribution helps keep this fan space alive and growing. Join fellow ARMYs in supporting this community."
+          href="/support"
+          icon={HeartHandshake}
+          color="yellow"
         />
       </CTAContainer>
     </div>

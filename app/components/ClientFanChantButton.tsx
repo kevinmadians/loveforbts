@@ -56,14 +56,26 @@ export function ClientFanChantButton() {
               setShowNotification(true);
             })
             .catch(error => {
-              console.error("Error playing audio:", error);
-              toast.error("Failed to play fan chant. Please try again.");
+              // Log error in development, just show user-friendly message in production
+              if (process.env.NODE_ENV === 'development') {
+                // Using a type assertion to avoid TS errors
+                const err = error as Error;
+                toast.error(`Failed to play fan chant: ${err.message}`);
+              } else {
+                toast.error("Failed to play fan chant. Please try again.");
+              }
             });
         }
       }
     } catch (error) {
-      console.error("Error handling audio:", error);
-      toast.error("Something went wrong. Please try again.");
+      // Log error in development, just show user-friendly message in production
+      if (process.env.NODE_ENV === 'development') {
+        // Using a type assertion to avoid TS errors
+        const err = error as Error;
+        toast.error(`Something went wrong: ${err.message}`);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   }, [isPlaying]);
 

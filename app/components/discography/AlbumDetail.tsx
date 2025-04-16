@@ -88,18 +88,26 @@ export function AlbumDetail({ albumWithNav }: AlbumDetailProps) {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      {/* Back to discography link */}
-      <div className="mb-6">
-        <Link 
-          href="/discography" 
-          className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-lg border-2 border-black hover:bg-gray-100 transition-colors"
-        >
-          <ArrowLeft size={18} />
-          <span>Back to Discography</span>
-        </Link>
+      {/* Album Hero Section */}
+      <div className="mb-6 md:mb-10 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 text-center black-han-sans">
+          {title}
+        </h1>
+        
+        <div className="flex flex-wrap gap-2 justify-center mb-4">
+          <span className={`text-sm font-medium px-3 py-1 rounded-full ${typeBadgeColor}`}>
+            {type}
+          </span>
+          <span className={`text-sm font-medium px-3 py-1 rounded-full ${languageBadgeColor}`}>
+            {language}
+          </span>
+          <span className="text-sm font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-800">
+            {new Date(releaseDate).getFullYear()}
+          </span>
+        </div>
       </div>
       
-      {/* Album Hero Section */}
+      {/* Album Cover and Details */}
       <div className="bg-white rounded-2xl border-2 border-black overflow-hidden mb-8">
         <div className="flex flex-col md:flex-row">
           {/* Album Cover */}
@@ -117,26 +125,13 @@ export function AlbumDetail({ albumWithNav }: AlbumDetailProps) {
           
           {/* Album Info */}
           <div className="md:w-1/2 p-6">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 black-han-sans">
-              {title}
-            </h1>
+            <h2 className="text-2xl font-bold mb-3 black-han-sans">
+              Album Details
+            </h2>
             
             <p className="text-lg text-gray-600 mb-4">Released on {formattedReleaseDate}</p>
             
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className={`text-sm font-medium px-3 py-1 rounded-full ${typeBadgeColor}`}>
-                {type}
-              </span>
-              <span className={`text-sm font-medium px-3 py-1 rounded-full ${languageBadgeColor}`}>
-                {language}
-              </span>
-              <span className="text-sm font-medium px-3 py-1 rounded-full bg-gray-100 text-gray-800">
-                {new Date(releaseDate).getFullYear()}
-              </span>
-            </div>
-            
             <div className="mb-6">
-              <h2 className="text-xl font-bold mb-2">About This Album</h2>
               <p className="text-gray-700">{description}</p>
             </div>
             
@@ -145,7 +140,7 @@ export function AlbumDetail({ albumWithNav }: AlbumDetailProps) {
                 href={spotifyLink} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#1DB954] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors mb-4"
+                className="inline-flex items-center gap-2 bg-[#1DB954] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors mb-4 w-full justify-center"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
@@ -205,7 +200,7 @@ export function AlbumDetail({ albumWithNav }: AlbumDetailProps) {
       {/* Album Navigation */}
       <div className="bg-purple-100 rounded-2xl border-2 border-black overflow-hidden p-6 mb-8">
         <h2 className="text-xl font-bold mb-4 text-center black-han-sans">
-          Continue Exploring BTS Discography
+          Continue Your BTS Journey
         </h2>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -216,11 +211,20 @@ export function AlbumDetail({ albumWithNav }: AlbumDetailProps) {
             >
               <ChevronLeft size={20} />
               <div>
-                <div className="text-sm text-gray-600">Previous Album</div>
+                <div className="text-xs text-gray-600">Previous Album</div>
                 <div className="font-bold">{previousAlbum.title}</div>
+                <div className="text-xs">{new Date(previousAlbum.releaseDate).getFullYear()}</div>
               </div>
             </Link>
           )}
+          
+          <Link
+            href="/discography"
+            className="flex-none bg-black text-white border-2 border-black rounded-xl p-4 hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+          >
+            <List size={18} />
+            <span>All Albums</span>
+          </Link>
           
           {nextAlbum && (
             <Link
@@ -228,13 +232,25 @@ export function AlbumDetail({ albumWithNav }: AlbumDetailProps) {
               className="flex-1 bg-white border-2 border-black rounded-xl p-4 hover:bg-gray-50 transition-colors flex items-center justify-between gap-3"
             >
               <div className="text-right">
-                <div className="text-sm text-gray-600">Next Album</div>
+                <div className="text-xs text-gray-600">Next Album</div>
                 <div className="font-bold">{nextAlbum.title}</div>
+                <div className="text-xs">{new Date(nextAlbum.releaseDate).getFullYear()}</div>
               </div>
               <ChevronRight size={20} />
             </Link>
           )}
         </div>
+      </div>
+      
+      {/* Back to Discography - moved to here */}
+      <div className="mb-8 flex justify-center">
+        <Link 
+          href="/discography" 
+          className="inline-flex items-center px-5 py-2 bg-purple-100 text-purple-800 font-medium rounded-full hover:bg-purple-200 transition-colors"
+        >
+          <ArrowLeft size={18} className="mr-2" />
+          Back to Discography
+        </Link>
       </div>
       
       {/* Back to Top */}

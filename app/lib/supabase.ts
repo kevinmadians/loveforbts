@@ -34,4 +34,13 @@ export type SupabaseArmyStory = {
   army_since: number
   created_at: string
   updated_at: string
+}
+
+export type SupabaseStoryComment = {
+  id: number
+  story_id: string
+  name: string
+  country: string
+  message: string
+  created_at: string
 } 

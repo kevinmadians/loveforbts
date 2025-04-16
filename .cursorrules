@@ -53,6 +53,8 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - Use Unicode escape sequences like `\u201C` (left double quote) and `\u201D` (right double quote) for special characters in TypeScript/JavaScript to avoid syntax and linter errors.
 - When deploying to hosting platforms like Netlify or Vercel, ensure that all necessary environment variables (such as Supabase credentials) are configured in the platform's environment settings.
 - For mobile-friendly spacing in Next.js layouts, use responsive padding classes (e.g., pt-0 md:pt-8) to reduce space between navbar and content on small screens while maintaining appropriate spacing on larger displays.
+- Avoid using console.error in production code; instead, use conditional logging based on NODE_ENV to show detailed errors only in development.
+- When implementing SEO in Next.js, metadata cannot be exported from client components (with "use client" directive). For client pages, create a separate metadata.ts file in the same directory.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries
@@ -61,6 +63,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - In Next.js, `dynamic` imports with `{ ssr: false }` cannot be used directly in Server Components. Create a client component wrapper with "use client" that handles the dynamic import.
 - For React 19 compatibility issues with packages like react-day-picker, use --legacy-peer-deps or downgrade to React 18.2.0
 - When renaming React component functions, maintain backward compatibility with additional named exports
+- In Next.js sitemap.ts files, use 'as const' type assertion for changeFrequency values to match the expected literal types in MetadataRoute.Sitemap
 
 ## Message Box UI Pattern
 - Container: White background, black border (2px), rounded corners (16px)
@@ -223,3 +226,83 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Ensured responsive design with appropriate grid layouts for all screen sizes
   - [X] Used consistent styling with the color theme of each feature
   - [X] Placed CTAs at the bottom of each page with clear section separation
+
+[X] Improve discography page and album detail pages
+  - [X] Made filter section on discography page more compact and mobile-friendly
+  - [X] Centered filter controls and made them more evenly sized
+  - [X] Added responsive layout to ensure visibility on all devices
+  - [X] Improved album detail page with proper heading structure matching other pages
+  - [X] Enhanced album detail UI with a clear, engaging header section
+  - [X] Improved back button styling for consistency with other pages
+  - [X] Added first-sentence summary to header for better engagement
+  - [X] Enhanced album navigation with year information and "All Albums" link
+  - [X] Improved Spotify button with full-width design for better visibility
+  - [X] Updated page heading sizes and spacing to match site convention
+  - [X] Styled back button to match purple rounded button from ARMY Stories page
+  - [X] Removed description paragraph from discography page to maintain consistent style
+
+[X] Clean up code and fix remaining issues
+  - [X] Removed duplicate FanChantButton components (app/components/FanChantButton.tsx)
+  - [X] Removed unused FanChantButton in features directory (app/components/features/FanChantButton.tsx)
+  - [X] Improved error handling in ClientFanChantButton.tsx to avoid console.error in production
+  - [X] Added lesson about avoiding console.error in production code
+  - [X] Updated .cursorrules to document the completed cleanup
+
+[X] Create Support page with Ko-fi donation option
+  - [X] Created new /support route with page and layout components
+  - [X] Designed support page with explanation of community needs
+  - [X] Added Ko-fi donation button with proper styling
+  - [X] Added alternative support options section
+  - [X] Integrated site logo and maintained consistent design
+  - [X] Updated footer navigation to include Support Us link
+  - [X] Used HeartHandshake icon from Lucide for the navigation link
+
+[X] Add Support CTAs across the site
+  - [X] Created engaging Support CTA for homepage with custom gradient background
+  - [X] Added Support CTA to ARMY Story page in Explore More section
+  - [X] Added Support CTA to Messages page in Explore More section 
+  - [X] Added standalone Support CTA to ARMY Card generator page
+  - [X] Added contextual Support CTA to individual ARMY Story pages
+  - [X] Used consistent styling with gradient backgrounds and the HeartHandshake icon
+  - [X] Maintained site design language with black borders and yellow accent color
+  - [X] Created unique, contextual messaging for each placement
+
+[X] Add comments section to ARMY Story pages
+  - [X] Created new SupabaseStoryComment type in supabase.ts
+  - [X] Added saveStoryComment and getStoryComments functions to supabase-service.ts
+  - [X] Created StoryComments component with form and comments display
+  - [X] Added country flag display for commenters' countries
+  - [X] Implemented real-time comment addition without page refresh
+  - [X] Added loading states and empty state for better UX
+  - [X] Added the comments section to individual story pages
+  - [X] Styled to match existing site design patterns
+  - [X] Integrated with Supabase to store and retrieve comments
+
+[X] Update About page with engaging content
+  - [X] Replaced butter-album.png with the site logo
+  - [X] Added comprehensive information about the community and its purpose
+  - [X] Created a Community Values section highlighting core principles
+  - [X] Enhanced Features section with Lucide icons and more detailed descriptions
+  - [X] Added Support CTA section with link to the Support page
+  - [X] Improved Connect With Us section with additional action button
+  - [X] Maintained consistent styling with rounded corners and hover effects
+  - [X] Kept existing heading and description style while expanding content
+
+[X] Add SEO elements for better search engine ranking
+  - [X] Updated root layout.tsx with improved comprehensive metadata
+    - [X] Added proper title format with template
+    - [X] Included detailed keywords relevant to BTS and ARMY
+    - [X] Added OpenGraph and Twitter card metadata
+    - [X] Added favicon and icon configurations
+    - [X] Set up proper canonical URLs
+  - [X] Created sitemap.ts to generate sitemap.xml
+    - [X] Added all main pages with appropriate priority settings
+    - [X] Added member pages to the sitemap 
+    - [X] Fixed TypeScript type issues with changeFrequency values
+  - [X] Created robots.txt with search engine directives
+  - [X] Created site.webmanifest for PWA support
+  - [X] Created seo-utils.ts with helper function for generating consistent metadata
+  - [X] Added page-specific metadata to key pages
+  - [X] Implemented workaround for client component pages using separate metadata.ts files
+  - [X] Added lesson about client components and metadata in Next.js
+  - [X] Added lesson about sitemap.ts changeFrequency type constraints

@@ -1,4 +1,4 @@
-import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory } from './supabase'
+import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment } from './supabase'
 import { format, addDays } from 'date-fns'
 import { nanoid } from 'nanoid'
 
@@ -388,5 +388,66 @@ export async function searchMessages(query: string, page: number = 1, pageSize: 
   } catch (error) {
     console.error('Error in searchMessages:', error);
     return { data: [], total: 0 };
+  }
+}
+
+/**
+ * Save a comment on an ARMY story
+ */
+export async function saveStoryComment(
+  storyId: string,
+  name: string,
+  country: string,
+  message: string
+): Promise<SupabaseStoryComment | null> {
+  try {
+    const now = new Date()
+    
+    const { data, error } = await supabase
+      .from('story_comments')
+      .insert([
+        { 
+          story_id: storyId,
+          name, 
+          country, 
+          message, 
+          created_at: now.toISOString(),
+        }
+      ])
+      .select()
+      .single()
+    
+    if (error) {
+      console.error('Error saving story comment:', error)
+      return null
+    }
+    
+    return data
+  } catch (error) {
+    console.error('Error in saveStoryComment:', error)
+    return null
+  }
+}
+
+/**
+ * Get all comments for a specific ARMY story
+ */
+export async function getStoryComments(storyId: string): Promise<SupabaseStoryComment[]> {
+  try {
+    const { data, error } = await supabase
+      .from('story_comments')
+      .select('*')
+      .eq('story_id', storyId)
+      .order('created_at', { ascending: true })
+    
+    if (error) {
+      console.error('Error fetching story comments:', error)
+      return []
+    }
+    
+    return data || []
+  } catch (error) {
+    console.error('Error in getStoryComments:', error)
+    return []
   }
 } 

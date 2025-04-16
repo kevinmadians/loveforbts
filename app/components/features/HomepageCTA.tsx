@@ -3,7 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Users, Heart, MessageSquare, BadgeCheck } from "lucide-react"
+import { Users, Heart, MessageSquare, BadgeCheck, HeartHandshake } from "lucide-react"
 
 type CtaCardProps = {
   title: string
@@ -37,7 +37,7 @@ export function HomepageCTA() {
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold mb-6 text-center black-han-sans">
-        Explore Our ARMY Community
+        Explore ARMY Community
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -107,6 +107,34 @@ export function HomepageCTA() {
         <div className="absolute right-0 bottom-0 opacity-15 pointer-events-none">
           <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        </div>
+      </div>
+      
+      {/* Support CTA Section */}
+      <div className="mt-8 bg-gradient-to-r from-[#ffe6e6] to-[#fff0cc] rounded-2xl border-2 border-black p-6 relative overflow-hidden">
+        <div className="relative z-10 max-w-2xl flex flex-col md:flex-row items-center gap-6">
+          <div className="flex-shrink-0 bg-white p-4 rounded-full border-2 border-black shadow-md">
+            <HeartHandshake size={48} className="text-purple-600" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold mb-2 black-han-sans">Support Our ARMY Community</h3>
+            <p className="mb-4">
+              Help us maintain this space where we celebrate our love for BTS. Your contribution makes a difference in keeping our community vibrant!
+            </p>
+            <Link 
+              href="/support" 
+              className="bg-[#FFDE00] text-black py-2 px-6 rounded-md inline-flex items-center justify-center hover:bg-yellow-400 transition-colors shadow-sm border-2 border-black black-han-sans"
+            >
+              Support ARMY 💜
+            </Link>
+          </div>
+        </div>
+        
+        {/* Decorative Hearts */}
+        <div className="absolute right-2 bottom-2 opacity-10 pointer-events-none">
+          <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
         </div>
       </div>

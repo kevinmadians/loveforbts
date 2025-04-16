@@ -1,0 +1,11 @@
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://loveforbts.com/sitemap.xml
+
+# Disallow admin areas
+User-agent: *
+Disallow: /api/
+Disallow: /admin/ 

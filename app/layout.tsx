@@ -13,19 +13,72 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
-  title: "Love for BTS",
-  description: "BTS Fan Community - Share your love for BTS with other fans worldwide",
-  keywords: "BTS, K-pop, fan community, ARMY, music",
-  authors: [{ name: "BTS ARMY" }],
-  creator: "BTS Fan Community",
+  metadataBase: new URL('https://loveforbts.com'),
+  title: {
+    default: "Love for BTS - BTS Fan Hub for ARMY",
+    template: "%s - Love for BTS",
+  },
+  description: "Your BTS fan hub! Explore fan content, story & more. Made for ARMY, by ARMY. Love BTS? You're in the right place.",
+  keywords: [
+    "BTS", "Bangtan Sonyeondan", "Bangtan Boys", "K-pop", 
+    "ARMY", "BTS ARMY", "BTS fan community", "BTS fan site", 
+    "RM", "Jin", "Suga", "J-Hope", "Jimin", "V", "Jungkook", 
+    "K-pop fan community", "Love for BTS", "BTS discography",
+    "BTS members", "BTS stories", "BTS fan content", "ARMY card", 
+    "ARMY stories", "Global ARMY", "BTS fan messages", "BTS support"
+  ],
+  authors: [{ name: "BTS ARMY Community" }],
+  creator: "Love for BTS Community",
+  publisher: "Love for BTS",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "/",
-    title: "Love for BTS",
-    description: "BTS Fan Community - Share your love for BTS with other fans worldwide",
+    url: "https://loveforbts.com",
+    title: "Love for BTS - BTS Fan Hub for ARMY",
+    description: "Your BTS fan hub! Explore fan content, story & more. Made for ARMY, by ARMY. Love BTS? You're in the right place.",
     siteName: "Love for BTS",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Love for BTS - BTS Fan Hub for ARMY",
+      }
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Love for BTS - BTS Fan Hub for ARMY",
+    description: "Your BTS fan hub! Explore fan content, story & more. Made for ARMY, by ARMY. Love BTS? You're in the right place.",
+    images: ["/og-image.png"],
+    creator: "@loveforbts",
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/site.webmanifest',
+  verification: {
+    google: 'verification_token', // Replace with actual Google verification token
+  },
+  // You can add more structured data as needed
 }
 
 export default function RootLayout({

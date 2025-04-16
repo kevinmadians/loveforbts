@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Instagram, Twitter, Music, Heart, MessageSquare, Info, Users, FileText, Phone } from "lucide-react"
+import { Instagram, Twitter, Music, Heart, MessageSquare, Info, Users, FileText, Phone, HeartHandshake } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -55,6 +55,7 @@ export function Footer() {
             <h3 className="text-lg font-bold mb-4 black-han-sans">Info & Legal</h3>
             <ul className="space-y-2">
               <FooterLink href="/contact" icon={<Phone size={16} />} label="Contact Us" />
+              <FooterLink href="/support" icon={<HeartHandshake size={16} />} label="Support Us" />
               <FooterLink href="/privacy-policy" icon={<FileText size={16} />} label="Privacy Policy" />
               <FooterLink href="/terms-of-use" icon={<FileText size={16} />} label="Terms of Use" />
               <FooterLink href="/cookie-policy" icon={<FileText size={16} />} label="Cookie Policy" />

@@ -6,7 +6,8 @@ import Link from "next/link"
 import { formatDate } from "@/app/lib/utils"
 import { type SupabaseArmyStory } from "@/app/lib/supabase"
 import { getCountryCode } from "@/app/lib/country-codes"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, HeartHandshake } from "lucide-react"
+import { StoryComments } from "./story-comments"
 
 interface StoryDetailProps {
   story: SupabaseArmyStory
@@ -136,6 +137,32 @@ export function StoryDetail({ story }: StoryDetailProps) {
           </div>
         </div>
       </div>
+      
+      {/* Support CTA */}
+      <div className="mt-8 p-5 bg-gradient-to-r from-purple-50 to-yellow-50 rounded-2xl border-2 border-black">
+        <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="bg-white p-3 rounded-full border-2 border-black">
+            <HeartHandshake size={28} className="text-purple-600" />
+          </div>
+          <div className="flex-1 text-center md:text-left">
+            <h3 className="text-lg font-bold mb-1 black-han-sans">
+              Touched by this ARMY story?
+            </h3>
+            <p className="text-sm md:text-base">
+              Your support helps us maintain this platform where ARMYs can share their beautiful BTS journeys.
+            </p>
+          </div>
+          <Link 
+            href="/support" 
+            className="inline-flex items-center px-4 py-2 bg-[#FFDE00] text-black border-2 border-black rounded-md hover:bg-yellow-300 transition-colors black-han-sans whitespace-nowrap"
+          >
+            Support Us 💜
+          </Link>
+        </div>
+      </div>
+      
+      {/* Comments Section */}
+      <StoryComments storyId={story.story_id} />
     </>
   )
 } 

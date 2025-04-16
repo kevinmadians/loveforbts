@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { StoryCard } from '@/app/components/features/story-card'
 import { StorySearch } from '@/app/components/features/story-search'
 import { useArmyStories } from '@/app/lib/army-story-context'
-import { PenSquare, MessageCircle, IdCard } from 'lucide-react'
+import { PenSquare, MessageCircle, IdCard, HeartHandshake } from 'lucide-react'
 import { type SupabaseArmyStory } from '@/app/lib/supabase'
 import { Pagination } from '@/app/components/ui/pagination'
 import { CTAContainer } from "@/app/components/ui/cta-container"
@@ -234,6 +234,14 @@ export default function ArmyStoryPage() {
           href="/army-card"
           icon={IdCard}
           color="blue"
+        />
+        
+        <PageCTA
+          title="Support ARMY Community"
+          description="Help us keep this space thriving with your support. Every contribution strengthens our BTS fan community."
+          href="/support"
+          icon={HeartHandshake}
+          color="purple"
         />
       </CTAContainer>
     </div>
