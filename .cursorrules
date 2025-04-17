@@ -329,3 +329,14 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Used consistent styling with the rest of the site
   - [X] Verified that all components render correctly in proper order
   - [X] Updated .cursorrules file to document the changes
+
+[X] Update Google Calendar integration and member photos
+  - [X] Modified reunion-countdown.tsx to use Google Calendar instead of .ics download
+  - [X] Created dynamic Google Calendar URL with proper event parameters
+  - [X] Created varied photo directory structure for member images
+  - [X] Created member-photos.ts utility with functions to get random member photos
+  - [X] Updated MembersCTA component to use varied photos on the homepage
+  - [X] Modified MemberCard to use varied photos only on the members listing page
+  - [X] Maintained backwards compatibility with existing image paths
+  - [X] Ensured proper fallbacks if varied photos aren't available
+  - [X] Updated .cursorrules file to document the changes

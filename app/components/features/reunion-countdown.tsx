@@ -327,47 +327,29 @@ export function ReunionCountdown() {
         
         {/* Interactive heart button and stats */}
         <div className="mt-8 text-center">
-          {/* Add to Calendar Button */}
+          {/* Add to Calendar Button - Google Calendar */}
           <button
             onClick={() => {
-              // Create calendar event data
-              const eventTitle = "BTS Full Group Reunion"
-              const eventDescription = "All BTS members have completed their military service and are reunited as a full group."
-              const eventLocation = "South Korea"
-              const eventStartDate = "2025-06-21T00:00:00+09:00"
-              const eventEndDate = "2025-06-22T00:00:00+09:00"
+              // Create calendar event data for Google Calendar
+              const eventTitle = encodeURIComponent("BTS Full Group Reunion");
+              const eventDescription = encodeURIComponent("All BTS members have completed their military service and are reunited as a full group.");
+              const eventLocation = encodeURIComponent("South Korea");
+              const eventStartDate = encodeURIComponent("20250621T000000Z");
+              const eventEndDate = encodeURIComponent("20250622T000000Z");
               
-              // Generate .ics file content
-              const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-SUMMARY:${eventTitle}
-DESCRIPTION:${eventDescription}
-LOCATION:${eventLocation}
-DTSTART:${new Date(eventStartDate).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')}
-DTEND:${new Date(eventEndDate).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')}
-STATUS:CONFIRMED
-SEQUENCE:0
-END:VEVENT
-END:VCALENDAR`;
+              // Create Google Calendar URL
+              const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&details=${eventDescription}&location=${eventLocation}&dates=${eventStartDate}/${eventEndDate}`;
               
-              // Create the download
-              const element = document.createElement('a');
-              element.setAttribute('href', 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsContent));
-              element.setAttribute('download', 'bts-reunion.ics');
-              element.style.display = 'none';
-              document.body.appendChild(element);
-              element.click();
-              document.body.removeChild(element);
+              // Open Google Calendar in a new tab
+              window.open(googleCalendarUrl, '_blank');
               
-              toast.success("BTS Reunion date added to your calendar!", {
+              toast.success("Opening Google Calendar to add BTS Reunion!", {
                 duration: 3000,
                 position: "bottom-center"
               });
             }}
             className="inline-flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-2 px-4 rounded-lg mb-4 hover:bg-purple-900 transition-colors black-han-sans border-2 border-[#FFDE00]"
-            aria-label="Add BTS reunion to your calendar"
+            aria-label="Add BTS reunion to your Google Calendar"
           >
             <Calendar size={18} />
             <span>Add to Calendar</span>
