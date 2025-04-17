@@ -55,6 +55,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - For mobile-friendly spacing in Next.js layouts, use responsive padding classes (e.g., pt-0 md:pt-8) to reduce space between navbar and content on small screens while maintaining appropriate spacing on larger displays.
 - Avoid using console.error in production code; instead, use conditional logging based on NODE_ENV to show detailed errors only in development.
 - When implementing SEO in Next.js, metadata cannot be exported from client components (with "use client" directive). For client pages, create a separate metadata.ts file in the same directory.
+- For date and time displays that need to work across different user timezones, implement client-side timezone handling using the browser's Date API instead of server-side fixed timezones.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries
@@ -340,3 +341,23 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Maintained backwards compatibility with existing image paths
   - [X] Ensured proper fallbacks if varied photos aren't available
   - [X] Updated .cursorrules file to document the changes
+
+[X] Fix BTS military discharge dates and implement user-local timezone
+  - [X] Fixed V's discharge date in discharge-dates.tsx (changed from June 11 to June 10, 2025)
+  - [X] Verified that all other discharge dates matched the user-provided dates
+  - [X] Confirmed calendar-data.ts already had the correct dates
+  - [X] Created new user-timezone-utils.ts for handling user's local timezone
+  - [X] Implemented getCurrentDate, formatLocalDate, getLocalDaysLeft, and other helper functions
+  - [X] Updated discharge-dates.tsx component to use local timezone instead of KST
+  - [X] Updated reunion-countdown.tsx component to use local timezone instead of KST
+  - [X] Made the Reunion date display in user's locale format while preserving KST timezone
+  - [X] Added formatKoreanDateInLocalFormat function to display KST dates in user's locale format
+  - [X] Enhanced the discharge-dates.tsx component to clearly show correct dates in user's local format
+  - [X] Used consistent ISO date strings with KST timezone info for reliable display
+  - [X] Added static date formatting to ensure correct dates display on page load/refresh
+  - [X] Improved Google Calendar event creation with proper date format and date range
+  - [X] Fixed issue where incorrect dates would briefly show before client-side code ran
+  - [X] Centralized discharge date constants for easier maintenance and consistency
+  - [X] Ensured all discharge dates are properly displayed using the local user's formatting preferences
+  - [X] Added lesson about client-side timezone handling for global audiences
+  - [X] Updated .cursorrules to document the completed timezone improvements

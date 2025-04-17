@@ -2,20 +2,47 @@
 
 import React, { useMemo, useCallback, useState, useEffect } from "react"
 import Image from "next/image"
-import { format, differenceInDays } from "date-fns"
 import { toast } from "sonner"
 import { addToGoogleCalendar } from "../../lib/utils"
-import { safeFormat, getDaysLeft, getProgress, formatCalendarDate } from "../../lib/date-utils"
 import { CalendarPlus } from "lucide-react"
-import { getCurrentDateInKST, formatKSTDate } from "../../lib/timezone-utils"
+import { 
+  getCurrentDate,
+  getLocalDaysLeft, 
+  getLocalProgress, 
+  formatLocalCalendarDate, 
+  formatDateInLocalFormat 
+} from "../../lib/user-timezone-utils"
+
+// Define discharge dates without timezone to use user's local timezone
+const DISCHARGE_DATES = {
+  Jin: "2024-06-12",
+  JHope: "2024-10-17",
+  RM: "2025-06-10",
+  Suga: "2025-06-21",
+  Jimin: "2025-06-11",
+  V: "2025-06-10",
+  Jungkook: "2025-06-11"
+}
+
+// Consistent static date formatting for non-client rendering
+const FORMATTED_DATES = {
+  Jin: "Jun 12, 2024",
+  JHope: "Oct 17, 2024",
+  RM: "Jun 10, 2025",
+  Suga: "Jun 21, 2025",
+  Jimin: "Jun 11, 2025",
+  V: "Jun 10, 2025",
+  Jungkook: "Jun 11, 2025"
+}
 
 type MemberInfo = {
   name: string
   role: string
+  dischargeDateString: string
   dischargeDate: Date
   status: "discharged" | "active"
   initial: string
-  image: string // Path to the member's image
+  image: string 
 }
 
 // BTS Members information with discharge dates
@@ -23,73 +50,80 @@ const btsMembers: MemberInfo[] = [
   {
     name: "Jin",
     role: "Vocalist",
-    dischargeDate: new Date("2024-06-12T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.Jin,
+    dischargeDate: new Date(DISCHARGE_DATES.Jin),
     status: "discharged",
     initial: "J",
-    image: "/images/members/jin.jpg" // You'll need to add this image file
+    image: "/images/members/jin.jpg"
   },
   {
     name: "J-Hope",
     role: "Rapper, Dance Leader",
-    dischargeDate: new Date("2024-10-17T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.JHope,
+    dischargeDate: new Date(DISCHARGE_DATES.JHope),
     status: "discharged",
     initial: "JH",
-    image: "/images/members/jhope.jpg" // You'll need to add this image file
+    image: "/images/members/jhope.jpg"
   },
   {
     name: "RM",
     role: "Leader, Rapper",
-    dischargeDate: new Date("2025-06-10T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.RM, 
+    dischargeDate: new Date(DISCHARGE_DATES.RM),
     status: "active",
     initial: "RM",
-    image: "/images/members/rm.jpg" // You'll need to add this image file
+    image: "/images/members/rm.jpg"
   },
   {
     name: "Suga",
     role: "Rapper",
-    dischargeDate: new Date("2025-06-21T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.Suga,
+    dischargeDate: new Date(DISCHARGE_DATES.Suga),
     status: "active",
     initial: "S",
-    image: "/images/members/suga.jpg" // You'll need to add this image file
+    image: "/images/members/suga.jpg"
   },
   {
     name: "Jimin",
     role: "Vocalist, Lead Dancer",
-    dischargeDate: new Date("2025-06-11T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.Jimin,
+    dischargeDate: new Date(DISCHARGE_DATES.Jimin),
     status: "active",
     initial: "JM",
-    image: "/images/members/jimin.jpg" // You'll need to add this image file
+    image: "/images/members/jimin.jpg"
   },
   {
     name: "V",
     role: "Vocalist",
-    dischargeDate: new Date("2025-06-11T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.V,
+    dischargeDate: new Date(DISCHARGE_DATES.V),
     status: "active",
     initial: "V",
-    image: "/images/members/v.jpg" // You'll need to add this image file
+    image: "/images/members/v.jpg"
   },
   {
     name: "Jungkook",
     role: "Main Vocalist",
-    dischargeDate: new Date("2025-06-11T00:00:00+09:00"),
+    dischargeDateString: DISCHARGE_DATES.Jungkook,
+    dischargeDate: new Date(DISCHARGE_DATES.Jungkook),
     status: "active",
     initial: "JK",
-    image: "/images/members/jungkook.jpg" // You'll need to add this image file
+    image: "/images/members/jungkook.jpg"
   }
 ]
 
 export function DischargeDates() {
   // State to track image loading errors and for refreshing countdown
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({})
-  const [currentDate, setCurrentDate] = useState(getCurrentDateInKST())
+  const [currentDate, setCurrentDate] = useState(getCurrentDate())
   const [isClient, setIsClient] = useState(false)
   
-  // Update the current date every minute to ensure countdown is accurate (using KST)
+  // Update the current date every minute to ensure countdown is accurate
   useEffect(() => {
     setIsClient(true)
     
     const timer = setInterval(() => {
-      setCurrentDate(getCurrentDateInKST());
+      setCurrentDate(getCurrentDate());
     }, 60000); // Update every minute
     
     return () => clearInterval(timer);
@@ -103,18 +137,35 @@ export function DischargeDates() {
     }))
   }
 
+  // Helper function to get static formatted date for SSR
+  const getFormattedDate = (member: MemberInfo): string => {
+    if (member.name === "Jin") return FORMATTED_DATES.Jin;
+    if (member.name === "J-Hope") return FORMATTED_DATES.JHope;
+    if (member.name === "RM") return FORMATTED_DATES.RM;
+    if (member.name === "Suga") return FORMATTED_DATES.Suga;
+    if (member.name === "Jimin") return FORMATTED_DATES.Jimin;
+    if (member.name === "V") return FORMATTED_DATES.V;
+    if (member.name === "Jungkook") return FORMATTED_DATES.Jungkook;
+    return "Unknown date";
+  }
+  
   // Memoize member data with calculations to avoid recalculating on every render
   const membersWithData = useMemo(() => {
     try {
       return btsMembers.map(member => {
-        const daysLeft = getDaysLeft(member.dischargeDate, currentDate)
-        const progress = getProgress(member.dischargeDate, currentDate)
+        const daysLeft = getLocalDaysLeft(member.dischargeDate)
+        const progress = getLocalProgress(member.dischargeDate)
+        
+        // Use consistent formatting for dates - with static dates for SSR
+        const formattedDate = isClient
+          ? formatDateInLocalFormat(member.dischargeDateString)
+          : getFormattedDate(member)
         
         return {
           ...member,
           daysLeft,
           progress,
-          formattedDate: safeFormat(member.dischargeDate, "MMM d, yyyy", "Unknown date")
+          formattedDate
         }
       })
     } catch (error) {
@@ -123,21 +174,20 @@ export function DischargeDates() {
         ...member,
         daysLeft: 0,
         progress: 0,
-        formattedDate: "Date unknown"
+        formattedDate: getFormattedDate(member) // Always use static date on error
       }));
     }
-  }, [currentDate]) // Re-calculate when currentDate changes
+  }, [currentDate, isClient]) // Re-calculate when currentDate or isClient changes
   
   // Memoize the add to calendar handler
   const handleAddToCalendar = useCallback((member: MemberInfo) => {
     try {
-      const formattedDate = formatCalendarDate(member.dischargeDate);
-      
       const eventDetails = {
         text: `${member.name}'s Military Discharge`,
         dates: {
-          start: formattedDate,
-          end: formattedDate
+          // Just pass the date string for Google Calendar - the formatLocalCalendarDate will be called in utils
+          start: member.dischargeDateString,
+          end: member.dischargeDateString
         },
         details: `${member.name} (${member.role}) completes military service`,
         location: "South Korea"
@@ -145,7 +195,7 @@ export function DischargeDates() {
       
       addToGoogleCalendar(eventDetails, () => {
         toast.success("Event added to calendar!", {
-          description: `${member.name}'s discharge date has been added to your calendar.`,
+          description: `${member.name}'s discharge date (${getFormattedDate(member)}) has been added to your calendar.`,
           action: {
             label: "View Calendar",
             onClick: () => window.open("https://calendar.google.com", "_blank")

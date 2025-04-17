@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useState, useEffect, useMemo, useCallback } from "react"
-import { getDaysLeft } from "../../lib/date-utils"
 import { updateHeartClicks, getHeartClicks } from "../../lib/supabase-service"
 import { toast } from "sonner"
 import Image from "next/image"
-import { getCurrentDateInKST, formatKSTDate } from "../../lib/timezone-utils"
-import { Calendar } from "lucide-react"
+import { Calendar, ArrowUp } from "lucide-react"
+import { getCurrentDate, getLocalDaysLeft } from "../../lib/user-timezone-utils"
+import { addToGoogleCalendar } from "@/lib/utils"
 
 type CountdownUnit = {
   value: number
@@ -16,10 +16,10 @@ type CountdownUnit = {
 }
 
 export function ReunionCountdown() {
-  // BTS reunion date - June 21, 2025 (with timezone information)
-  const reunionDate = useMemo(() => new Date("2025-06-21T00:00:00+09:00"), [])
-  // Use client-side only state (with KST)
-  const [currentDate, setCurrentDate] = useState(() => getCurrentDateInKST())
+  // BTS reunion date - June 21, 2025 (using standard format for consistent local timezone handling)
+  const reunionDate = useMemo(() => new Date("2025-06-21"), [])
+  // Use client-side only state with user's local time
+  const [currentDate, setCurrentDate] = useState(() => getCurrentDate())
   const [isClient, setIsClient] = useState(false)
   
   // Heart button clicks state
@@ -32,9 +32,9 @@ export function ReunionCountdown() {
     // Mark that we're on the client
     setIsClient(true)
     
-    // Update the current date every second for a smooth countdown (using KST)
+    // Update the current date every second for a smooth countdown
     const timer = setInterval(() => {
-      setCurrentDate(getCurrentDateInKST())
+      setCurrentDate(getCurrentDate())
     }, 1000)
     
     // Load heart clicks from Supabase
@@ -166,14 +166,26 @@ export function ReunionCountdown() {
                     timeUnits[3].value === 0
 
   // Calculate days left for progress bar (client-side only)
-  const daysLeft = isClient ? getDaysLeft(reunionDate, currentDate) : 0
+  const daysLeft = isClient ? getLocalDaysLeft(reunionDate) : 0
   const totalDays = 548 // Approximately 18 months of service
   const progressPercentage = isClient ? Math.min(100, Math.max(0, ((totalDays - daysLeft) / totalDays) * 100)) : 0
   
-  // Format the reunion date in KST
+  // Format the reunion date
   const formattedReunionDate = useMemo(() => {
-    return "June 21, 2025";
-  }, []);
+    if (!isClient) return "June 21, 2025";
+    
+    try {
+      // Format date in user's locale
+      const options: Intl.DateTimeFormatOptions = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+      };
+      return new Intl.DateTimeFormat(navigator.language || 'en-US', options).format(reunionDate);
+    } catch (error) {
+      return "June 21, 2025";
+    }
+  }, [reunionDate, isClient]);
   
   // Create a descriptive text for screen readers
   const screenReaderText = isComplete
@@ -330,22 +342,19 @@ export function ReunionCountdown() {
           {/* Add to Calendar Button - Google Calendar */}
           <button
             onClick={() => {
-              // Create calendar event data for Google Calendar
-              const eventTitle = encodeURIComponent("BTS Full Group Reunion");
-              const eventDescription = encodeURIComponent("All BTS members have completed their military service and are reunited as a full group.");
-              const eventLocation = encodeURIComponent("South Korea");
-              const eventStartDate = encodeURIComponent("20250621T000000Z");
-              const eventEndDate = encodeURIComponent("20250622T000000Z");
-              
-              // Create Google Calendar URL
-              const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&details=${eventDescription}&location=${eventLocation}&dates=${eventStartDate}/${eventEndDate}`;
-              
-              // Open Google Calendar in a new tab
-              window.open(googleCalendarUrl, '_blank');
-              
-              toast.success("Opening Google Calendar to add BTS Reunion!", {
-                duration: 3000,
-                position: "bottom-center"
+              addToGoogleCalendar({
+                text: "BTS Full Group Reunion",
+                dates: {
+                  start: "2025-06-21",
+                  end: "2025-06-21"
+                },
+                details: "All BTS members have completed their military service and are reunited as a full group.",
+                location: "South Korea"
+              }, () => {
+                toast.success("Opening Google Calendar to add BTS Reunion!", {
+                  duration: 3000,
+                  position: "bottom-center"
+                });
               });
             }}
             className="inline-flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-2 px-4 rounded-lg mb-4 hover:bg-purple-900 transition-colors black-han-sans border-2 border-[#FFDE00]"

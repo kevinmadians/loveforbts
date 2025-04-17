@@ -80,8 +80,25 @@ export function addToGoogleCalendar(
   const { text, dates, details = "", location = "" } = eventDetails;
   
   // Format dates for Google Calendar URL (YYYYMMDD format)
-  const startDate = dates.start;
-  const endDate = dates.end;
+  // Convert the ISO date string to a proper Google Calendar format YYYYMMDDTHHMMSSZ
+  const formatGoogleCalendarDate = (dateStr: string): string => {
+    // Create a date object from the string (will use local timezone)
+    const date = new Date(dateStr);
+    // Get date as YYYYMMDD
+    const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '');
+    // Format for Google Calendar
+    return `${formattedDate}T000000Z`;
+  };
+  
+  // Format start date and create next day for end date
+  const startDate = formatGoogleCalendarDate(dates.start);
+  
+  // For end date, add one day to make it a full day event
+  const endDate = (() => {
+    const endDateTime = new Date(dates.end);
+    endDateTime.setDate(endDateTime.getDate() + 1);
+    return formatGoogleCalendarDate(endDateTime.toISOString());
+  })();
   
   // Create Google Calendar URL
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}`;
