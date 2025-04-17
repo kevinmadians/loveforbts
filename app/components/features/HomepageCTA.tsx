@@ -34,6 +34,57 @@ const CtaCard = ({ title, description, icon, href, bgColor, buttonText, iconColo
 }
 
 export function HomepageCTA() {
+  // Handle scroll to countdown
+  const scrollToCountdown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Find the countdown element
+    const countdownElement = document.getElementById('countdown');
+    
+    if (countdownElement) {
+      // Get the countdown's dimensions and position
+      const rect = countdownElement.getBoundingClientRect();
+      
+      // Calculate position considering device viewport
+      const isMobile = window.innerWidth < 768;
+      const viewportHeight = window.innerHeight;
+      
+      // Adjust offset based on device size to match the screenshot exactly
+      let scrollOffset = 0;
+      
+      if (isMobile) {
+        // On mobile, we want to show the "BTS REUNION" text with
+        // the date and progress bar as shown in the screenshot
+        
+        // Height of the navbar (approximate, could be made more precise)
+        const navbarHeight = 56;
+        
+        // Additional space to position the header section in view
+        // This ensures "BTS REUNION" is visible at the top of the viewport
+        // after scrolling completes, similar to the screenshot
+        const headerOffset = 20; 
+        
+        // For smaller screens, adjust differently to ensure a good view
+        if (viewportHeight < 667) { // iPhone SE or similar
+          scrollOffset = -(navbarHeight + 30);
+        } else if (viewportHeight < 812) { // iPhone X or similar
+          scrollOffset = -(navbarHeight + 50);
+        } else { // Larger phones
+          scrollOffset = -(navbarHeight + 70); 
+        }
+      }
+      
+      // Calculate final scroll position
+      const scrollToY = window.scrollY + rect.top + scrollOffset;
+      
+      // Scroll with smooth behavior
+      window.scrollTo({
+        top: scrollToY,
+        behavior: 'smooth'
+      });
+    }
+  };
+  
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold mb-6 text-center black-han-sans">
@@ -112,12 +163,12 @@ export function HomepageCTA() {
             <p className="text-lg mb-6">
               BTS will reunite after their military service is complete. Join our community to track important dates, celebrate milestones, and prepare for their return together.
             </p>
-            <Link 
-              href="/#countdown" 
+            <button 
+              onClick={scrollToCountdown}
               className="bg-black text-[#FFDE00] py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
             >
               See the Countdown
-            </Link>
+            </button>
           </div>
         </div>
         

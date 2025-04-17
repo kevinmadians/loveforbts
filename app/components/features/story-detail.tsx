@@ -1,12 +1,12 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { formatDate } from "@/app/lib/utils"
 import { type SupabaseArmyStory } from "@/app/lib/supabase"
 import { getCountryCode } from "@/app/lib/country-codes"
-import { ArrowLeft, HeartHandshake } from "lucide-react"
+import { ArrowLeft, HeartHandshake, ArrowUp, ChevronUp } from "lucide-react"
 import { StoryComments } from "./story-comments"
 
 interface StoryDetailProps {
@@ -51,6 +51,34 @@ export function StoryDetail({ story }: StoryDetailProps) {
   
   // Format markdown to HTML
   const storyHtml = renderMarkdown(story.content)
+
+  // State to track scroll position
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+
+  // Handle scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Show floating button when scrolled down
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button when scrolled down 300px
+      if (window.scrollY > 300) {
+        setShowScrollToTop(true);
+      } else {
+        setShowScrollToTop(false);
+      }
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   
   return (
     <>
@@ -138,6 +166,18 @@ export function StoryDetail({ story }: StoryDetailProps) {
         </div>
       </div>
       
+      {/* Back to Top Button */}
+      <div className="flex justify-center my-8">
+        <button
+          onClick={scrollToTop}
+          className="inline-flex items-center gap-2 bg-black text-[#FFDE00] px-5 py-3 rounded-lg hover:bg-purple-900 transition-colors black-han-sans border-2 border-[#FFDE00] shadow-md transform hover:scale-105 active:scale-95"
+          aria-label="Scroll back to top"
+        >
+          <ArrowUp size={18} />
+          <span>Back to Top</span>
+        </button>
+      </div>
+      
       {/* Support CTA */}
       <div className="mt-8 p-5 bg-gradient-to-r from-purple-50 to-yellow-50 rounded-2xl border-2 border-black">
         <div className="flex flex-col md:flex-row items-center gap-4">
@@ -163,6 +203,19 @@ export function StoryDetail({ story }: StoryDetailProps) {
       
       {/* Comments Section */}
       <StoryComments storyId={story.story_id} />
+
+      {/* Floating Back to Top Button */}
+      {showScrollToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 left-6 z-40 flex items-center justify-center w-12 h-12 rounded-full 
+            bg-black hover:bg-purple-900 text-[#FFDE00] shadow-lg transition-all duration-300
+            border-2 border-[#FFDE00] transform hover:scale-110 active:scale-95"
+          aria-label="Scroll back to top"
+        >
+          <ChevronUp size={24} />
+        </button>
+      )}
     </>
   )
 } 

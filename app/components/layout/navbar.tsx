@@ -4,15 +4,25 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard } from "lucide-react"
+import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export function Navbar() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [btsExpanded, setBtsExpanded] = useState(false)
+  const [armyExpanded, setArmyExpanded] = useState(false)
   
   // Close mobile menu when pathname changes (user navigates to a different page)
   useEffect(() => {
     setMobileMenuOpen(false)
+    setBtsExpanded(false)
+    setArmyExpanded(false)
   }, [pathname])
 
   return (
@@ -36,21 +46,30 @@ export function Navbar() {
           {/* Navigation Links - Desktop */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
-              <NavLink href="/members" active={pathname.startsWith("/members")} icon={<Users size={18} />}>
-                Members
-              </NavLink>
-              <NavLink href="/discography" active={pathname.startsWith("/discography")} icon={<Disc size={18} />}>
-                Discography
-              </NavLink>
-              <NavLink href="/messages" active={pathname === "/messages"} icon={<MessageSquare size={18} />}>
-                Messages
-              </NavLink>
-              <NavLink href="/army-story" active={pathname.startsWith("/army-story")} icon={<Heart size={18} />}>
-                Story
-              </NavLink>
-              <NavLink href="/army-card" active={pathname === "/army-card"} icon={<IdCard size={18} />}>
-                ARMY Card
-              </NavLink>
+              {/* BTS Dropdown - Contains Members and Discography */}
+              <NavDropdown 
+                label="BTS" 
+                icon={<Users size={18} />} 
+                active={pathname.startsWith("/members") || pathname.startsWith("/discography")}
+                items={[
+                  { href: "/members", label: "Members", icon: <Users size={16} /> },
+                  { href: "/discography", label: "Discography", icon: <Disc size={16} /> },
+                ]}
+              />
+              
+              {/* ARMY Dropdown - Contains Messages, Story, and ARMY Card */}
+              <NavDropdown 
+                label="ARMY" 
+                icon={<Heart size={18} />} 
+                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card"}
+                items={[
+                  { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
+                  { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
+                  { href: "/army-card", label: "ARMY Card", icon: <IdCard size={16} /> },
+                ]}
+              />
+              
+              {/* About link remains standalone */}
               <NavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
                 About
               </NavLink>
@@ -76,21 +95,89 @@ export function Navbar() {
           <div className="fixed inset-x-0 top-16 z-50 md:hidden">
             <div className="bg-[#FFDE00] border-b-2 border-x-2 border-black shadow-lg py-2 pb-4">
               <div className="flex flex-col space-y-2">
-                <MobileNavLink href="/members" active={pathname.startsWith("/members")} icon={<Users size={18} />}>
-                  Members
-                </MobileNavLink>
-                <MobileNavLink href="/discography" active={pathname.startsWith("/discography")} icon={<Disc size={18} />}>
-                  Discography
-                </MobileNavLink>
-                <MobileNavLink href="/messages" active={pathname === "/messages"} icon={<MessageSquare size={18} />}>
-                  Messages
-                </MobileNavLink>
-                <MobileNavLink href="/army-story" active={pathname.startsWith("/army-story")} icon={<Heart size={18} />}>
-                  Story
-                </MobileNavLink>
-                <MobileNavLink href="/army-card" active={pathname === "/army-card"} icon={<IdCard size={18} />}>
-                  ARMY Card
-                </MobileNavLink>
+                {/* BTS Section - Contains Members and Discography */}
+                <div className="px-4 py-2">
+                  <button 
+                    onClick={() => setBtsExpanded(!btsExpanded)}
+                    className="w-full flex items-center justify-between text-black font-medium mb-1"
+                    aria-expanded={btsExpanded}
+                    aria-controls="bts-menu"
+                  >
+                    <div className="flex items-center">
+                      <span className="mr-1.5"><Users size={18} /></span>
+                      <span className="black-han-sans">BTS</span>
+                    </div>
+                    <ChevronDown 
+                      size={18} 
+                      className={`transition-transform duration-300 ${btsExpanded ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  {/* BTS Submenu */}
+                  <div 
+                    id="bts-menu"
+                    className={`ml-7 flex flex-col space-y-2 mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
+                      btsExpanded ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    {/* Members */}
+                    <Link href="/members" className="flex items-center text-black/90 hover:text-purple-900">
+                      <Users size={16} className="mr-1.5" />
+                      <span>Members</span>
+                    </Link>
+                    
+                    {/* Discography */}
+                    <Link href="/discography" className="flex items-center text-black/90 hover:text-purple-900">
+                      <Disc size={16} className="mr-1.5" />
+                      <span>Discography</span>
+                    </Link>
+                  </div>
+                </div>
+                
+                {/* ARMY Section - Contains Messages, Story, ARMY Card */}
+                <div className="px-4 py-2">
+                  <button 
+                    onClick={() => setArmyExpanded(!armyExpanded)} 
+                    className="w-full flex items-center justify-between text-black font-medium mb-1"
+                    aria-expanded={armyExpanded}
+                    aria-controls="army-menu"
+                  >
+                    <div className="flex items-center">
+                      <span className="mr-1.5"><Heart size={18} /></span>
+                      <span className="black-han-sans">ARMY</span>
+                    </div>
+                    <ChevronDown 
+                      size={18} 
+                      className={`transition-transform duration-300 ${armyExpanded ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  {/* ARMY Submenu */}
+                  <div 
+                    id="army-menu"
+                    className={`ml-7 flex flex-col space-y-2 mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
+                      armyExpanded ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    {/* Messages */}
+                    <Link href="/messages" className="flex items-center text-black/90 hover:text-purple-900">
+                      <MessageSquare size={16} className="mr-1.5" />
+                      <span>Messages</span>
+                    </Link>
+                    
+                    {/* Story */}
+                    <Link href="/army-story" className="flex items-center text-black/90 hover:text-purple-900">
+                      <Heart size={16} className="mr-1.5" />
+                      <span>Story</span>
+                    </Link>
+                    
+                    {/* ARMY Card */}
+                    <Link href="/army-card" className="flex items-center text-black/90 hover:text-purple-900">
+                      <IdCard size={16} className="mr-1.5" />
+                      <span>ARMY Card</span>
+                    </Link>
+                  </div>
+                </div>
+                
+                {/* About - standalone link */}
                 <MobileNavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
                   About
                 </MobileNavLink>
@@ -135,6 +222,54 @@ function NavLink({
   )
 }
 
+function NavDropdown({ 
+  label, 
+  icon, 
+  items, 
+  active 
+}: { 
+  label: string; 
+  icon: React.ReactNode; 
+  items: { href: string; label: string; icon?: React.ReactNode }[];
+  active: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  
+  return (
+    <DropdownMenu onOpenChange={setIsOpen}>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
+            ${active 
+              ? "bg-black text-[#FFDE00]" 
+              : "text-black hover:bg-black hover:text-[#FFDE00]"
+            }`}
+          aria-label={`${label} menu`}
+        >
+          <span className="mr-1.5">{icon}</span>
+          <span className="black-han-sans mr-1">{label}</span>
+          <ChevronDown 
+            size={14} 
+            className={`ml-0.5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+          />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent 
+        className="bg-white border-2 border-black rounded-md shadow-lg p-1 min-w-[180px] animate-in fade-in-80 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
+      >
+        {items.map((item) => (
+          <DropdownMenuItem key={item.href} asChild className="px-3 py-2 rounded-md text-sm font-medium cursor-pointer hover:bg-black hover:text-[#FFDE00]">
+            <Link href={item.href} className="flex items-center">
+              {item.icon && <span className="mr-2">{item.icon}</span>}
+              {item.label}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 function MobileNavLink({ 
   href, 
   children, 
@@ -159,4 +294,4 @@ function MobileNavLink({
       <span className="black-han-sans">{children}</span>
     </Link>
   )
-} 
+}
