@@ -49,6 +49,7 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       // Add any problematic packages here if needed
+      '@radix-ui/react-use-effect-event': require.resolve('./compatibility/radix-use-effect-event-shim.js'),
     }
     
     return config
