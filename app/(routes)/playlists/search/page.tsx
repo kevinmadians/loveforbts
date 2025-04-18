@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Search, Music, Play, Pause, ExternalLink, Loader2 } from 'lucide-react';
+import { ArrowLeft, Search, Music, Play, Pause, ExternalLink, Loader2, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { searchBTSTrack, SpotifyTrack, formatDuration } from '@/app/services/spotify-service';
@@ -14,29 +14,95 @@ export default function SearchPage() {
   const [searchResults, setSearchResults] = useState<SpotifyTrack[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
+  const [error, setError] = useState<{ message: string; isRateLimit: boolean } | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const retryTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  // Clear any pending retries on unmount
+  useEffect(() => {
+    return () => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Search when query changes
   useEffect(() => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+
     if (!debouncedQuery.trim()) {
       setSearchResults([]);
       setIsSearching(false);
+      setError(null);
       return;
     }
     
-    const doSearch = async () => {
+    const doSearch = async (retryCount = 0) => {
       setIsSearching(true);
+      setError(null);
       
       try {
-        const results = await searchBTSTrack(debouncedQuery);
-        setSearchResults(results);
-      } catch (error) {
+        // Use the API endpoint instead of direct service call for better error handling
+        const response = await fetch(`/api/spotify/search?query=${encodeURIComponent(debouncedQuery)}`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          // Check if it's a rate limit error
+          if (response.status === 429 || data.error_type === 'rate_limit') {
+            const retryAfter = data.retry_after || 5;
+            
+            if (retryCount < 3) {
+              // Schedule a retry
+              toast({
+                title: 'Rate limit exceeded',
+                description: `Retrying in ${retryAfter} seconds...`,
+                variant: 'default',
+              });
+              
+              // Clear previous timeout if it exists
+              if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+              }
+              
+              // Set new timeout for retry
+              retryTimeoutRef.current = setTimeout(() => {
+                doSearch(retryCount + 1);
+              }, retryAfter * 1000);
+              
+              setError({
+                message: `Rate limit exceeded. Retrying in ${retryAfter} seconds...`,
+                isRateLimit: true
+              });
+              return;
+            } else {
+              throw new Error('Spotify search rate limit exceeded. Please try again later.');
+            }
+          }
+          
+          throw new Error(data.message || 'Failed to search for songs');
+        }
+        
+        setSearchResults(data.results || []);
+        setError(null);
+      } catch (error: any) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Search error:', error);
         }
+        
+        const isRateLimit = error.message?.includes('rate limit');
+        
+        setError({
+          message: error.message || 'Failed to search for songs. Please try again.',
+          isRateLimit
+        });
+        
         toast({
-          title: 'Error',
-          description: 'Failed to search for songs. Please try again.',
+          title: 'Search Error',
+          description: error.message || 'Failed to search for songs. Please try again.',
           variant: 'destructive',
         });
       } finally {
@@ -45,6 +111,14 @@ export default function SearchPage() {
     };
     
     doSearch();
+    
+    // Clean up function to cancel any pending searches on query change
+    return () => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
+    };
   }, [debouncedQuery]);
 
   const togglePlayPreview = (track: SpotifyTrack) => {
@@ -70,7 +144,16 @@ export default function SearchPage() {
       
       // Play the new track
       audioRef.current = new Audio(track.preview_url);
-      audioRef.current.play();
+      audioRef.current.play().catch(err => {
+        toast({
+          title: 'Playback Error',
+          description: 'Failed to play the preview. Please try again.',
+          variant: 'destructive',
+        });
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Audio playback error:', err);
+        }
+      });
       
       // Set up ended event handler
       audioRef.current.onended = () => {
@@ -123,6 +206,21 @@ export default function SearchPage() {
         </div>
       </div>
       
+      {/* Error message */}
+      {error && (
+        <div className={`mb-6 p-4 border rounded-lg ${error.isRateLimit ? 'border-yellow-400 bg-yellow-50' : 'border-red-400 bg-red-50'} max-w-5xl mx-auto`}>
+          <div className="flex items-center">
+            <AlertTriangle className={`mr-3 ${error.isRateLimit ? 'text-yellow-500' : 'text-red-500'}`} size={24} />
+            <p className="text-gray-700">{error.message}</p>
+          </div>
+          {error.isRateLimit && (
+            <p className="mt-2 text-sm text-gray-600">
+              The Spotify API has rate limits to prevent excessive requests. Your search will automatically retry.
+            </p>
+          )}
+        </div>
+      )}
+      
       {/* Results */}
       <div className="max-w-5xl mx-auto">
         {isSearching ? (
@@ -130,7 +228,7 @@ export default function SearchPage() {
             <Loader2 size={32} className="animate-spin mr-3" />
             <span>Searching...</span>
           </div>
-        ) : searchResults.length === 0 ? (
+        ) : searchResults.length === 0 && !error ? (
           <div className="text-center py-16">
             {debouncedQuery ? (
               <div>
@@ -155,7 +253,7 @@ export default function SearchPage() {
               </div>
             )}
           </div>
-        ) : (
+        ) : searchResults.length > 0 && (
           <div>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-semibold">Search results for "{debouncedQuery}"</h2>

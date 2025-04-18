@@ -10,6 +10,30 @@ const BTS_ARTIST_ID = '3Nrfpe0tUJi4K4DXYWgMUX';
 let accessToken: string | null = null;
 let tokenExpirationTime: number | null = null;
 
+// Simple in-memory cache for track data
+interface TrackCache {
+  [trackId: string]: {
+    data: SpotifyTrack;
+    timestamp: number;
+  };
+}
+
+// Cache tracks for 1 hour
+const TRACK_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+const trackCache: TrackCache = {};
+
+// For search throttling and caching
+interface SearchCache {
+  [query: string]: {
+    results: SpotifyTrack[];
+    timestamp: number;
+  };
+}
+const searchCache: SearchCache = {};
+const SEARCH_CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
+let lastSearchTime = 0;
+const SEARCH_THROTTLE = 300; // Minimum ms between search requests
+
 export interface SpotifyTrack {
   id: string;
   name: string;
@@ -68,7 +92,7 @@ export const getSpotifyToken = async (): Promise<string> => {
 /**
  * Make an authenticated request to the Spotify API
  */
-const spotifyApiRequest = async (endpoint: string, method = 'GET', params?: Record<string, string>): Promise<any> => {
+const spotifyApiRequest = async (endpoint: string, method = 'GET', params?: Record<string, string>, retryCount = 0): Promise<any> => {
   try {
     const token = await getSpotifyToken();
     
@@ -91,6 +115,28 @@ const spotifyApiRequest = async (endpoint: string, method = 'GET', params?: Reco
       }
     });
     
+    // Handle rate limiting with exponential backoff
+    if (response.status === 429) {
+      // Max 3 retries
+      if (retryCount >= 3) {
+        throw new Error(`Spotify API rate limit exceeded after ${retryCount} retries`);
+      }
+      
+      // Get retry-after header or use exponential backoff
+      const retryAfter = response.headers.get('Retry-After');
+      const delayMs = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, retryCount) * 1000;
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`Rate limited by Spotify. Retrying in ${delayMs}ms (retry ${retryCount + 1}/3)`);
+      }
+      
+      // Wait for the required time
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+      
+      // Retry the request with incremented retry count
+      return spotifyApiRequest(endpoint, method, params, retryCount + 1);
+    }
+    
     if (!response.ok) {
       throw new Error(`Spotify API error: ${response.status} ${response.statusText}`);
     }
@@ -105,15 +151,31 @@ const spotifyApiRequest = async (endpoint: string, method = 'GET', params?: Reco
 };
 
 /**
- * Get track details by Spotify track ID
+ * Get track details by Spotify track ID with caching
  */
 export const getTrackById = async (trackId: string): Promise<SpotifyTrack> => {
+  // Check cache first
+  const cachedTrack = trackCache[trackId];
+  const now = Date.now();
+  
+  if (cachedTrack && (now - cachedTrack.timestamp) < TRACK_CACHE_TTL) {
+    return cachedTrack.data;
+  }
+  
+  // If not in cache or expired, fetch from API
   const data = await spotifyApiRequest(`/tracks/${trackId}`);
+  
+  // Cache the result
+  trackCache[trackId] = {
+    data: data as SpotifyTrack,
+    timestamp: now
+  };
+  
   return data as SpotifyTrack;
 };
 
 /**
- * Get multiple tracks by their IDs
+ * Get multiple tracks by their IDs with caching
  * @param trackIds Array of Spotify track IDs to fetch
  * @returns Array of Spotify track objects
  * @throws Error if the API request fails
@@ -123,42 +185,83 @@ export const getTracksById = async (trackIds: string[]): Promise<SpotifyTrack[]>
     return [];
   }
 
+  const now = Date.now();
+  const results: SpotifyTrack[] = [];
+  const idsToFetch: string[] = [];
+  
+  // Check which tracks we can get from cache
+  for (const trackId of trackIds) {
+    const cached = trackCache[trackId];
+    if (cached && (now - cached.timestamp) < TRACK_CACHE_TTL) {
+      results.push(cached.data);
+    } else {
+      idsToFetch.push(trackId);
+    }
+  }
+  
+  // If all tracks were in cache, return early
+  if (idsToFetch.length === 0) {
+    return results;
+  }
+
   // Spotify API limits to 50 tracks per request
   const chunks = [];
-  for (let i = 0; i < trackIds.length; i += 50) {
-    chunks.push(trackIds.slice(i, i + 50));
+  for (let i = 0; i < idsToFetch.length; i += 50) {
+    chunks.push(idsToFetch.slice(i, i + 50));
   }
   
   try {
-    const results = await Promise.all(
-      chunks.map(async (chunk) => {
-        try {
-          return await spotifyApiRequest('/tracks', 'GET', { ids: chunk.join(',') });
-        } catch (error: any) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error(`Error fetching chunk of tracks (${chunk.join(',')}):`, error);
-          }
-          throw new Error(`Failed to fetch track details: ${error.message}`);
+    // Process chunks sequentially with delay to avoid rate limiting
+    const apiResults = [];
+    for (const chunk of chunks) {
+      try {
+        // Add a delay between chunks to avoid rate limiting
+        if (apiResults.length > 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
-      })
-    );
-    
-    // Flatten the results
-    const tracks = results.flatMap(result => result.tracks || []);
-    
-    // Verify that we got track details for all requested IDs
-    if (tracks.length === 0 && trackIds.length > 0) {
-      throw new Error('No tracks were returned from Spotify API');
-    }
-    
-    if (tracks.some(track => !track)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Some tracks could not be found:', 
-          trackIds.filter((id, index) => !tracks[index]));
+        
+        const result = await spotifyApiRequest('/tracks', 'GET', { ids: chunk.join(',') });
+        apiResults.push(result);
+      } catch (error: any) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error(`Error fetching chunk of tracks (${chunk.join(',')}):`, error);
+        }
+        throw new Error(`Failed to fetch track details: ${error.message}`);
       }
     }
     
-    return tracks.filter(Boolean) as SpotifyTrack[];
+    // Flatten the results
+    const fetchedTracks = apiResults.flatMap(result => result.tracks || []);
+    
+    // Cache the new results
+    for (const track of fetchedTracks) {
+      if (track) {
+        trackCache[track.id] = {
+          data: track,
+          timestamp: now
+        };
+      }
+    }
+    
+    // Combine cached and new results, maintaining original order
+    const allTracks = trackIds.map(id => {
+      const cached = trackCache[id];
+      return cached ? cached.data : null;
+    });
+    
+    // Verify that we got track details for all requested IDs
+    if (allTracks.every(track => track === null) && trackIds.length > 0) {
+      throw new Error('No tracks were returned from Spotify API');
+    }
+    
+    if (allTracks.some(track => !track)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Some tracks could not be found:', 
+          trackIds.filter((id, index) => !allTracks[index]));
+      }
+    }
+    
+    return allTracks.filter(Boolean) as SpotifyTrack[];
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error in getTracksById:', error);
@@ -168,28 +271,64 @@ export const getTracksById = async (trackIds: string[]): Promise<SpotifyTrack[]>
 };
 
 /**
- * Search for BTS tracks
+ * Search for BTS tracks with throttling and caching
  */
 export const searchBTSTrack = async (query: string): Promise<SpotifyTrack[]> => {
   if (!query || query.trim() === '') {
     return [];
   }
   
+  const normalizedQuery = query.trim().toLowerCase();
+  
+  // Check cache first
+  const cachedResults = searchCache[normalizedQuery];
+  const now = Date.now();
+  
+  if (cachedResults && (now - cachedResults.timestamp) < SEARCH_CACHE_TTL) {
+    return cachedResults.results;
+  }
+  
+  // Throttle requests to prevent hitting rate limits
+  const timeSinceLastSearch = now - lastSearchTime;
+  if (timeSinceLastSearch < SEARCH_THROTTLE) {
+    await new Promise(resolve => setTimeout(resolve, SEARCH_THROTTLE - timeSinceLastSearch));
+  }
+  
+  // Update the last search time
+  lastSearchTime = Date.now();
+  
   // Add "BTS" to the search query and limit to tracks
   const searchQuery = `${query} artist:BTS`;
   
-  const data = await spotifyApiRequest('/search', 'GET', {
-    q: searchQuery,
-    type: 'track',
-    limit: '10'
-  });
-  
-  // Filter to ensure only BTS tracks (in case Spotify returns others)
-  return data.tracks.items.filter((track: SpotifyTrack) => 
-    track.artists.some(artist => 
-      artist.name === 'BTS' || artist.name === '방탄소년단'
-    )
-  );
+  try {
+    const data = await spotifyApiRequest('/search', 'GET', {
+      q: searchQuery,
+      type: 'track',
+      limit: '10'
+    });
+    
+    // Filter to ensure only BTS tracks (in case Spotify returns others)
+    const results = data.tracks.items.filter((track: SpotifyTrack) => 
+      track.artists.some(artist => 
+        artist.name === 'BTS' || artist.name === '방탄소년단'
+      )
+    );
+    
+    // Cache the results
+    searchCache[normalizedQuery] = {
+      results,
+      timestamp: Date.now()
+    };
+    
+    return results;
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error searching BTS tracks:', error);
+    }
+    
+    // If we fail, return empty results
+    return [];
+  }
 };
 
 /**
@@ -201,13 +340,6 @@ export const getBTSAlbums = async (limit: number = 20, offset: number = 0): Prom
     offset: offset.toString(),
     include_groups: 'album,single'
   });
-};
-
-/**
- * Get a Spotify playlist embed URL
- */
-export const getPlaylistEmbedUrl = (playlistId: string): string => {
-  return `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator`;
 };
 
 /**

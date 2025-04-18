@@ -56,6 +56,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - Avoid using console.error in production code; instead, use conditional logging based on NODE_ENV to show detailed errors only in development.
 - When implementing SEO in Next.js, metadata cannot be exported from client components (with "use client" directive). For client pages, create a separate metadata.ts file in the same directory.
 - For date and time displays that need to work across different user timezones, implement client-side timezone handling using the browser's Date API instead of server-side fixed timezones.
+- When working with third-party APIs like Spotify that have rate limits, implement these strategies to prevent 429 errors: 1) Add local caching, 2) Use exponential backoff for retries, 3) Process batch requests sequentially with delays, 4) Add client-side throttling, and 5) Provide clear user feedback during retries.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries
@@ -487,3 +488,13 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Updated webpack configuration in next.config.mjs to use import.meta.url for path resolution
   - [X] Fixed the "require is not defined" error in ES module context
   - [X] Maintained functionality while making the code compatible with Next.js ESM setup
+
+[X] Remove playlists feature completely
+  - [X] Remove app/(routes)/playlists directory with all subfolders and files
+  - [X] Remove playlist components in app/components/features/playlists
+  - [X] Remove playlist-data.ts from app/data
+  - [X] Remove Spotify API routes in app/api/spotify
+  - [X] Remove playlist-related functions from spotify-service.ts
+  - [X] Remove playlist-related types and functions from supabase.ts and supabase-service.ts 
+  - [X] Remove playlist entry from navbar
+  - [X] Created SQL cleanup file for removing playlists table when needed
