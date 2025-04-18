@@ -59,17 +59,18 @@ export function Navbar() {
                 ]}
               />
               
-              {/* ARMY Dropdown - Contains Messages, Story, and ARMY Card */}
+              {/* ARMY Dropdown - Contains Messages, Story, ARMY Card, Bias Test, Vocabulary, and Playlists */}
               <NavDropdown 
                 label="ARMY" 
                 icon={<Heart size={18} />} 
-                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary"}
+                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary" || pathname.startsWith("/playlists")}
                 items={[
                   { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
                   { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
                   { href: "/army-card", label: "ARMY Card", icon: <IdCard size={16} /> },
                   { href: "/bias-test", label: "Bias Test", icon: <Users size={16} /> },
                   { href: "/vocabulary", label: "Vocabulary", icon: <BookOpen size={16} /> },
+                  { href: "/playlists", label: "Playlists", icon: <Music size={16} /> },
                 ]}
               />
               
@@ -206,6 +207,14 @@ export function Navbar() {
                           <span className="flex items-center">
                             <BookOpen size={16} className="mr-2" />
                             Vocabulary
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/playlists" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/playlists") ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <Music size={16} className="mr-2" />
+                            Playlists
                           </span>
                         </Link>
                       </li>

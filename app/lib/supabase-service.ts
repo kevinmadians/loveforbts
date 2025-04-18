@@ -1,4 +1,4 @@
-import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment } from './supabase'
+import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment, type SupabasePlaylist } from './supabase'
 import { format, addDays } from 'date-fns'
 import { nanoid } from 'nanoid'
 
@@ -449,5 +449,145 @@ export async function getStoryComments(storyId: string): Promise<SupabaseStoryCo
   } catch (error) {
     console.error('Error in getStoryComments:', error)
     return []
+  }
+}
+
+/**
+ * Save a user-generated playlist to Supabase
+ */
+export async function savePlaylist(
+  creator_name: string,
+  title: string,
+  songs: string[] // Array of Spotify track IDs
+): Promise<SupabasePlaylist | null> {
+  try {
+    const now = new Date()
+    const playlist_id = nanoid(10) // Generate a unique ID for the playlist
+    
+    const { data, error } = await supabase
+      .from('user_playlists')
+      .insert([
+        { 
+          playlist_id,
+          creator_name, 
+          title,
+          songs,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString()
+        }
+      ])
+      .select()
+      .single()
+    
+    if (error) {
+      console.error('Error saving playlist:', error)
+      return null
+    }
+    
+    return data
+  } catch (error) {
+    console.error('Error in savePlaylist:', error)
+    return null
+  }
+}
+
+/**
+ * Get all user-generated playlists
+ */
+export async function getPlaylists(page: number = 1, pageSize: number = 10): Promise<{ data: SupabasePlaylist[], total: number }> {
+  try {
+    // Get total count first
+    const { count, error: countError } = await supabase
+      .from('user_playlists')
+      .select('*', { count: 'exact', head: true });
+    
+    if (countError) {
+      console.error('Error counting playlists:', countError);
+      return { data: [], total: 0 };
+    }
+    
+    // Calculate pagination
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    
+    // Get paginated data
+    const { data, error } = await supabase
+      .from('user_playlists')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    
+    if (error) {
+      console.error('Error fetching playlists:', error);
+      return { data: [], total: 0 };
+    }
+    
+    return { data: data || [], total: count || 0 };
+  } catch (error) {
+    console.error('Error in getPlaylists:', error);
+    return { data: [], total: 0 };
+  }
+}
+
+/**
+ * Get a single playlist by ID
+ */
+export async function getPlaylistById(playlistId: string): Promise<SupabasePlaylist | null> {
+  try {
+    const { data, error } = await supabase
+      .from('user_playlists')
+      .select('*')
+      .eq('playlist_id', playlistId)
+      .single()
+    
+    if (error) {
+      console.error('Error fetching playlist:', error)
+      return null
+    }
+    
+    return data
+  } catch (error) {
+    console.error('Error in getPlaylistById:', error)
+    return null
+  }
+}
+
+/**
+ * Search playlists by title or creator name
+ */
+export async function searchPlaylists(query: string, page: number = 1, pageSize: number = 10): Promise<{ data: SupabasePlaylist[], total: number }> {
+  try {
+    // Get total count first
+    const { count, error: countError } = await supabase
+      .from('user_playlists')
+      .select('*', { count: 'exact', head: true })
+      .or(`title.ilike.%${query}%,creator_name.ilike.%${query}%`);
+    
+    if (countError) {
+      console.error('Error counting search results:', countError);
+      return { data: [], total: 0 };
+    }
+    
+    // Calculate pagination
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    
+    // Get paginated data
+    const { data, error } = await supabase
+      .from('user_playlists')
+      .select('*')
+      .or(`title.ilike.%${query}%,creator_name.ilike.%${query}%`)
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    
+    if (error) {
+      console.error('Error searching playlists:', error);
+      return { data: [], total: 0 };
+    }
+    
+    return { data: data || [], total: count || 0 };
+  } catch (error) {
+    console.error('Error in searchPlaylists:', error);
+    return { data: [], total: 0 };
   }
 } 

@@ -1,0 +1,94 @@
+# Instructions
+
+During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section so you will not make the same mistake again.
+
+Use the `.cursorrules` file as a Scratchpad to organize your thoughts. When receiving a new task, review the content, clear old tasks if necessary, explain the current task, and plan steps to complete it. Use todo markers to indicate progress:
+[X] Task 1
+[ ] Task 2
+
+Update progress in the Scratchpad when finishing subtasks or milestones to maintain a big picture of the task.
+
+# Tools
+
+All tools are in python3. For batch processing, consult the python files and write your own script if needed.
+
+## Screenshot Verification
+```bash
+venv/bin/python3 tools/screenshot_utils.py URL [--output OUTPUT] [--width WIDTH] [--height HEIGHT]
+venv/bin/python3 tools/llm_api.py --prompt "Your verification question" --provider {openai|anthropic} --image path/to/screenshot.png
+```
+
+## LLM
+```bash
+venv/bin/python3 ./tools/llm_api.py --prompt "What is the capital of France?" --provider "anthropic"
+```
+
+Supported providers:
+- OpenAI (default, model: gpt-4o)
+- Azure OpenAI (model: configured via AZURE_OPENAI_MODEL_DEPLOYMENT)
+- DeepSeek (model: deepseek-chat)
+- Anthropic (model: claude-3-sonnet-20240229)
+- Gemini (model: gemini-pro)
+- Local LLM (model: Qwen/Qwen2.5-32B-Instruct-AWQ)
+
+## Web browser
+```bash
+venv/bin/python3 ./tools/web_scraper.py --max-concurrent 3 URL1 URL2 URL3
+```
+
+## Search engine
+```bash
+venv/bin/python3 ./tools/search_engine.py "your search keywords"
+```
+
+# Lessons
+
+## User Specified Lessons
+- Use python venv in ./venv for development. Check for 'uv' with `which uv`. If available, use `uv pip install`; otherwise, use `pip`.
+- For git multiline commit messages, write to a file and use `git commit -F <filename>`. Include "[Cursor] " in commit messages and PR titles.
+- The official BTS brand color is #FFDE00 (yellow) and should be used for branded elements instead of purple.
+- When customizing Sonner library toast notifications, use standard properties in ExternalToast type and avoid non-standard properties like 'descriptionStyle'.
+- For Next.js page layouts, set specific max-width constraints instead of relying on container classes to maintain consistent widths across different screen sizes.
+- For image creation in canvas contexts, use `document.createElement('img')` instead of `new Image()` to avoid TypeScript errors.
+- Use Unicode escape sequences like `\u201C` (left double quote) and `\u201D` (right double quote) for special characters in TypeScript/JavaScript to avoid syntax and linter errors.
+- When deploying to hosting platforms like Netlify or Vercel, ensure that all necessary environment variables (such as Supabase credentials) are configured in the platform's environment settings.
+- For mobile-friendly spacing in Next.js layouts, use responsive padding classes (e.g., pt-0 md:pt-8) to reduce space between navbar and content on small screens while maintaining appropriate spacing on larger displays.
+- Avoid using console.error in production code; instead, use conditional logging based on NODE_ENV to show detailed errors only in development.
+- When implementing SEO in Next.js, metadata cannot be exported from client components (with "use client" directive). For client pages, create a separate metadata.ts file in the same directory.
+- For date and time displays that need to work across different user timezones, implement client-side timezone handling using the browser's Date API instead of server-side fixed timezones.
+- In Next.js 15+, `params` is a Promise and should be unwrapped with `React.use()` or destructured immediately at the top of the component like `const { id } = params;` to avoid direct property access warnings. Client components can use the `useParams()` hook instead.
+
+## Cursor learned
+- Handle UTF-8 encoding properly for international search queries
+- Use 'seaborn-v0_8' instead of 'seaborn' due to recent version changes
+- Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
+- In Next.js, `dynamic` imports with `{ ssr: false }` cannot be used directly in Server Components. Create a client component wrapper with "use client" that handles the dynamic import.
+- For React 19 compatibility issues with packages like react-day-picker, use --legacy-peer-deps or downgrade to React 18.2.0
+- When renaming React component functions, maintain backward compatibility with additional named exports
+- In Next.js sitemap.ts files, use 'as const' type assertion for changeFrequency values to match the expected literal types in MetadataRoute.Sitemap
+- In Next.js projects with aliased imports (@/hooks, @/components), make sure to maintain proper directory structures and use re-export files to maintain backward compatibility when refactoring.
+
+## Message Box UI Pattern
+- Container: White background, black border (2px), rounded corners (16px)
+- Heading: "Black Han Sans" font, ~32px, black, center-aligned
+- Form Layout: Vertical stack with ~16-20px spacing
+- Input Fields: Black border (2px), white background, rounded corners (8px), padding (12px)
+- Submit Button: Black background, yellow text (#FFDE00), purple heart emoji, full width, rounded (8px)
+- Labels: Bold, black text, slightly larger than input text
+- Textarea: Taller than regular inputs, same styling pattern
+
+# Scratchpad
+
+[X] Fix playlist tracks preview and params.id warning
+  - [X] Updated CompactTracksList to use simpler design based on the screenshot
+    - Simplified to show numbered list without album images
+    - Reduced visual complexity for better performance
+    - Fixed spacing and styling to match the design from screenshot
+  - [X] Updated UserPlaylistGrid to match screenshot's card design
+    - Changed layout to have title at the top
+    - Moved creator information to bottom footer
+    - Reduced tracks preview to 3 songs instead of 5
+    - Simplified overall card design with cleaner borders
+  - [X] Added lesson about Next.js 15 params handling
+    - Documented proper approach for both client and server components
+    - Explained why destructuring at the top of component is important 

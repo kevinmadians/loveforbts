@@ -60,10 +60,9 @@ export function ClientFanChantButton() {
               if (process.env.NODE_ENV === 'development') {
                 // Using a type assertion to avoid TS errors
                 const err = error as Error;
-                toast.error(`Failed to play fan chant: ${err.message}`);
-              } else {
-                toast.error("Failed to play fan chant. Please try again.");
+                console.error(`Failed to play fan chant: ${err.message}`);
               }
+              toast.error("Failed to play fan chant. Please try again.");
             });
         }
       }
@@ -72,10 +71,9 @@ export function ClientFanChantButton() {
       if (process.env.NODE_ENV === 'development') {
         // Using a type assertion to avoid TS errors
         const err = error as Error;
-        toast.error(`Something went wrong: ${err.message}`);
-      } else {
-        toast.error("Something went wrong. Please try again.");
+        console.error(`Something went wrong: ${err.message}`);
       }
+      toast.error("Something went wrong. Please try again.");
     }
   }, [isPlaying]);
 

@@ -43,4 +43,14 @@ export type SupabaseStoryComment = {
   country: string
   message: string
   created_at: string
+}
+
+export type SupabasePlaylist = {
+  id: number
+  playlist_id: string
+  creator_name: string
+  title: string
+  songs: string[] // Array of Spotify track IDs
+  created_at: string
+  updated_at: string
 } 

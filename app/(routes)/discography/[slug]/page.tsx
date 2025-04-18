@@ -3,8 +3,11 @@ import { ServerAlbumDetail } from "@/app/components/discography/ServerAlbumDetai
 import { discographyData } from "@/app/lib/discography-data"
 
 export default function AlbumPage({ params }: { params: { slug: string } }) {
+  // Destructure slug to avoid direct params access
+  const { slug } = params;
+  
   // Find the album data based on the slug
-  const album = discographyData.find(album => album.slug === params.slug);
+  const album = discographyData.find(album => album.slug === slug);
   
   // If album not found, show 404
   if (!album) {
