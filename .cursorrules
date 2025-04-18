@@ -480,3 +480,10 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Modified webpack configuration to use the compatibility shim
   - [X] Ensured no existing functionality was changed
   - [X] This allows for successful builds on Vercel while maintaining all features
+
+[X] Fix ESM module compatibility for Vercel build
+  - [X] Updated compatibility shim to use ESM syntax instead of CommonJS
+  - [X] Changed file extension from .js to .mjs to indicate ES module format
+  - [X] Updated webpack configuration in next.config.mjs to use import.meta.url for path resolution
+  - [X] Fixed the "require is not defined" error in ES module context
+  - [X] Maintained functionality while making the code compatible with Next.js ESM setup
