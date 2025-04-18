@@ -1,4 +1,4 @@
-export type EventCategory = 'debut' | 'release' | 'award' | 'performance' | 'milestone' | 'vlive' | 'other';
+export type EventCategory = 'debut' | 'release' | 'award' | 'performance' | 'milestone' | 'vlive' | 'other' | 'military';
 
 export interface HistoricalEvent {
   date: string; // Format: YYYY-MM-DD
@@ -473,7 +473,7 @@ export const btsHistory: HistoricalEvent[] = [
         alt: 'BTS at the United Nations in 2021'
       }
     ],
-    link: 'https://www.youtube.com/watch?v=jzptGL6Qlqg'
+    link: 'https://www.youtube.com/watch?v=9SmQOZWNyWE&pp=ygULYnRzIHVuIDIwMjE%3D'
   },
   {
     date: '2021-11-27',
@@ -532,7 +532,8 @@ export const btsHistory: HistoricalEvent[] = [
         url: '/images/history/festa-dinner-2022.jpg',
         alt: 'BTS at their FESTA dinner'
       }
-    ]
+    ],
+    link: 'https://www.youtube.com/watch?v=1t0iJ7F_k9Q'
   },
   {
     date: '2022-10-15',
@@ -545,6 +546,20 @@ export const btsHistory: HistoricalEvent[] = [
         type: 'image',
         url: '/images/history/busan-concert.jpg',
         alt: 'BTS performing in Busan'
+      }
+    ]
+  },
+  {
+    date: '2022-12-13',
+    year: 2022,
+    title: 'Jin Begins Military Service',
+    description: 'Jin became the first BTS member to enlist in the South Korean military, beginning his mandatory service at the age of 30.',
+    category: 'military',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/jin-enlistment.jpg',
+        alt: 'Jin before military enlistment'
       }
     ]
   },
@@ -563,7 +578,7 @@ export const btsHistory: HistoricalEvent[] = [
         alt: 'BTS 10th anniversary celebration'
       }
     ],
-    link: 'https://www.youtube.com/watch?v=owZ0Fn0Zzhs'
+    link: 'https://www.youtube.com/watch?v=-vbvkuMCr8M&pp=ygUgYnRzIDEwdGggYW5uaXZlcnNhcnkgY2VsZWJyYXRpb24%3D'
   },
   {
     date: '2023-06-13',
@@ -580,11 +595,11 @@ export const btsHistory: HistoricalEvent[] = [
     ]
   },
   {
-    date: '2023-07-21',
+    date: '2023-04-18',
     year: 2023,
-    title: 'J-Hope Military Enlistment',
+    title: 'J-Hope Begins Military Service',
     description: 'J-Hope became the second BTS member to begin his mandatory military service.',
-    category: 'milestone',
+    category: 'military',
     media: [
       {
         type: 'image',
@@ -592,6 +607,153 @@ export const btsHistory: HistoricalEvent[] = [
         alt: 'J-Hope before military enlistment'
       }
     ]
+  },
+  {
+    date: '2023-12-11',
+    year: 2023,
+    title: 'RM and V Begin Military Service',
+    description: 'RM and V enlisted in the South Korean military, becoming the third and fourth BTS members to begin their mandatory service.',
+    category: 'military',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/rm-v-enlistment.jpg',
+        alt: 'RM and V before military enlistment'
+      }
+    ]
+  },
+  {
+    date: '2023-12-12',
+    year: 2023,
+    title: 'Jimin and Jungkook Begin Military Service',
+    description: 'Jimin and Jungkook enlisted in the South Korean military, joining their bandmates. With their enlistment, all BTS members were fulfilling their mandatory military service.',
+    category: 'military',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/jimin-jungkook-enlistment.jpg',
+        alt: 'Jimin and Jungkook before military enlistment'
+      }
+    ]
+  },
+  {
+    date: '2023-09-22',
+    year: 2023,
+    title: 'Suga Begins Alternative Military Service',
+    description: 'Suga began his alternative military service as a social service agent due to his shoulder condition, becoming the third BTS member to begin his mandatory service.',
+    category: 'military',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/suga-enlistment.jpg',
+        alt: 'Suga before beginning alternative military service'
+      }
+    ]
+  },
+  {
+    date: '2016-12-02',
+    year: 2016,
+    title: 'First MAMA Artist of the Year Win',
+    description: 'BTS won their first Artist of the Year (Daesang) at the Mnet Asian Music Awards (MAMA), marking a major milestone in their career.',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2016.jpg',
+        alt: 'BTS at MAMA 2016 with Artist of the Year award'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=ENvJwgcTl50&pp=ygURYnRzIHdpbiBtYW1hIDIwMTY%3D'
+  },
+  {
+    date: '2017-12-01',
+    year: 2017,
+    title: 'MAMA Artist of the Year (Second Win)',
+    description: 'BTS won Artist of the Year at MAMA for the second consecutive year, further solidifying their growing global status.',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2017.jpg',
+        alt: 'BTS receiving Artist of the Year award at MAMA 2017'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=JaxQpezXpjg&pp=ygURYnRzIHdpbiBtYW1hIDIwMTc%3D'
+  },
+  {
+    date: '2018-12-14',
+    year: 2018,
+    title: 'MAMA Artist of the Year (Third Win)',
+    description: 'BTS achieved their third consecutive Artist of the Year win at MAMA, becoming the first artist to win this prestigious award three years in a row.',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2018.jpg',
+        alt: 'BTS with Artist of the Year award at MAMA 2018'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=vVs710bHkNA&pp=ygURYnRzIHdpbiBtYW1hIDIwMTg%3D'
+  },
+  {
+    date: '2019-12-04',
+    year: 2019,
+    title: 'MAMA Artist of the Year (Fourth Win)',
+    description: 'BTS made history by winning Artist of the Year at MAMA for the fourth consecutive year, an unprecedented achievement in K-pop.',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2019.jpg',
+        alt: 'BTS receiving Artist of the Year at MAMA 2019'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=_BVc9VoCxPY'
+  },
+  {
+    date: '2020-12-06',
+    year: 2020,
+    title: 'MAMA Artist of the Year (Fifth Win)',
+    description: 'BTS continued their extraordinary streak by winning Artist of the Year at MAMA for the fifth consecutive time, along with Song of the Year for "Dynamite".',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2020.jpg',
+        alt: 'BTS receiving awards at MAMA 2020'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=IZ5ADDqUv9U&pp=ygURYnRzIHdpbiBtYW1hIDIwMjDSBwkJfgkBhyohjO8%3D'
+  },
+  {
+    date: '2021-12-11',
+    year: 2021,
+    title: 'MAMA Artist of the Year (Sixth Win)',
+    description: 'BTS won Artist of the Year at MAMA for the sixth consecutive year, extending their record-breaking streak in the K-pop industry.',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2021.jpg',
+        alt: 'BTS receiving Artist of the Year at MAMA 2021'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=ZsewPlgn3ZY&pp=ygURYnRzIHdpbiBtYW1hIDIwMjE%3D'
+  },
+  {
+    date: '2022-11-29',
+    year: 2022,
+    title: 'MAMA Artist of the Year (Seventh Win)',
+    description: 'BTS achieved a seventh consecutive Artist of the Year win at MAMA, maintaining their undefeated record and setting a nearly impossible standard for other artists to match.',
+    category: 'award',
+    media: [
+      {
+        type: 'image',
+        url: '/images/history/mama-2022.jpg',
+        alt: 'BTS winning Artist of the Year at MAMA 2022'
+      }
+    ],
+    link: 'https://www.youtube.com/watch?v=jzptGL6Qlqg'
   }
 ];
 

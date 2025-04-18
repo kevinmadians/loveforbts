@@ -395,3 +395,42 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Update navbar to include Bias Test in the ARMY submenu
   - [X] Ensure responsive design across all devices
   - [X] Add engaging animations for quiz progression
+
+[X] Implement ARMY Vocabulary Guide
+  - [X] Created vocabulary-data.ts with comprehensive BTS/ARMY terminology database
+  - [X] Structured data with categories (fandom, meme, song, inside-joke, nickname, phrase)
+  - [X] Added VocabularyGuide component with interactive filtering and search
+  - [X] Created engaging vocabulary page with additional information for new fans
+  - [X] Added color-coded category filtering similar to history page
+  - [X] Implemented expandable terms with detailed information and examples
+  - [X] Added sharing functionality for individual terms
+  - [X] Added navigation to the ARMY submenu in navbar
+  - [X] Included cross-promotion CTAs to other ARMY-focused features
+  - [X] Created proper SEO metadata for search engine visibility
+  - [X] Used consistent styling with other pages (borders, colors, typography)
+
+[X] Customize BTS History Timeline Page
+  - [X] Improved image display to prevent cropping with responsive container and object-fit: contain
+  - [X] Added Jin's military enlistment and service information (December 13, 2022)
+  - [X] Added all other members' military enlistment dates (J-Hope, Suga, RM, V, Jimin, and Jungkook)
+  - [X] Added comprehensive MAMA Awards history with all seven consecutive Artist of the Year wins (2016-2022)
+  - [X] Enhanced event display with better responsive design for various screen sizes
+  - [X] Improved link and share button interactions with stopPropagation to prevent accidental collapses
+  - [X] Made media container maintain proper 16:9 aspect ratio for consistent display
+  - [X] Added visible "View Source" text to external links on larger screens
+  - [X] Applied same image display improvements to TodayInBTSHistory component for consistency
+  - [X] Ensured fallback images display properly when image loading fails
+
+[X] Improve BTS History page with smooth scrolling and detailed awards section
+  - [X] Implemented smooth scrolling to anchors for better navigation on mobile
+  - [X] Added anchor navigation links at the top of the page for Timeline, Awards & Milestones, and Facts sections
+  - [X] Created comprehensive Awards & Milestones section showcasing:
+    - [X] Seven consecutive MAMA Artist of the Year wins (2016-2022) with visual timeline
+    - [X] Billboard achievements including multiple #1 Hot 100 songs
+    - [X] Three United Nations General Assembly appearances with descriptions
+    - [X] Grammy nominations and performances
+  - [X] Added scroll-margin-top to sections for proper header spacing on anchor navigation
+  - [X] Implemented Head component with global scroll-behavior: smooth CSS
+  - [X] Enhanced visual presentation with color-coded cards and engaging visual elements
+  - [X] Fixed component imports in TodayInBTSHistory.tsx to prevent errors
+  - [X] Added proper spacing for mobile viewing

@@ -15,7 +15,8 @@ const CATEGORY_COLORS: Record<EventCategory, string> = {
   'performance': '#FF7A00', // Orange
   'milestone': '#00B884', // Teal
   'vlive': '#FF3B30', // Red
-  'other': '#747474' // Gray
+  'other': '#747474', // Gray
+  'military': '#2E6D25' // Army Green
 }
 
 const CATEGORY_LABELS: Record<EventCategory, string> = {
@@ -25,7 +26,8 @@ const CATEGORY_LABELS: Record<EventCategory, string> = {
   'performance': 'Performance',
   'milestone': 'Milestone',
   'vlive': 'V LIVE',
-  'other': 'Other'
+  'other': 'Other',
+  'military': 'Military Service'
 }
 
 export function TodayInBTSHistory() {
@@ -181,17 +183,20 @@ export function TodayInBTSHistory() {
                   {isExpanded && (
                     <div className="border-t border-gray-200 p-4 bg-gray-50">
                       {event.media && event.media.length > 0 && (
-                        <div className="mb-4 relative h-48 rounded-md overflow-hidden">
-                          <Image
-                            src={event.media[0].url}
-                            alt={event.media[0].alt || event.title}
-                            fill
-                            className="object-cover"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = '/images/bts-logo.png';
-                            }}
-                          />
+                        <div className="mb-4 rounded-md overflow-hidden">
+                          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}> {/* 16:9 aspect ratio */}
+                            <Image
+                              src={event.media[0].url}
+                              alt={event.media[0].alt || event.title}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 600px"
+                              className="object-contain"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = '/images/bts-logo.png';
+                              }}
+                            />
+                          </div>
                         </div>
                       )}
                       

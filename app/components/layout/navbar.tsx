@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar } from "lucide-react"
+import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar, BookOpen } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,12 +63,13 @@ export function Navbar() {
               <NavDropdown 
                 label="ARMY" 
                 icon={<Heart size={18} />} 
-                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test"}
+                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary"}
                 items={[
                   { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
                   { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
                   { href: "/army-card", label: "ARMY Card", icon: <IdCard size={16} /> },
                   { href: "/bias-test", label: "Bias Test", icon: <Users size={16} /> },
+                  { href: "/vocabulary", label: "Vocabulary", icon: <BookOpen size={16} /> },
                 ]}
               />
               
@@ -166,35 +167,49 @@ export function Navbar() {
                     />
                   </button>
                   {/* ARMY Submenu */}
-                  <div 
-                    id="army-menu"
-                    className={`ml-7 flex flex-col space-y-2 mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                      armyExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    {/* Messages */}
-                    <Link href="/messages" className="flex items-center text-black/90 hover:text-purple-900">
-                      <MessageSquare size={16} className="mr-1.5" />
-                      <span>Messages</span>
-                    </Link>
-                    
-                    {/* Story */}
-                    <Link href="/army-story" className="flex items-center text-black/90 hover:text-purple-900">
-                      <Heart size={16} className="mr-1.5" />
-                      <span>Story</span>
-                    </Link>
-                    
-                    {/* ARMY Card */}
-                    <Link href="/army-card" className="flex items-center text-black/90 hover:text-purple-900">
-                      <IdCard size={16} className="mr-1.5" />
-                      <span>ARMY Card</span>
-                    </Link>
-                    
-                    {/* Bias Test */}
-                    <Link href="/bias-test" className="flex items-center text-black/90 hover:text-purple-900">
-                      <Users size={16} className="mr-1.5" />
-                      <span>Bias Test</span>
-                    </Link>
+                  <div id="army-menu" className={`mt-1 pl-4 overflow-hidden transition-all duration-300 ${armyExpanded ? 'max-h-80' : 'max-h-0'}`}>
+                    <ul className="space-y-1 py-1">
+                      <li>
+                        <Link href="/messages" className={`block px-3 py-2 rounded text-sm ${pathname === "/messages" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <MessageSquare size={16} className="mr-2" />
+                            Messages
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/army-story" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/army-story") ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <Heart size={16} className="mr-2" />
+                            Story
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/army-card" className={`block px-3 py-2 rounded text-sm ${pathname === "/army-card" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <IdCard size={16} className="mr-2" />
+                            ARMY Card
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/bias-test" className={`block px-3 py-2 rounded text-sm ${pathname === "/bias-test" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <Users size={16} className="mr-2" />
+                            Bias Test
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/vocabulary" className={`block px-3 py-2 rounded text-sm ${pathname === "/vocabulary" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <BookOpen size={16} className="mr-2" />
+                            Vocabulary
+                          </span>
+                        </Link>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 
