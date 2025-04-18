@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote } from "lucide-react"
+import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,11 +50,12 @@ export function Navbar() {
               <NavDropdown 
                 label="BTS" 
                 icon={<Users size={18} />} 
-                active={pathname.startsWith("/members") || pathname.startsWith("/discography") || pathname.startsWith("/quotes")}
+                active={pathname.startsWith("/members") || pathname.startsWith("/discography") || pathname.startsWith("/quotes") || pathname.startsWith("/history")}
                 items={[
                   { href: "/members", label: "Members", icon: <Users size={16} /> },
                   { href: "/discography", label: "Discography", icon: <Disc size={16} /> },
                   { href: "/quotes", label: "Quotes", icon: <Quote size={16} /> },
+                  { href: "/history", label: "History", icon: <Calendar size={16} /> },
                 ]}
               />
               
@@ -62,11 +63,12 @@ export function Navbar() {
               <NavDropdown 
                 label="ARMY" 
                 icon={<Heart size={18} />} 
-                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card"}
+                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test"}
                 items={[
                   { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
                   { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
                   { href: "/army-card", label: "ARMY Card", icon: <IdCard size={16} /> },
+                  { href: "/bias-test", label: "Bias Test", icon: <Users size={16} /> },
                 ]}
               />
               
@@ -137,6 +139,12 @@ export function Navbar() {
                       <Quote size={16} className="mr-1.5" />
                       <span>Quotes</span>
                     </Link>
+
+                    {/* History */}
+                    <Link href="/history" className="flex items-center text-black/90 hover:text-purple-900">
+                      <Calendar size={16} className="mr-1.5" />
+                      <span>History</span>
+                    </Link>
                   </div>
                 </div>
                 
@@ -161,7 +169,7 @@ export function Navbar() {
                   <div 
                     id="army-menu"
                     className={`ml-7 flex flex-col space-y-2 mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                      armyExpanded ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
+                      armyExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
                     }`}
                   >
                     {/* Messages */}
@@ -180,6 +188,12 @@ export function Navbar() {
                     <Link href="/army-card" className="flex items-center text-black/90 hover:text-purple-900">
                       <IdCard size={16} className="mr-1.5" />
                       <span>ARMY Card</span>
+                    </Link>
+                    
+                    {/* Bias Test */}
+                    <Link href="/bias-test" className="flex items-center text-black/90 hover:text-purple-900">
+                      <Users size={16} className="mr-1.5" />
+                      <span>Bias Test</span>
                     </Link>
                   </div>
                 </div>

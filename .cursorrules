@@ -372,3 +372,26 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Update navbar to include Quotes in the BTS submenu
   - [X] Ensure responsive design across all devices
   - [X] Add proper animation/transition effects for better engagement
+
+[X] Implement This Day in BTS History feature
+  - [X] Create a comprehensive BTS history database with important dates
+  - [X] Create a new /history route and page component
+  - [X] Design an engaging history display with timeline visualization
+  - [X] Implement date-matching algorithm to find events from the current day
+  - [X] Add media attachments (images/videos) for key historical events
+  - [X] Add social sharing functionality
+  - [X] Update navbar to include History in the BTS submenu
+  - [X] Ensure responsive design across all devices
+  - [X] Add animations for timeline navigation
+
+[X] Implement Bias Compatibility Test feature
+  - [X] Create compatibility database with member personality traits and matches
+  - [X] Create a new /bias-test route and page component
+  - [X] Design an engaging quiz interface with BTS color theme
+  - [X] Implement 5-7 personality-based questions
+  - [X] Create result page showing compatibility with other members
+  - [X] Add member photos and personality traits to results
+  - [X] Include sharing functionality for social media
+  - [X] Update navbar to include Bias Test in the ARMY submenu
+  - [X] Ensure responsive design across all devices
+  - [X] Add engaging animations for quiz progression
