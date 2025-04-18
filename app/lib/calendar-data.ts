@@ -35,6 +35,78 @@ export const eventCategories: Record<EventCategory, { color: string; label: stri
 export const calendarEvents: CalendarEvent[] = [
   // Tour Events
   {
+    title: "Jin Solo Tour - Goyang",
+    start: new Date(2025, 5, 28), // June 28
+    end: new Date(2025, 5, 29), // June 29
+    category: 'tour',
+    location: "Goyang Auxiliary Stadium, South Korea",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Chiba",
+    start: new Date(2025, 6, 5), // July 5
+    end: new Date(2025, 6, 6), // July 6
+    category: 'tour',
+    location: "Makuhari Messe International Exhibition Hall 4-6, Japan",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Osaka",
+    start: new Date(2025, 6, 12), // July 12
+    end: new Date(2025, 6, 13), // July 13
+    category: 'tour',
+    location: "Kyocera Dome Osaka, Japan",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Anaheim",
+    start: new Date(2025, 6, 17), // July 17
+    end: new Date(2025, 6, 18), // July 18
+    category: 'tour',
+    location: "Honda Center, California, USA",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Dallas",
+    start: new Date(2025, 6, 22), // July 22
+    end: new Date(2025, 6, 23), // July 23
+    category: 'tour',
+    location: "American Airlines Center, Texas, USA",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Tampa",
+    start: new Date(2025, 6, 26), // July 26
+    end: new Date(2025, 6, 27), // July 27
+    category: 'tour',
+    location: "Amalie Arena, Florida, USA",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Newark",
+    start: new Date(2025, 6, 30), // July 30
+    end: new Date(2025, 6, 31), // July 31
+    category: 'tour',
+    location: "Prudential Center, New Jersey, USA",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - London",
+    start: new Date(2025, 7, 5), // August 5
+    end: new Date(2025, 7, 6), // August 6
+    category: 'tour',
+    location: "The O2, United Kingdom",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
+    title: "Jin Solo Tour - Amsterdam",
+    start: new Date(2025, 7, 9), // August 9
+    end: new Date(2025, 7, 10), // August 10
+    category: 'tour',
+    location: "Ziggo Dome, Netherlands",
+    description: "#RUNSEOKJIN_EP.TOUR"
+  },
+  {
     title: "J-Hope Solo Tour - Seoul",
     start: new Date(2025, 1, 28), // Feb 28
     end: new Date(2025, 2, 2), // March 2
