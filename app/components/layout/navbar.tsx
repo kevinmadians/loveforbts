@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown } from "lucide-react"
+import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
 } from "../ui/dropdown-menu"
 
 export function Navbar() {
-  const pathname = usePathname()
+  const pathname = usePathname() || ""
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [btsExpanded, setBtsExpanded] = useState(false)
   const [armyExpanded, setArmyExpanded] = useState(false)
@@ -46,14 +46,15 @@ export function Navbar() {
           {/* Navigation Links - Desktop */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
-              {/* BTS Dropdown - Contains Members and Discography */}
+              {/* BTS Dropdown - Contains Members, Discography, and Quotes */}
               <NavDropdown 
                 label="BTS" 
                 icon={<Users size={18} />} 
-                active={pathname.startsWith("/members") || pathname.startsWith("/discography")}
+                active={pathname.startsWith("/members") || pathname.startsWith("/discography") || pathname.startsWith("/quotes")}
                 items={[
                   { href: "/members", label: "Members", icon: <Users size={16} /> },
                   { href: "/discography", label: "Discography", icon: <Disc size={16} /> },
+                  { href: "/quotes", label: "Quotes", icon: <Quote size={16} /> },
                 ]}
               />
               
@@ -95,7 +96,7 @@ export function Navbar() {
           <div className="fixed inset-x-0 top-16 z-50 md:hidden">
             <div className="bg-[#FFDE00] border-b-2 border-x-2 border-black shadow-lg py-2 pb-4">
               <div className="flex flex-col space-y-2">
-                {/* BTS Section - Contains Members and Discography */}
+                {/* BTS Section - Contains Members, Discography, and Quotes */}
                 <div className="px-4 py-2">
                   <button 
                     onClick={() => setBtsExpanded(!btsExpanded)}
@@ -116,7 +117,7 @@ export function Navbar() {
                   <div 
                     id="bts-menu"
                     className={`ml-7 flex flex-col space-y-2 mt-1 overflow-hidden transition-all duration-300 ease-in-out ${
-                      btsExpanded ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'
+                      btsExpanded ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
                     }`}
                   >
                     {/* Members */}
@@ -129,6 +130,12 @@ export function Navbar() {
                     <Link href="/discography" className="flex items-center text-black/90 hover:text-purple-900">
                       <Disc size={16} className="mr-1.5" />
                       <span>Discography</span>
+                    </Link>
+
+                    {/* Quotes */}
+                    <Link href="/quotes" className="flex items-center text-black/90 hover:text-purple-900">
+                      <Quote size={16} className="mr-1.5" />
+                      <span>Quotes</span>
                     </Link>
                   </div>
                 </div>
