@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm install --no-frozen-lockfile && NEXT_TELEMETRY_DISABLED=1 pnpm run build",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "cleanUrls": true,
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "outputDirectory": ".next",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./"
+} 
