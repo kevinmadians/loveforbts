@@ -8,10 +8,10 @@ export default function RoutesLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
-      <main className="w-full py-4 md:py-8 flex flex-col items-center justify-center">
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-6xl flex flex-col items-center justify-center py-4 md:py-8 px-4">
         {children}
-      </main>
-    </>
+      </div>
+    </div>
   )
 } 

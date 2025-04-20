@@ -17,8 +17,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <main>{children}</main>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
+      </head>
+      <body className={`${inter.className} flex flex-col min-h-screen bg-white`}>
+        <main className="flex-1 flex justify-center">
+          <div className="w-full max-w-6xl mx-auto px-4">
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   );
