@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar, BookOpen } from "lucide-react"
+import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar, BookOpen, HelpCircle } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,13 +63,14 @@ export function Navbar() {
               <NavDropdown 
                 label="ARMY" 
                 icon={<Image src="/images/army-bomb.svg" alt="ARMY Bomb" width={22} height={22} />} 
-                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary"}
+                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary" || pathname === "/quiz"}
                 items={[
                   { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
                   { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
                   { href: "/army-card", label: "ARMY Card", icon: <IdCard size={16} /> },
                   { href: "/bias-test", label: "Bias Test", icon: <Users size={16} /> },
                   { href: "/vocabulary", label: "Vocabulary", icon: <BookOpen size={16} /> },
+                  { href: "/quiz", label: "Quiz", icon: <HelpCircle size={16} /> },
                 ]}
               />
               
@@ -210,6 +211,14 @@ export function Navbar() {
                           <span className="flex items-center">
                             <BookOpen size={16} className="mr-2" />
                             Vocabulary
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/quiz" className={`block px-3 py-2 rounded text-sm ${pathname === "/quiz" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <HelpCircle size={16} className="mr-2" />
+                            Quiz
                           </span>
                         </Link>
                       </li>

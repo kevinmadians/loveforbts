@@ -498,3 +498,59 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Remove playlist-related types and functions from supabase.ts and supabase-service.ts 
   - [X] Remove playlist entry from navbar
   - [X] Created SQL cleanup file for removing playlists table when needed
+
+[X] Update quiz page on navigation menu
+  - [X] Added Lyrics Quiz to the ARMY submenu in the desktop navigation
+  - [X] Added Lyrics Quiz to the ARMY submenu in the mobile navigation
+  - [X] Used HelpCircle icon to match the site's design language
+  - [X] Updated active path condition to highlight the quiz link when on the quiz page
+
+[X] Restructure and enhance quiz features
+  - [X] Create quiz index page that lists different quiz types
+  - [X] Move existing lyrics quiz to /quiz/lyrics-quiz route
+  - [X] Enhance lyrics quiz with more engaging questions and visual improvements
+  - [X] Update navigation links to point to the new quiz index page
+  - [X] Make quiz interface more consistent with site design patterns
+  - [X] Fix missing images in the lyrics quiz
+  - [X] Add instructions and explanations for each quiz type
+
+[X] Fix quiz page code duplication and standardize components
+  - [X] Created reusable components in app/components/features/QuizComponents.tsx
+    - [X] QuizProgressBar for consistent progress indicators
+    - [X] QuizTimer for standardized timer display
+    - [X] StreakIndicator for showing streak messages
+    - [X] MultipleChoiceOption for standardized question options
+    - [X] Helper functions for common quiz operations
+  - [X] Created custom use-quiz.ts hook to centralize quiz state management
+    - [X] Unified state management for all quiz pages
+    - [X] Standardized functions for handling answers, timers, and navigation
+    - [X] Added proper TypeScript typing for quiz components
+  - [X] Implemented QuizConfetti component for standardized confetti effects
+    - [X] Created targeted components for different confetti scenarios
+    - [X] Used consistent confetti effects across all quiz types
+    - [X] Avoided direct use of confetti library in quiz pages
+  - [X] Created QuizContainer for consistent UI structure
+    - [X] Standardized header, progress, timer sections
+    - [X] Consistent styling across all quiz types
+    - [X] Properly configured props for flexibility
+  - [X] Implemented central quiz configuration in app/quiz/index.tsx
+    - [X] Created configuration for all quiz types
+    - [X] Added helper functions for common quiz operations
+    - [X] Standardized sharing functionality
+
+[X] Reorganize quiz features for better user experience
+  - [X] Moved BTS Knowledge Challenge from lyrics quiz to ARMY Knowledge quiz
+  - [X] Created new ARMY Knowledge Quiz page at /quiz/army-quiz
+  - [X] Refocused lyrics quiz page to only contain lyrics-related content
+  - [X] Updated the quiz index page to enable the ARMY Knowledge Quiz
+  - [X] Added cross-linking between quiz pages for better navigation
+  - [X] Implemented consistent UI using shared components
+  - [X] Added chronology, visual recognition, and member-specific questions to ARMY Quiz
+
+[X] Clean up project and remove unused features
+  - [X] Removed polls page references from CustomHead.tsx
+  - [X] Removed polls entry from SEO-Title-List.md
+  - [X] Removed unused confetti demo page and components
+  - [X] Deleted app/confetti-demo/page.tsx
+  - [X] Deleted app/components/ConfettiDemo.tsx
+  - [X] Deleted app/components/features/example-confetti.tsx

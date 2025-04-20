@@ -9,6 +9,7 @@ interface SEOProps {
   ogImageWidth?: number;
   ogImageHeight?: number;
   ogImageAlt?: string;
+  includeSuffix?: boolean;
 }
 
 /**
@@ -23,6 +24,7 @@ export function generateMetadata({
   ogImageWidth = 1200,
   ogImageHeight = 630,
   ogImageAlt = "Love for BTS - BTS Fan Hub for ARMY",
+  includeSuffix = true,
 }: SEOProps): Metadata {
   const url = `https://loveforbts.com${path}`
   
@@ -37,15 +39,17 @@ export function generateMetadata({
   // Merge with page-specific keywords
   const mergedKeywords = [...commonKeywords, ...keywords]
   
+  const pageTitle = includeSuffix ? `${title} - Love for BTS` : title;
+  
   return {
-    title,
+    title: pageTitle,
     description,
     keywords: mergedKeywords,
     alternates: {
       canonical: url,
     },
     openGraph: {
-      title: `${title} - Love for BTS`,
+      title: pageTitle,
       description,
       url,
       images: [
@@ -59,7 +63,7 @@ export function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} - Love for BTS`,
+      title: pageTitle,
       description,
       images: [ogImage],
     }

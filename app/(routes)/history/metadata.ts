@@ -1,7 +1,6 @@
-import { Metadata } from "next"
 import { generateMetadata } from "@/app/lib/seo-utils"
 
-export const metadata: Metadata = generateMetadata({
+export default generateMetadata({
   title: "BTS History Timeline",
   description: "Explore BTS's journey from debut to global superstardom through this interactive timeline of significant events, debuts, awards, performances, and milestones.",
   keywords: [

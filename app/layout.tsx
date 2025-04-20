@@ -8,6 +8,7 @@ import { NotificationProvider } from "./lib/notification-context"
 import { Navbar } from "./components/layout/navbar"
 import { Footer } from "./components/layout/footer"
 import { FanChantButtonWrapper } from "./components/FanChantButtonWrapper"
+import { CustomHead } from "./components/layout/CustomHead"
 import GoogleAnalytics from "./lib/google-analytics"
 import "./globals.css"
 
@@ -15,10 +16,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://loveforbts.com'),
-  title: {
-    default: "Love for BTS - BTS Fan Hub for ARMY",
-    template: "%s - Love for BTS",
-  },
+  title: "Love for BTS - BTS Fan Hub for ARMY",
   description: "Your BTS fan hub! Explore fan content, story & more. Made for ARMY, by ARMY. Love BTS? You're in the right place.",
   keywords: [
     "BTS", "Bangtan Sonyeondan", "Bangtan Boys", "K-pop", 
@@ -95,9 +93,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet" />
       </head>
-      <body className={`${inter.variable} font-sans min-h-screen bg-white`}>
+      <body className={`${inter.variable} font-sans min-h-screen bg-white`} suppressHydrationWarning={true}>
         {/* Google Analytics */}
         <GoogleAnalytics />
+        
+        {/* Custom component to force page titles */}
+        <CustomHead />
         
         <NotificationProvider>
           <ArmyStoryProvider>

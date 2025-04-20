@@ -7,7 +7,8 @@ import { useArmyStories } from '@/app/lib/army-story-context'
 import { type SupabaseArmyStory } from '@/app/lib/supabase'
 
 export default function StoryDetailPage() {
-  const { id } = useParams()
+  const params = useParams()
+  const id = params?.id as string
   const router = useRouter()
   const { getStoryById } = useArmyStories()
   const [story, setStory] = useState<SupabaseArmyStory | null>(null)
