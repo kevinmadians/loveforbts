@@ -39,7 +39,7 @@ export function Navbar() {
                 height={32} 
                 className="h-8 w-8"
               />
-              <span className="ml-2 text-xl font-bold black-han-sans">Love for BTS</span>
+              <span className="ml-2 text-xl font-bold black-han-sans text-[#9333EA]">Love for BTS</span>
             </Link>
           </div>
 

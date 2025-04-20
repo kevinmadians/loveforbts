@@ -42,18 +42,16 @@ const nextConfig = {
   experimental: {
     webpackBuildWorker: true,
     parallelServerCompiles: true,
-    serverComponentsExternalPackages: [],
-    outputFileTracingExcludes: {
-      '*': [
-        // Exclude specific files that might cause issues
-        '**/node_modules/@swc/core-linux-x64-gnu',
-        '**/node_modules/@swc/core-linux-x64-musl',
-        '**/node_modules/sharp',
-      ],
-    },
   },
-  // Ensure output tracing includes all necessary files
-  outputFileTracing: true,
+  // Moved from experimental to root level
+  outputFileTracingExcludes: {
+    '*': [
+      // Exclude specific files that might cause issues
+      '**/node_modules/@swc/core-linux-x64-gnu',
+      '**/node_modules/@swc/core-linux-x64-musl',
+      '**/node_modules/sharp',
+    ],
+  },
   // Customize webpack config to ensure compatibility with React 19
   webpack: (config, { isServer }) => {
     // Fix issues with packages that might not be fully compatible with React 19

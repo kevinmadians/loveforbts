@@ -9,7 +9,7 @@ export default function RoutesLayout({
 }) {
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full max-w-6xl flex flex-col items-center justify-center py-4 md:py-8 px-4">
+      <div className="w-full max-w-6xl mx-auto py-4 md:py-8 px-4 md:px-6">
         {children}
       </div>
     </div>
