@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { CountrySelect } from "@/app/components/ui/country-select"
 import { getCountryCode } from "@/app/lib/country-codes"
 import { searchBTSSongs, type BTSSong } from "@/app/data/bts-songs"
+import { getArmyCardPhoto, getRandomVariedPhoto } from "@/app/lib/member-photos"
 
 // Define form schema using Zod
 const armyCardSchema = z.object({
@@ -97,6 +98,7 @@ export function ArmyCardGenerator() {
   }>({})
 
   const [selectedMember, setSelectedMember] = useState<typeof membersData[0] | null>(null)
+  const [memberPhoto, setMemberPhoto] = useState<string>("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [cardGenerated, setCardGenerated] = useState(false)
   const [memberImageLoaded, setMemberImageLoaded] = useState(false)
@@ -127,13 +129,33 @@ export function ArmyCardGenerator() {
     setShowSongSuggestions(false);
   };
 
+  const handleRefreshPhoto = () => {
+    if (selectedMember) {
+      const newPhoto = getRandomVariedPhoto(selectedMember.slug);
+      setMemberPhoto(newPhoto);
+      // Reset member image loaded state so it can reload the new image
+      setMemberImageLoaded(false);
+      
+      toast.success("Photo refreshed!", {
+        description: "Showing a new photo for your bias",
+      });
+    }
+  };
+
   // Update selected member when bias changes
   useEffect(() => {
     if (formData.bias) {
       const member = membersData.find(m => m.slug === formData.bias)
       setSelectedMember(member || null)
+      
+      // Set dynamic member photo
+      if (member) {
+        const dynamicPhoto = getArmyCardPhoto(member.slug)
+        setMemberPhoto(dynamicPhoto)
+      }
     } else {
       setSelectedMember(null)
+      setMemberPhoto("")
     }
   }, [formData.bias])
 
@@ -171,7 +193,7 @@ export function ArmyCardGenerator() {
 
   // Preload the member image for canvas rendering
   useEffect(() => {
-    if (selectedMember && cardGenerated) {
+    if (selectedMember && memberPhoto && cardGenerated) {
       // Create an image element for the member photo
       const img = document.createElement('img');
       img.crossOrigin = "anonymous";
@@ -179,7 +201,7 @@ export function ArmyCardGenerator() {
         memberImageRef.current = img;
         setMemberImageLoaded(true);
       };
-      img.src = selectedMember.image;
+      img.src = memberPhoto;
       
       // If country is selected, also preload the flag
       if (formData.country) {
@@ -193,7 +215,7 @@ export function ArmyCardGenerator() {
         flagImg.src = `https://flagcdn.com/w80/${countryCode}.png`;
       }
     }
-  }, [selectedMember, cardGenerated, formData.country]);
+  }, [selectedMember, memberPhoto, cardGenerated, formData.country]);
 
   const generateCard = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -243,7 +265,7 @@ export function ArmyCardGenerator() {
     if (!cardRef.current || !canvasRef.current) return
     
     // Wait for member image to load first
-    if (!memberImageLoaded && selectedMember) {
+    if (!memberImageLoaded && selectedMember && memberPhoto) {
       toast.info("Preparing image...", {
         description: "Please wait while we prepare your card for download",
       })
@@ -252,7 +274,7 @@ export function ArmyCardGenerator() {
       img.crossOrigin = "anonymous";
       await new Promise((resolve) => {
         img.onload = resolve;
-        img.src = selectedMember.image;
+        img.src = memberPhoto;
         memberImageRef.current = img;
       });
     }
@@ -497,6 +519,30 @@ export function ArmyCardGenerator() {
               ))}
             </select>
             {errors.bias && <p className="mt-1 text-sm text-red-500">{errors.bias}</p>}
+            
+            {/* Photo Refresh Button */}
+            {selectedMember && (
+              <button
+                type="button"
+                onClick={handleRefreshPhoto}
+                className="mt-2 w-full bg-[#FFDE00] text-black py-2 px-4 rounded-md border-2 border-black hover:bg-yellow-400 transition-colors black-han-sans flex items-center justify-center gap-2"
+              >
+                <svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+                  />
+                </svg>
+                Change {selectedMember.name === "BTS (OT7)" ? "Group" : selectedMember.name} Photo
+              </button>
+            )}
           </div>
 
           <div>
@@ -695,9 +741,9 @@ export function ArmyCardGenerator() {
               </div>
               {/* Member Image */}
               <div className="w-full aspect-square relative border-b-2" style={{ borderColor: themeMap[formData.theme as keyof typeof themeMap].border }}>
-                {selectedMember && (
+                {selectedMember && memberPhoto && (
                   <Image
-                    src={selectedMember.image}
+                    src={memberPhoto}
                     alt={`Photo of ${selectedMember.name}`}
                     fill
                     className="object-cover"

@@ -554,3 +554,19 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
   - [X] Deleted app/confetti-demo/page.tsx
   - [X] Deleted app/components/ConfettiDemo.tsx
   - [X] Deleted app/components/features/example-confetti.tsx
+
+[X] Implement varied photos for BTS members and OT7 in ARMY Card page
+  - [X] Created OT7 folder in public/images/members/varied/ot7
+  - [X] Added 4 group photos (ot7-1.jpg through ot7-4.jpg) to the OT7 folder
+  - [X] Updated member-photos.ts to include OT7 photos in memberVariedPhotos object
+  - [X] Enhanced getRandomMemberPhoto function with time-based rotation (changes every 4 hours)
+  - [X] Created new getArmyCardPhoto function for consistent daily photo selection
+  - [X] Updated ARMY Card Generator to use dynamic photos instead of static member.image
+  - [X] Added memberPhoto state to track the current dynamic photo
+  - [X] Updated all image loading logic to use the dynamic memberPhoto
+  - [X] Ensured photos change dynamically over time while remaining consistent during user sessions
+  - [X] Added manual photo refresh button below bias selection dropdown
+  - [X] Created getRandomVariedPhoto function for manual photo cycling
+  - [X] Added handleRefreshPhoto function to manually change displayed photos
+  - [X] Added refresh icon and contextual button text (individual member vs. OT7 group)
+  - [X] Implemented toast notification for user feedback when photo is refreshed

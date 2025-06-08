@@ -9,10 +9,32 @@ import { getMessageComments, saveMessageComment } from "@/app/lib/supabase-servi
 import { toast } from "sonner"
 import { Send, MessageCircle } from "lucide-react"
 import { CountrySelect } from "@/app/components/ui/country-select"
+import { z } from "zod"
+import { containsBadWords } from "@/app/lib/bad-words"
 
 interface MessageCommentsProps {
   messageId: number
 }
+
+// Define form schema using Zod
+const commentSchema = z.object({
+  name: z.string()
+    .min(2, { message: "Name must be at least 2 characters long" })
+    .max(50, { message: "Name must be at most 50 characters long" })
+    .refine((val: string) => !containsBadWords(val), {
+      message: "Name contains inappropriate words"
+    }),
+  country: z.string().min(1, { message: "Please select a country" }),
+  message: z.string()
+    .min(5, { message: "Message must be at least 5 characters long" })
+    .max(500, { message: "Message must be at most 500 characters long" })
+    .refine((val: string) => !val.includes('http://') && !val.includes('https://') && !val.includes('www.'), {
+      message: "URLs are not allowed in messages"
+    })
+    .refine((val: string) => !containsBadWords(val), {
+      message: "Message contains inappropriate words"
+    }),
+})
 
 export function MessageComments({ messageId }: MessageCommentsProps) {
   const [comments, setComments] = useState<SupabaseMessageComment[]>([])
@@ -43,8 +65,32 @@ export function MessageComments({ messageId }: MessageCommentsProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Validate message length and URLs
+    if (message.length > 500) {
+      toast.error("Comment must be at most 500 characters long")
+      return
+    }
+    
+    if (message.includes('http://') || message.includes('https://') || message.includes('www.')) {
+      toast.error("URLs are not allowed in comments")
+      return
+    }
+    
     if (!name.trim() || !country.trim() || !message.trim()) {
       toast.error("Please fill in all fields")
+      return
+    }
+
+    // Validate against bad words
+    try {
+      const validatedData = commentSchema.parse({ name, country, message })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0]
+        toast.error(firstError.message)
+        return
+      }
+      toast.error("Invalid input. Please check your comment.")
       return
     }
     

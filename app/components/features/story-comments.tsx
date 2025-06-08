@@ -80,6 +80,19 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
       toast.error("Please fill in all fields")
       return
     }
+
+    // Validate against bad words and other schema rules
+    try {
+      commentSchema.parse({ name, country, message })
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0]
+        toast.error(firstError.message)
+        return
+      }
+      toast.error("Invalid input. Please check your comment.")
+      return
+    }
     
     setIsSubmitting(true)
     

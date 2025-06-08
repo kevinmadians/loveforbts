@@ -4,7 +4,7 @@ const BAD_WORDS = [
   'fuck', 'shit', 'ass', 'bitch', 'damn', 'hell', 'crap', 'bastard', 'cunt', 'motherfucker', 'prick', 'piss', 'dickhead', 'twat', 'ballsack',
 
   // Hate speech / Slurs
-  'nigger', 'chink', 'spic', 'kike', 'gook', 'fag', 'faggot', 'retard', 'tranny', 'towelhead', 'camel jockey', 'wetback', 'redskin', 'nazi',
+  'nigger', 'niga', 'nigga', 'niggas','chink', 'spic', 'kike', 'gook', 'fag', 'faggot', 'retard', 'tranny', 'towelhead', 'camel jockey', 'wetback', 'redskin', 'nazi',
 
   // Inappropriate terms / Adult content
   'sex', 'porn', 'pussy', 'dick', 'dildo', 'blowjob', 'anal', 'slut', 'whore', 'tits', 'boobs', 'cum', 'orgasm', 'threesome', 'hentai', 'nude', 'nudity', 'ejaculation', 'masturbation',
