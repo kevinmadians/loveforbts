@@ -22,6 +22,7 @@ const armyCardSchema = z.object({
   motto: z.string().max(40, { message: "Motto/quote must be 40 characters or less" }).optional(),
   cardStyle: z.string().min(1, { message: "Please select a card style" }),
   badge: z.string().optional(),
+  photoOption: z.string().min(1, { message: "Please select a photo option" }),
 })
 
 type ArmyCardFormData = Omit<z.infer<typeof armyCardSchema>, 'motto'>;
@@ -73,7 +74,9 @@ export function ArmyCardGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const memberImageRef = useRef<HTMLImageElement | null>(null)
+  const userImageRef = useRef<HTMLImageElement | null>(null)
   const flagImageRef = useRef<HTMLImageElement | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   
   const [formData, setFormData] = useState<ArmyCardFormData>({
     name: "",
@@ -84,6 +87,7 @@ export function ArmyCardGenerator() {
     favoriteSong: "",
     cardStyle: "classic",
     badge: "💜",
+    photoOption: "member",
   })
 
   const [errors, setErrors] = useState<{
@@ -95,13 +99,17 @@ export function ArmyCardGenerator() {
     favoriteSong?: string;
     cardStyle?: string;
     badge?: string;
+    photoOption?: string;
   }>({})
 
   const [selectedMember, setSelectedMember] = useState<typeof membersData[0] | null>(null)
   const [memberPhoto, setMemberPhoto] = useState<string>("")
+  const [userPhoto, setUserPhoto] = useState<string>("")
+  const [userPhotoFile, setUserPhotoFile] = useState<File | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [cardGenerated, setCardGenerated] = useState(false)
   const [memberImageLoaded, setMemberImageLoaded] = useState(false)
+  const [userImageLoaded, setUserImageLoaded] = useState(false)
   const [flagImageLoaded, setFlagImageLoaded] = useState(false)
 
   // Replace Favorite BTS Song input with Spotify search autocomplete
@@ -140,6 +148,51 @@ export function ArmyCardGenerator() {
         description: "Showing a new photo for your bias",
       });
     }
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size should be less than 5MB");
+      return;
+    }
+
+    setUserPhotoFile(file);
+    
+    // Create preview URL
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      setUserPhoto(result);
+      setUserImageLoaded(false); // Reset for canvas preparation
+      
+      toast.success("Photo uploaded!", {
+        description: "Your photo is ready to use on the card",
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemovePhoto = () => {
+    setUserPhoto("");
+    setUserPhotoFile(null);
+    setUserImageLoaded(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    
+    toast.success("Photo removed", {
+      description: "User photo has been cleared",
+    });
   };
 
   // Update selected member when bias changes
@@ -191,19 +244,31 @@ export function ArmyCardGenerator() {
     }))
   }
 
-  // Preload the member image for canvas rendering
+  // Preload images for canvas rendering
   useEffect(() => {
-    if (selectedMember && memberPhoto && cardGenerated) {
-      // Create an image element for the member photo
-      const img = document.createElement('img');
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        memberImageRef.current = img;
-        setMemberImageLoaded(true);
-      };
-      img.src = memberPhoto;
+    if (cardGenerated) {
+      // Load member image if needed
+      if (selectedMember && memberPhoto && (formData.photoOption === "member" || formData.photoOption === "both")) {
+        const img = document.createElement('img');
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+          memberImageRef.current = img;
+          setMemberImageLoaded(true);
+        };
+        img.src = memberPhoto;
+      }
+
+      // Load user image if needed
+      if (userPhoto && (formData.photoOption === "user" || formData.photoOption === "both")) {
+        const img = document.createElement('img');
+        img.onload = () => {
+          userImageRef.current = img;
+          setUserImageLoaded(true);
+        };
+        img.src = userPhoto;
+      }
       
-      // If country is selected, also preload the flag
+      // Load flag image if country is selected
       if (formData.country) {
         const countryCode = getCountryCode(formData.country).toLowerCase();
         const flagImg = document.createElement('img');
@@ -215,7 +280,7 @@ export function ArmyCardGenerator() {
         flagImg.src = `https://flagcdn.com/w80/${countryCode}.png`;
       }
     }
-  }, [selectedMember, memberPhoto, cardGenerated, formData.country]);
+  }, [selectedMember, memberPhoto, userPhoto, cardGenerated, formData.country, formData.photoOption]);
 
   const generateCard = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -264,18 +329,30 @@ export function ArmyCardGenerator() {
     await loadFont();
     if (!cardRef.current || !canvasRef.current) return
     
-    // Wait for member image to load first
-    if (!memberImageLoaded && selectedMember && memberPhoto) {
-      toast.info("Preparing image...", {
+    // Wait for member image to load first if needed
+    if (!memberImageLoaded && selectedMember && memberPhoto && (formData.photoOption === "member" || formData.photoOption === "both")) {
+      toast.info("Preparing member image...", {
         description: "Please wait while we prepare your card for download",
       })
-      // Create an image element for the member photo
       const img = document.createElement('img');
       img.crossOrigin = "anonymous";
       await new Promise((resolve) => {
         img.onload = resolve;
         img.src = memberPhoto;
         memberImageRef.current = img;
+      });
+    }
+
+    // Wait for user image to load if needed
+    if (!userImageLoaded && userPhoto && (formData.photoOption === "user" || formData.photoOption === "both")) {
+      toast.info("Preparing your photo...", {
+        description: "Processing your uploaded image",
+      })
+      const img = document.createElement('img');
+      await new Promise((resolve) => {
+        img.onload = resolve;
+        img.src = userPhoto;
+        userImageRef.current = img;
       });
     }
     
@@ -317,61 +394,298 @@ export function ArmyCardGenerator() {
     
     // Title text
     ctx.fillStyle = theme.headerText;
-    ctx.font = "bold 120px 'Black Han Sans', sans-serif";
+    ctx.font = "bold 90px 'Black Han Sans', sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("ARMY CARD", canvas.width / 2, 160);
+    ctx.fillText("ARMY CARD", canvas.width / 2, 140);
     
     // Draw badge/icon
     if (formData.badge) {
-      ctx.font = "80px 'Black Han Sans', sans-serif";
-      ctx.fillText(formData.badge, canvas.width - 120, 160);
+      ctx.font = "60px 'Black Han Sans', sans-serif";
+      ctx.fillText(formData.badge, canvas.width - 100, 140);
     }
     
-    // Draw member image if available
-    if (memberImageRef.current) {
-      // Draw member image
-      const imgWidth = canvas.width - 80
-      const imgHeight = imgWidth
-      ctx.drawImage(memberImageRef.current, 40, 240, imgWidth, imgHeight)
+    // Draw photos based on photoOption
+    const photoArea = {
+      x: 40,
+      y: 240,
+      width: canvas.width - 80,
+      height: canvas.width - 80
+    };
+
+    if (formData.photoOption === "member" && memberImageRef.current) {
+      // Draw member image only with proper aspect ratio and centering
+      const memberImg = memberImageRef.current;
+      const memberAspectRatio = memberImg.naturalWidth / memberImg.naturalHeight;
+      const targetAspectRatio = photoArea.width / photoArea.height;
       
-      // Add a border to the image
-      ctx.strokeStyle = "#000000"
-      ctx.lineWidth = 10
-      ctx.strokeRect(40, 240, imgWidth, imgHeight)
+      let drawWidth = photoArea.width;
+      let drawHeight = photoArea.height;
+      let drawX = photoArea.x;
+      let drawY = photoArea.y;
+      
+      // Adjust dimensions to maintain aspect ratio while filling the space
+      if (memberAspectRatio > targetAspectRatio) {
+        // Image is wider, fit by height and center horizontally
+        drawHeight = photoArea.height;
+        drawWidth = drawHeight * memberAspectRatio;
+        drawX = photoArea.x + (photoArea.width - drawWidth) / 2;
+      } else {
+        // Image is taller, fit by width and center vertically
+        drawWidth = photoArea.width;
+        drawHeight = drawWidth / memberAspectRatio;
+        drawY = photoArea.y + (photoArea.height - drawHeight) / 2;
+      }
+      
+      // Use clipping to ensure image doesn't overflow the designated area
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
+      ctx.clip();
+      ctx.drawImage(memberImg, drawX, drawY, drawWidth, drawHeight);
+      ctx.restore();
+      
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
+    } else if (formData.photoOption === "user" && userImageRef.current) {
+      // Draw user image only with proper aspect ratio and centering (no cropping)
+      const userImg = userImageRef.current;
+      const userAspectRatio = userImg.naturalWidth / userImg.naturalHeight;
+      const targetAspectRatio = photoArea.width / photoArea.height;
+      
+      let drawWidth, drawHeight, drawX, drawY;
+      
+      // Fit image within bounds without cropping (object-contain behavior)
+      if (userAspectRatio > targetAspectRatio) {
+        // Image is wider, fit by width and center vertically
+        drawWidth = photoArea.width;
+        drawHeight = drawWidth / userAspectRatio;
+        drawX = photoArea.x;
+        drawY = photoArea.y + (photoArea.height - drawHeight) / 2;
+      } else {
+        // Image is taller, fit by height and center horizontally
+        drawHeight = photoArea.height;
+        drawWidth = drawHeight * userAspectRatio;
+        drawX = photoArea.x + (photoArea.width - drawWidth) / 2;
+        drawY = photoArea.y;
+      }
+      
+      // Fill background with light gray
+      ctx.fillStyle = "#f9f9f9";
+      ctx.fillRect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
+      
+      // Draw image without clipping (entire image visible)
+      ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
+      
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
+    } else if (formData.photoOption === "both") {
+      // Draw both images side by side with improved sizing and centering
+      const halfWidth = photoArea.width / 2;
+      
+      if (memberImageRef.current) {
+        // Calculate image dimensions for proper centering and aspect ratio
+        const memberImg = memberImageRef.current;
+        const memberAspectRatio = memberImg.naturalWidth / memberImg.naturalHeight;
+        const targetAspectRatio = halfWidth / photoArea.height;
+        
+        let drawWidth = halfWidth;
+        let drawHeight = photoArea.height;
+        let drawX = photoArea.x;
+        let drawY = photoArea.y;
+        
+        // Adjust dimensions to maintain aspect ratio while filling the space
+        if (memberAspectRatio > targetAspectRatio) {
+          // Image is wider, fit by height and center horizontally
+          drawHeight = photoArea.height;
+          drawWidth = drawHeight * memberAspectRatio;
+          drawX = photoArea.x + (halfWidth - drawWidth) / 2;
+        } else {
+          // Image is taller, fit by width and center vertically
+          drawWidth = halfWidth;
+          drawHeight = drawWidth / memberAspectRatio;
+          drawY = photoArea.y + (photoArea.height - drawHeight) / 2;
+        }
+        
+        // Use clipping to ensure image doesn't overflow the designated area
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(photoArea.x, photoArea.y, halfWidth, photoArea.height);
+        ctx.clip();
+        ctx.drawImage(memberImg, drawX, drawY, drawWidth, drawHeight);
+        ctx.restore();
+      }
+      
+      if (userImageRef.current) {
+        // Calculate image dimensions for proper centering and aspect ratio (no cropping)
+        const userImg = userImageRef.current;
+        const userAspectRatio = userImg.naturalWidth / userImg.naturalHeight;
+        const targetAspectRatio = halfWidth / photoArea.height;
+        
+        let drawWidth, drawHeight, drawX, drawY;
+        
+        // Fit image within bounds without cropping (object-contain behavior)
+        if (userAspectRatio > targetAspectRatio) {
+          // Image is wider, fit by width and center vertically
+          drawWidth = halfWidth;
+          drawHeight = drawWidth / userAspectRatio;
+          drawX = photoArea.x + halfWidth;
+          drawY = photoArea.y + (photoArea.height - drawHeight) / 2;
+        } else {
+          // Image is taller, fit by height and center horizontally
+          drawHeight = photoArea.height;
+          drawWidth = drawHeight * userAspectRatio;
+          drawX = photoArea.x + halfWidth + (halfWidth - drawWidth) / 2;
+          drawY = photoArea.y;
+        }
+        
+        // Fill user photo background with light gray
+        ctx.fillStyle = "#f9f9f9";
+        ctx.fillRect(photoArea.x + halfWidth, photoArea.y, halfWidth, photoArea.height);
+        
+        // Draw user image without clipping (entire image visible)
+        ctx.drawImage(userImg, drawX, drawY, drawWidth, drawHeight);
+      }
+      
+      // Add border around the entire photo area
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
+      
+      // Add divider line between photos
+      if (memberImageRef.current && userImageRef.current) {
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(photoArea.x + halfWidth, photoArea.y);
+        ctx.lineTo(photoArea.x + halfWidth, photoArea.y + photoArea.height);
+        ctx.stroke();
+      }
     } else {
-      // Fallback if image is not available
-      ctx.fillStyle = "#f2f2f2"
-      ctx.fillRect(40, 240, canvas.width - 80, canvas.width - 80) // Square area for member
+      // Fallback if no images are available
+      ctx.fillStyle = "#f2f2f2";
+      ctx.fillRect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
       
-      // Add text to indicate missing image
-      ctx.fillStyle = "#000000"
-      ctx.font = "bold 60px Arial, sans-serif"
-      ctx.textAlign = "center"
-      ctx.fillText(selectedMember?.name || "Your Bias", canvas.width / 2, 240 + (canvas.width - 80) / 2)
+      // Add placeholder text
+      ctx.fillStyle = "#666666";
+      ctx.font = "bold 60px 'Black Han Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("No Photo", canvas.width / 2, photoArea.y + photoArea.height / 2);
+      
+      // Add border
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(photoArea.x, photoArea.y, photoArea.width, photoArea.height);
     }
     
-    // User info section background
+    // User info section background - ensure it covers the remaining space
+    const infoSectionY = 240 + (canvas.width - 80) + 20;
+    const infoSectionHeight = canvas.height - infoSectionY - 80; // Leave space for bottom margin
     ctx.fillStyle = theme.bodyBg;
-    ctx.fillRect(40, 240 + (canvas.width - 80) + 20, canvas.width - 80, canvas.height - (240 + (canvas.width - 80) + 60));
+    ctx.fillRect(40, infoSectionY, canvas.width - 80, infoSectionHeight);
     
-    // Info lines
-    let currentY = 240 + (canvas.width - 80) + 100;
-    const lineHeight = 120;
-    // Update drawLabelWithValue signature
+    // Info lines - start with better positioning
+    let currentY = infoSectionY + 60;
+    const lineHeight = 85;
+    const maxWidth = canvas.width - 160; // Maximum width for text
+    
+    // Helper function to measure text width
+    const measureText = (text: string, font: string): number => {
+      ctx.font = font;
+      return ctx.measureText(text).width;
+    };
+    
+    // Helper function to auto-scale font size to fit text
+    const getOptimalFontSize = (text: string, maxWidth: number, baseFontSize: number, fontFamily: string, fontWeight: string = '500'): number => {
+      let fontSize = baseFontSize;
+      let font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+      
+      while (measureText(text, font) > maxWidth && fontSize > 28) {
+        fontSize -= 1;
+        font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+      }
+      
+      return fontSize;
+    };
+    
+    // Helper function to wrap text if needed
+    const wrapText = (text: string, maxWidth: number, font: string): string[] => {
+      ctx.font = font;
+      const words = text.split(' ');
+      const lines: string[] = [];
+      let currentLine = '';
+      
+      for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        const testWidth = ctx.measureText(testLine).width;
+        
+        if (testWidth <= maxWidth) {
+          currentLine = testLine;
+        } else {
+          if (currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
+          } else {
+            // Single word is too long, add it anyway
+            lines.push(word);
+            currentLine = '';
+          }
+        }
+      }
+      
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+      
+      return lines.length > 0 ? lines : [text];
+    };
+    
+    // Update drawLabelWithValue signature with improved text handling
     type DrawLabelWithValue = (label: string, value: string, y: number, isBold?: boolean) => number;
     const drawLabelWithValue: DrawLabelWithValue = (label, value, y, isBold = false) => {
+      // Draw bullet point
       ctx.fillStyle = theme.bullet;
       ctx.beginPath();
-      ctx.arc(80, y - 20, 15, 0, Math.PI * 2);
+      ctx.arc(80, y - 15, 12, 0, Math.PI * 2);
       ctx.fill();
+      
+      // Draw label
       ctx.fillStyle = theme.text;
-      ctx.font = `${isBold ? 'bold' : '500'} 80px 'Black Han Sans', sans-serif`;
+      const labelFontSize = getOptimalFontSize(`${label}:`, 200, 56, "'Black Han Sans', sans-serif", isBold ? 'bold' : '500');
+      ctx.font = `${isBold ? 'bold' : '500'} ${labelFontSize}px 'Black Han Sans', sans-serif`;
       ctx.textAlign = 'left';
       ctx.fillText(`${label}:`, 110, y);
       const labelWidth = ctx.measureText(`${label}:`).width;
-      ctx.font = "500 70px 'Black Han Sans', sans-serif";
-      ctx.fillText(value, 130 + labelWidth, y);
-      return y + lineHeight;
+      
+      // Calculate available width for value
+      const availableWidth = maxWidth - labelWidth - 50; // 50px buffer
+      
+      // Auto-scale value font size
+      const valueFontSize = getOptimalFontSize(value, availableWidth, 52, "'Black Han Sans', sans-serif", '500');
+      const valueFont = `500 ${valueFontSize}px 'Black Han Sans', sans-serif`;
+      
+      // Check if text needs wrapping
+      const valueLines = wrapText(value, availableWidth, valueFont);
+      
+      // Draw value text (single line or wrapped)
+      ctx.font = valueFont;
+      let valueY = y;
+      
+      for (let i = 0; i < valueLines.length; i++) {
+        if (i === 0) {
+          // First line goes next to the label
+          ctx.fillText(valueLines[i], 130 + labelWidth, valueY);
+        } else {
+          // Subsequent lines are indented to align with the first line of value
+          valueY += Math.max(45, valueFontSize * 0.8);
+          ctx.fillText(valueLines[i], 130 + labelWidth, valueY);
+        }
+      }
+      
+      // Return next Y position with proper spacing
+      const totalLinesUsed = Math.max(1, valueLines.length);
+      return y + (lineHeight * (totalLinesUsed > 1 ? totalLinesUsed * 0.8 : 1));
     };
     currentY = drawLabelWithValue("Name", formData.name, currentY, true);
     
@@ -379,20 +693,30 @@ export function ArmyCardGenerator() {
     if (formData.country) {
       ctx.fillStyle = theme.bullet;
       ctx.beginPath();
-      ctx.arc(80, currentY - 20, 15, 0, Math.PI * 2);
+      ctx.arc(80, currentY - 15, 12, 0, Math.PI * 2);
       ctx.fill();
+      
       ctx.fillStyle = theme.text;
-      ctx.font = "bold 80px 'Black Han Sans', sans-serif";
+      const labelFontSize = getOptimalFontSize("Country:", 200, 56, "'Black Han Sans', sans-serif", 'bold');
+      ctx.font = `bold ${labelFontSize}px 'Black Han Sans', sans-serif`;
       ctx.textAlign = "left";
       ctx.fillText("Country:", 110, currentY);
       const labelWidth = ctx.measureText("Country:").width;
+      
       const flagX = 130 + labelWidth;
-      const flagY = currentY - 45;
+      const flagY = currentY - 30;
+      
+      // Draw flag if available
       if (flagImageRef.current) {
-        ctx.drawImage(flagImageRef.current, flagX, flagY, 60, 40);
+        ctx.drawImage(flagImageRef.current, flagX, flagY, 40, 27);
       }
-      ctx.font = "500 70px 'Black Han Sans', sans-serif";
-      ctx.fillText(formData.country, flagX + 70, currentY);
+      
+      // Calculate available width for country name
+      const availableWidthForCountry = maxWidth - labelWidth - 65; // 65px for flag + spacing
+      const countryFontSize = getOptimalFontSize(formData.country, availableWidthForCountry, 52, "'Black Han Sans', sans-serif", '500');
+      ctx.font = `500 ${countryFontSize}px 'Black Han Sans', sans-serif`;
+      ctx.fillText(formData.country, flagX + 55, currentY);
+      
       currentY += lineHeight;
     }
     
@@ -406,9 +730,9 @@ export function ArmyCardGenerator() {
     
     // Brand URL at the bottom
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.font = "bold 36px 'Black Han Sans', sans-serif";
+    ctx.font = "bold 28px 'Black Han Sans', sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("LOVEFORBTS.COM", canvas.width / 2, canvas.height - 50);
+    ctx.fillText("LOVEFORBTS.COM", canvas.width / 2, canvas.height - 40);
     
     // Generate download
     const dataUrl = canvas.toDataURL("image/png")
@@ -567,6 +891,85 @@ export function ArmyCardGenerator() {
             </select>
             {errors.armySince && <p className="mt-1 text-sm text-red-500">{errors.armySince}</p>}
           </div>
+
+          {/* Photo Option Selection */}
+          <div>
+            <label htmlFor="photoOption" className="block text-sm font-medium mb-1 black-han-sans">
+              Card Photo
+            </label>
+            <select
+              id="photoOption"
+              name="photoOption"
+              value={formData.photoOption}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 border-2 ${
+                errors.photoOption ? "border-red-500" : "border-black"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+            >
+              <option value="member">Member Photo Only</option>
+              <option value="user">My Photo Only</option>
+              <option value="both">Member + My Photo</option>
+            </select>
+            {errors.photoOption && <p className="mt-1 text-sm text-red-500">{errors.photoOption}</p>}
+          </div>
+
+          {/* User Photo Upload */}
+          {(formData.photoOption === "user" || formData.photoOption === "both") && (
+            <div>
+              <label className="block text-sm font-medium mb-1 black-han-sans">
+                Upload Your Photo
+              </label>
+              <div className="space-y-3">
+                {/* File Input */}
+                <div className="flex items-center gap-3">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    id="photo-upload"
+                  />
+                  <label
+                    htmlFor="photo-upload"
+                    className="flex-1 cursor-pointer bg-white border-2 border-black rounded-md px-4 py-2 text-center hover:bg-gray-50 transition-colors black-han-sans"
+                  >
+                    {userPhoto ? "Change Photo" : "Choose Photo"}
+                  </label>
+                  {userPhoto && (
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors black-han-sans"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+
+                {/* Photo Preview */}
+                {userPhoto && (
+                  <div className="relative w-40 h-40 mx-auto">
+                    <img
+                      src={userPhoto}
+                      alt="User photo preview"
+                      className="w-full h-full object-contain rounded-md border-2 border-black bg-gray-50"
+                    />
+                    <div className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                      ✓
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload Guidelines */}
+                <p className="text-xs text-gray-600">
+                  • Maximum file size: 5MB
+                  • Supported formats: JPG, PNG, GIF
+                  • Square photos work best
+                </p>
+              </div>
+            </div>
+          )}
 
           <div>
             <label htmlFor="theme" className="block text-sm font-medium mb-1 black-han-sans">
@@ -739,9 +1142,12 @@ export function ArmyCardGenerator() {
                   <span className="ml-2 text-2xl" style={{ fontFamily: 'Black Han Sans, sans-serif' }}>{formData.badge}</span>
                 )}
               </div>
-              {/* Member Image */}
-              <div className="w-full aspect-square relative border-b-2" style={{ borderColor: themeMap[formData.theme as keyof typeof themeMap].border }}>
-                {selectedMember && memberPhoto && (
+              {/* Card Photos */}
+              <div className="w-full flex-shrink-0 relative border-b-2" style={{ 
+                borderColor: themeMap[formData.theme as keyof typeof themeMap].border,
+                height: 'calc(60% - 60px)' // 60% of card height minus header height
+              }}>
+                {formData.photoOption === "member" && selectedMember && memberPhoto && (
                   <Image
                     src={memberPhoto}
                     alt={`Photo of ${selectedMember.name}`}
@@ -749,54 +1155,103 @@ export function ArmyCardGenerator() {
                     className="object-cover"
                   />
                 )}
+                
+                {formData.photoOption === "user" && userPhoto && (
+                  <img
+                    src={userPhoto}
+                    alt="User photo"
+                    className="w-full h-full object-contain bg-gray-50"
+                  />
+                )}
+                
+                {formData.photoOption === "both" && (selectedMember && memberPhoto || userPhoto) && (
+                  <div className="w-full h-full flex">
+                    {selectedMember && memberPhoto && (
+                      <div className="w-1/2 h-full relative">
+                        <Image
+                          src={memberPhoto}
+                          alt={`Photo of ${selectedMember.name}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    {userPhoto && (
+                      <div className="w-1/2 h-full relative bg-gray-50">
+                        <img
+                          src={userPhoto}
+                          alt="User photo"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* Placeholder when no photos are available */}
+                {!((formData.photoOption === "member" && selectedMember && memberPhoto) || 
+                    (formData.photoOption === "user" && userPhoto) || 
+                    (formData.photoOption === "both" && (selectedMember && memberPhoto || userPhoto))) && (
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                    <div className="text-center text-gray-400">
+                      <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-xs">Photo will appear here</p>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* Card Info */}
-              <div className="p-4 flex-grow flex flex-col justify-between" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bodyBg }}>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
-                    <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
-                      Name: <span className="font-normal">{formData.name}</span>
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
-                    <p className="font-bold black-han-sans text-lg mr-1" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>Country: </p>
-                    <span className="flex items-center gap-1">
-                      {formData.country && (
-                        <Image
-                          src={`https://flagcdn.com/w20/${getCountryCode(formData.country).toLowerCase()}.png`}
-                          alt={`Flag of ${formData.country}`}
-                          width={16}
-                          height={12}
-                          className="inline-block"
-                        />
-                      )}
-                      <span className="font-normal" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>{formData.country}</span>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
-                    <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
-                      Bias: <span className="font-normal">{selectedMember?.name}</span>
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
-                    <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
-                      ARMY Since: <span className="font-normal">{formData.armySince}</span>
-                    </p>
-                  </div>
-                  {formData.favoriteSong && (
+              <div className="p-3 flex-1 flex flex-col justify-between overflow-hidden" style={{ 
+                background: themeMap[formData.theme as keyof typeof themeMap].bodyBg,
+                minHeight: '40%' // Ensure minimum height for info section
+              }}>
+                                  <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
-                      <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
-                        Fav. Song: <span className="font-normal">{formData.favoriteSong}</span>
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                      <p className="font-bold black-han-sans text-sm leading-tight" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                        Name: <span className="font-normal">{formData.name}</span>
                       </p>
                     </div>
-                  )}
-                </div>
-                <div className="mt-auto pt-2 text-center text-xs font-medium uppercase tracking-wider" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: 'Inter, sans-serif' }}>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                      <p className="font-bold black-han-sans text-sm leading-tight mr-1" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>Country: </p>
+                      <span className="flex items-center gap-1">
+                        {formData.country && (
+                          <Image
+                            src={`https://flagcdn.com/w20/${getCountryCode(formData.country).toLowerCase()}.png`}
+                            alt={`Flag of ${formData.country}`}
+                            width={12}
+                            height={9}
+                            className="inline-block"
+                          />
+                        )}
+                        <span className="font-normal text-sm" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>{formData.country}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                      <p className="font-bold black-han-sans text-sm leading-tight" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                        Bias: <span className="font-normal">{selectedMember?.name}</span>
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                      <p className="font-bold black-han-sans text-sm leading-tight" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                        ARMY Since: <span className="font-normal">{formData.armySince}</span>
+                      </p>
+                    </div>
+                    {formData.favoriteSong && (
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                        <p className="font-bold black-han-sans text-sm leading-tight" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                          Fav. Song: <span className="font-normal">{formData.favoriteSong}</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                <div className="mt-auto pt-1 text-center text-xs font-medium uppercase tracking-wider" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: 'Inter, sans-serif' }}>
                   LOVEFORBTS.COM
                 </div>
               </div>
