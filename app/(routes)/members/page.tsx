@@ -39,7 +39,7 @@ export default function MembersDirectoryPage() {
         </h2>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {membersData.map((member) => (
+          {membersData.filter(member => member.slug !== 'ot7').map((member) => (
             <MemberCard
               key={member.slug}
               name={member.name}

@@ -7,12 +7,26 @@ import { useMessages } from "@/app/lib/message-context"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { containsBadWords, getFirstBadWord } from "@/app/lib/bad-words"
 
 // Define form schema using Zod
 const commentSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  name: z.string()
+    .min(2, { message: "Name must be at least 2 characters long" })
+    .max(50, { message: "Name must be at most 50 characters long" })
+    .refine((val: string) => !containsBadWords(val), {
+      message: "Name contains inappropriate words"
+    }),
   country: z.string().min(1, { message: "Please select a country" }),
-  message: z.string().min(5, { message: "Message must be at least 5 characters long" }),
+  message: z.string()
+    .min(5, { message: "Message must be at least 5 characters long" })
+    .max(500, { message: "Message must be at most 500 characters long" })
+    .refine((val: string) => !val.includes('http://') && !val.includes('https://') && !val.includes('www.'), {
+      message: "URLs are not allowed in messages"
+    })
+    .refine((val: string) => !containsBadWords(val), {
+      message: "Message contains inappropriate words"
+    }),
 })
 
 type CommentFormData = z.infer<typeof commentSchema>
@@ -209,7 +223,7 @@ export function CommentForm({ onSubmit }: CommentFormProps) {
 
         <div>
           <label htmlFor="message" className="block text-sm font-medium mb-1 black-han-sans">
-            Message
+            Message <span className="text-gray-500 text-xs">({formData.message.length}/500 characters)</span>
           </label>
           <textarea
             id="message"

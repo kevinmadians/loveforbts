@@ -3,41 +3,19 @@
 import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import { formatDate } from "@/app/lib/utils"
-import { type SupabaseStoryComment } from "@/app/lib/supabase"
+import { type SupabaseMessageComment } from "@/app/lib/supabase"
 import { getCountryCode } from "@/app/lib/country-codes"
-import { getStoryComments, saveStoryComment } from "@/app/lib/supabase-service"
+import { getMessageComments, saveMessageComment } from "@/app/lib/supabase-service"
 import { toast } from "sonner"
 import { Send, MessageCircle } from "lucide-react"
 import { CountrySelect } from "@/app/components/ui/country-select"
-import { z } from "zod"
-import { containsBadWords } from "@/app/lib/bad-words"
 
-interface StoryCommentsProps {
-  storyId: string
+interface MessageCommentsProps {
+  messageId: number
 }
 
-// Define form schema using Zod
-const commentSchema = z.object({
-  name: z.string()
-    .min(2, { message: "Name must be at least 2 characters long" })
-    .max(50, { message: "Name must be at most 50 characters long" })
-    .refine((val: string) => !containsBadWords(val), {
-      message: "Name contains inappropriate words"
-    }),
-  country: z.string().min(1, { message: "Please select a country" }),
-  message: z.string()
-    .min(5, { message: "Message must be at least 5 characters long" })
-    .max(500, { message: "Message must be at most 500 characters long" })
-    .refine((val: string) => !val.includes('http://') && !val.includes('https://') && !val.includes('www.'), {
-      message: "URLs are not allowed in messages"
-    })
-    .refine((val: string) => !containsBadWords(val), {
-      message: "Message contains inappropriate words"
-    }),
-})
-
-export function StoryComments({ storyId }: StoryCommentsProps) {
-  const [comments, setComments] = useState<SupabaseStoryComment[]>([])
+export function MessageComments({ messageId }: MessageCommentsProps) {
+  const [comments, setComments] = useState<SupabaseMessageComment[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   
@@ -50,8 +28,8 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
     async function loadComments() {
       setIsLoading(true)
       try {
-        const storyComments = await getStoryComments(storyId)
-        setComments(storyComments)
+        const messageComments = await getMessageComments(messageId)
+        setComments(messageComments)
       } catch (error) {
         console.error("Error loading comments:", error)
       } finally {
@@ -60,21 +38,10 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
     }
     
     loadComments()
-  }, [storyId])
+  }, [messageId])
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    // Validate message length and URLs
-    if (message.length > 500) {
-      toast.error("Comment must be at most 500 characters long")
-      return
-    }
-    
-    if (message.includes('http://') || message.includes('https://') || message.includes('www.')) {
-      toast.error("URLs are not allowed in comments")
-      return
-    }
     
     if (!name.trim() || !country.trim() || !message.trim()) {
       toast.error("Please fill in all fields")
@@ -84,7 +51,7 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
     setIsSubmitting(true)
     
     try {
-      const newComment = await saveStoryComment(storyId, name, country, message)
+      const newComment = await saveMessageComment(messageId, name, country, message)
       
       if (newComment) {
         setComments([...comments, newComment])
@@ -124,7 +91,7 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
           </div>
         ) : comments.length === 0 ? (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-            <p className="text-gray-600">Be the first to comment on this story!</p>
+            <p className="text-gray-600">Be the first to comment on this message!</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -165,7 +132,7 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
       </div>
       
       {/* Comment Form */}
-      <div className="bg-white rounded-2xl border-2 border-black p-4 md:p-6">
+      <div className="bg-white rounded-lg border-2 border-black p-6">
         <h3 className="text-xl black-han-sans mb-4">Leave a Comment</h3>
         
         <form onSubmit={handleSubmit}>
@@ -204,14 +171,14 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
           {/* Message Field */}
           <div className="mb-4">
             <label htmlFor="message" className="block font-medium mb-1">
-              Comment <span className="text-gray-500 text-xs">({message.length}/500 characters)</span>
+              Comment
             </label>
             <textarea
               id="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:ring-1 focus:ring-purple-500 min-h-[100px]"
-              placeholder="Share your thoughts on this story..."
+              placeholder="Share your thoughts on this message..."
               required
             />
           </div>

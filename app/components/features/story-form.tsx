@@ -8,15 +8,34 @@ import { useArmyStories } from "@/app/lib/army-story-context"
 import { type SupabaseArmyStory } from "@/app/lib/supabase"
 import RichTextEditor from "../ui/rich-text-editor"
 import { toast } from "sonner"
+import { containsBadWords } from "@/app/lib/bad-words"
 
 // Define form schema using Zod
 const storySchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  name: z.string()
+    .min(2, { message: "Name must be at least 2 characters long" })
+    .max(50, { message: "Name must be at most 50 characters long" })
+    .refine((val: string) => !containsBadWords(val), {
+      message: "Name contains inappropriate words"
+    }),
   country: z.string().min(1, { message: "Please select a country" }),
   bias: z.string().min(1, { message: "Please select your bias" }),
-  content: z.string().min(50, { message: "Story must be at least 50 characters long" }),
-  title: z.string().optional(),
-  army_since: z.number().min(2013, { message: "Please select when you became an ARMY" })
+  content: z.string()
+    .min(50, { message: "Story must be at least 50 characters long" })
+    .max(5000, { message: "Story must be at most 5000 characters long" })
+    .refine((val: string) => !val.includes('http://') && !val.includes('https://') && !val.includes('www.'), {
+      message: "URLs are not allowed in stories"
+    })
+    .refine((val: string) => !containsBadWords(val), {
+      message: "Story contains inappropriate words"
+    }),
+  title: z.string()
+    .max(100, { message: "Title must be at most 100 characters long" })
+    .optional()
+    .refine((val: string | undefined) => !val || !containsBadWords(val), {
+      message: "Title contains inappropriate words"
+    }),
+  army_since: z.number().min(2013, { message: "ARMY Since must be 2013 or later" }),
 })
 
 type StoryFormData = z.infer<typeof storySchema>
@@ -157,15 +176,13 @@ export function StoryForm({ onSubmit }: StoryFormProps) {
 
   return (
     <div className="bg-white rounded-2xl border-2 border-black p-6 shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center black-han-sans">
-        Share Your ARMY Story 💜
-      </h2>
+      
       
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title Input */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium mb-1 black-han-sans">
-            Story Title <span className="text-gray-500 text-xs">(optional)</span>
+            Story Title <span className="text-gray-500 text-xs">(optional, {formData.title?.length || 0}/100 characters)</span>
           </label>
           <input
             id="title"
@@ -282,7 +299,7 @@ export function StoryForm({ onSubmit }: StoryFormProps) {
         {/* Story Content - Rich Text Editor */}
         <div>
           <label htmlFor="content" className="block text-sm font-medium mb-1 black-han-sans">
-            Your ARMY Story
+            Your ARMY Story <span className="text-gray-500 text-xs">({formData.content.length}/5000 characters)</span>
           </label>
           <RichTextEditor
             value={formData.content}

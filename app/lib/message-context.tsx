@@ -7,6 +7,7 @@ import type { SupabaseMessage } from './supabase'
 // Message type definition
 export type Message = {
   id: number
+  message_id: string
   name: string
   country: string
   message: string
@@ -44,6 +45,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
   const convertMessage = (dbMessage: SupabaseMessage): Message => {
     return {
       id: dbMessage.id,
+      message_id: dbMessage.message_id,
       name: dbMessage.name,
       country: dbMessage.country,
       message: dbMessage.message,

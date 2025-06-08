@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useCallback } from "react"
 import { z } from "zod"
 import Image from "next/image"
 import { Download, Share2 } from "lucide-react"
@@ -8,6 +8,7 @@ import { membersData } from "@/app/lib/members-data"
 import { toast } from "sonner"
 import { CountrySelect } from "@/app/components/ui/country-select"
 import { getCountryCode } from "@/app/lib/country-codes"
+import { searchBTSSongs, type BTSSong } from "@/app/data/bts-songs"
 
 // Define form schema using Zod
 const armyCardSchema = z.object({
@@ -15,9 +16,57 @@ const armyCardSchema = z.object({
   country: z.string().min(1, { message: "Please select a country" }),
   bias: z.string().min(1, { message: "Please select your bias" }),
   armySince: z.string().min(1, { message: "Please select when you became ARMY" }),
+  theme: z.string().min(1, { message: "Please select a card theme" }),
+  favoriteSong: z.string().optional(),
+  motto: z.string().max(40, { message: "Motto/quote must be 40 characters or less" }).optional(),
+  cardStyle: z.string().min(1, { message: "Please select a card style" }),
+  badge: z.string().optional(),
 })
 
-type ArmyCardFormData = z.infer<typeof armyCardSchema>
+type ArmyCardFormData = Omit<z.infer<typeof armyCardSchema>, 'motto'>;
+
+// Theme color map
+const themeMap = {
+  classic: {
+    headerBg: '#FFDE00',
+    headerText: '#000000',
+    bodyBg: '#ffffff',
+    border: '#000000',
+    bullet: '#FFDE00',
+    text: '#000000',
+    accent: '#FFDE00',
+  },
+  purple: {
+    headerBg: '#9e4ef9',
+    headerText: '#ffffff',
+    bodyBg: '#f8f4ff',
+    border: '#9e4ef9',
+    bullet: '#9e4ef9',
+    text: '#2d0066',
+    accent: '#9e4ef9',
+  },
+  black: {
+    headerBg: '#111111',
+    headerText: '#FFDE00',
+    bodyBg: '#fffbe6',
+    border: '#111111',
+    bullet: '#FFDE00',
+    text: '#111111',
+    accent: '#FFDE00',
+  },
+  pastel: {
+    headerBg: '#ffe3f6',
+    headerText: '#9e4ef9',
+    bodyBg: '#f8f8f8',
+    border: '#9e4ef9',
+    bullet: '#ffb6e6',
+    text: '#9e4ef9',
+    accent: '#ffb6e6',
+  },
+}
+
+// Only use membersData for biasOptions, since OT7 is now included in membersData
+const biasOptions = membersData.map((member) => ({ slug: member.slug, name: member.name }));
 
 export function ArmyCardGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -30,6 +79,10 @@ export function ArmyCardGenerator() {
     country: "",
     bias: "",
     armySince: "",
+    theme: "classic",
+    favoriteSong: "",
+    cardStyle: "classic",
+    badge: "💜",
   })
 
   const [errors, setErrors] = useState<{
@@ -37,6 +90,10 @@ export function ArmyCardGenerator() {
     country?: string;
     bias?: string;
     armySince?: string;
+    theme?: string;
+    favoriteSong?: string;
+    cardStyle?: string;
+    badge?: string;
   }>({})
 
   const [selectedMember, setSelectedMember] = useState<typeof membersData[0] | null>(null)
@@ -44,6 +101,31 @@ export function ArmyCardGenerator() {
   const [cardGenerated, setCardGenerated] = useState(false)
   const [memberImageLoaded, setMemberImageLoaded] = useState(false)
   const [flagImageLoaded, setFlagImageLoaded] = useState(false)
+
+  // Replace Favorite BTS Song input with Spotify search autocomplete
+  const [songQuery, setSongQuery] = useState("");
+  const [songSuggestions, setSongSuggestions] = useState<BTSSong[]>([]);
+  const [showSongSuggestions, setShowSongSuggestions] = useState(false);
+
+  const songInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSongSearch = useCallback((value: string) => {
+    if (!value.trim()) {
+      setSongSuggestions([]);
+      setShowSongSuggestions(false);
+      return;
+    }
+
+    const results = searchBTSSongs(value);
+    setSongSuggestions(results);
+    setShowSongSuggestions(true);
+  }, []);
+
+  const handleSongSelect = (song: BTSSong) => {
+    setFormData(prev => ({ ...prev, favoriteSong: song.title }));
+    setSongQuery(song.title);
+    setShowSongSuggestions(false);
+  };
 
   // Update selected member when bias changes
   useEffect(() => {
@@ -145,7 +227,19 @@ export function ArmyCardGenerator() {
     }, 1000)
   }
 
+  // In the downloadCard function, before drawing, load the font
+  const loadFont = async () => {
+    if (document.fonts && 'FontFace' in window) {
+      try {
+        const font = new FontFace('Black Han Sans', "url('/fonts/BlackHanSans-Regular.woff2') format('woff2')");
+        await font.load();
+        document.fonts.add(font);
+      } catch (e) {}
+    }
+  }
+
   const downloadCard = async () => {
+    await loadFont();
     if (!cardRef.current || !canvasRef.current) return
     
     // Wait for member image to load first
@@ -183,24 +277,33 @@ export function ArmyCardGenerator() {
     canvas.width = 1080 // Standard width
     canvas.height = 1920 // 9:16 ratio
     
+    // Use theme with proper typing
+    const theme = themeMap[formData.theme as keyof typeof themeMap] || themeMap.classic;
+    
     // Draw background
-    ctx.fillStyle = "#ffffff"
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = theme.bodyBg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw border
-    ctx.strokeStyle = "#000000"
-    ctx.lineWidth = 20
-    ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20)
+    ctx.strokeStyle = theme.border;
+    ctx.lineWidth = 20;
+    ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
     
-    // Draw BTS branding elements
-    ctx.fillStyle = "#FFDE00" // BTS yellow
-    ctx.fillRect(20, 20, canvas.width - 40, 200)
+    // Draw header
+    ctx.fillStyle = theme.headerBg;
+    ctx.fillRect(20, 20, canvas.width - 40, 200);
     
     // Title text
-    ctx.fillStyle = "#000000"
-    ctx.font = "bold 120px 'Black Han Sans', sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText("ARMY CARD", canvas.width / 2, 160)
+    ctx.fillStyle = theme.headerText;
+    ctx.font = "bold 120px 'Black Han Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("ARMY CARD", canvas.width / 2, 160);
+    
+    // Draw badge/icon
+    if (formData.badge) {
+      ctx.font = "80px 'Black Han Sans', sans-serif";
+      ctx.fillText(formData.badge, canvas.width - 120, 160);
+    }
     
     // Draw member image if available
     if (memberImageRef.current) {
@@ -226,89 +329,64 @@ export function ArmyCardGenerator() {
     }
     
     // User info section background
-    ctx.fillStyle = "#f8f8f8"
-    ctx.fillRect(40, 240 + (canvas.width - 80) + 20, canvas.width - 80, canvas.height - (240 + (canvas.width - 80) + 60))
+    ctx.fillStyle = theme.bodyBg;
+    ctx.fillRect(40, 240 + (canvas.width - 80) + 20, canvas.width - 80, canvas.height - (240 + (canvas.width - 80) + 60));
     
-    // User info text
-    const infoStartY = 240 + (canvas.width - 80) + 100
-    const lineHeight = 140 // Increased line height for better spacing
-    
-    // Define text styling functions for more engaging design
-    const drawLabelWithValue = (label: string, value: string, y: number) => {
-      // Draw yellow bullet point
-      ctx.fillStyle = "#FFDE00"
-      ctx.beginPath()
-      ctx.arc(80, y - 20, 15, 0, Math.PI * 2)
-      ctx.fill()
-      
-      // Draw bold label in black
-      ctx.fillStyle = "#000000"
-      ctx.font = "bold 80px 'Black Han Sans', sans-serif"
-      ctx.textAlign = "left"
-      ctx.fillText(`${label}:`, 110, y)
-      
-      // Calculate width of label for positioning the value
-      const labelWidth = ctx.measureText(`${label}:`).width
-      
-      // Draw value with different styling
-      ctx.font = "500 70px Arial, sans-serif"
-      ctx.fillText(value, 130 + labelWidth, y)
-      
-      return y + lineHeight
-    }
-    
-    // Draw each info line with enhanced styling
-    let currentY = infoStartY
-    currentY = drawLabelWithValue("Name", formData.name, currentY)
+    // Info lines
+    let currentY = 240 + (canvas.width - 80) + 100;
+    const lineHeight = 120;
+    // Update drawLabelWithValue signature
+    type DrawLabelWithValue = (label: string, value: string, y: number, isBold?: boolean) => number;
+    const drawLabelWithValue: DrawLabelWithValue = (label, value, y, isBold = false) => {
+      ctx.fillStyle = theme.bullet;
+      ctx.beginPath();
+      ctx.arc(80, y - 20, 15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = theme.text;
+      ctx.font = `${isBold ? 'bold' : '500'} 80px 'Black Han Sans', sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.fillText(`${label}:`, 110, y);
+      const labelWidth = ctx.measureText(`${label}:`).width;
+      ctx.font = "500 70px 'Black Han Sans', sans-serif";
+      ctx.fillText(value, 130 + labelWidth, y);
+      return y + lineHeight;
+    };
+    currentY = drawLabelWithValue("Name", formData.name, currentY, true);
     
     // Country with flag
     if (formData.country) {
-      // Draw yellow bullet point
-      ctx.fillStyle = "#FFDE00"
-      ctx.beginPath()
-      ctx.arc(80, currentY - 20, 15, 0, Math.PI * 2)
-      ctx.fill()
-      
-      // Draw country label
-      ctx.fillStyle = "#000000"
-      ctx.font = "bold 80px 'Black Han Sans', sans-serif"
-      ctx.textAlign = "left"
-      ctx.fillText("Country:", 110, currentY)
-      
-      // Calculate width of label for positioning the value and flag
-      const labelWidth = ctx.measureText("Country:").width
-      
-      // Position for flag (before the country name)
-      const flagX = 130 + labelWidth
-      const flagY = currentY - 45 // Adjust to align with text
-      
-      // Draw flag if available
+      ctx.fillStyle = theme.bullet;
+      ctx.beginPath();
+      ctx.arc(80, currentY - 20, 15, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = theme.text;
+      ctx.font = "bold 80px 'Black Han Sans', sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("Country:", 110, currentY);
+      const labelWidth = ctx.measureText("Country:").width;
+      const flagX = 130 + labelWidth;
+      const flagY = currentY - 45;
       if (flagImageRef.current) {
-        const flagWidth = 60
-        const flagHeight = 40
-        ctx.drawImage(flagImageRef.current, flagX, flagY, flagWidth, flagHeight)
+        ctx.drawImage(flagImageRef.current, flagX, flagY, 60, 40);
       }
-      
-      // Draw country value (after the flag)
-      ctx.font = "500 70px Arial, sans-serif"
-      ctx.fillText(formData.country, flagX + 70, currentY)
-      
-      currentY += lineHeight
+      ctx.font = "500 70px 'Black Han Sans', sans-serif";
+      ctx.fillText(formData.country, flagX + 70, currentY);
+      currentY += lineHeight;
     }
     
-    // Bias
-    currentY = drawLabelWithValue("Bias", selectedMember?.name || formData.bias, currentY)
+    currentY = drawLabelWithValue("Bias", selectedMember?.name || formData.bias, currentY);
+    currentY = drawLabelWithValue("ARMY Since", formData.armySince, currentY);
     
-    // ARMY Since
-    if (formData.armySince) {
-      currentY = drawLabelWithValue("ARMY Since", formData.armySince, currentY)
+    // Favorite Song
+    if (formData.favoriteSong) {
+      currentY = drawLabelWithValue("Fav. Song", formData.favoriteSong, currentY);
     }
     
-    // Brand URL at the bottom - more subtle with uppercase
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)" // More subtle with transparency
-    ctx.font = "bold 36px Arial, sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText("LOVEFORBTS.COM", canvas.width / 2, canvas.height - 50)
+    // Brand URL at the bottom
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.font = "bold 36px 'Black Han Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("LOVEFORBTS.COM", canvas.width / 2, canvas.height - 50);
     
     // Generate download
     const dataUrl = canvas.toDataURL("image/png")
@@ -412,7 +490,7 @@ export function ArmyCardGenerator() {
               } rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
             >
               <option value="">Select your bias</option>
-              {membersData.map((member) => (
+              {biasOptions.map((member) => (
                 <option key={member.slug} value={member.slug}>
                   {member.name}
                 </option>
@@ -442,6 +520,110 @@ export function ArmyCardGenerator() {
               ))}
             </select>
             {errors.armySince && <p className="mt-1 text-sm text-red-500">{errors.armySince}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="theme" className="block text-sm font-medium mb-1 black-han-sans">
+              Card Theme
+            </label>
+            <select
+              id="theme"
+              name="theme"
+              value={formData.theme}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 border-2 ${
+                errors.theme ? "border-red-500" : "border-black"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+            >
+              <option value="classic">Classic Yellow</option>
+              <option value="purple">BTS Purple</option>
+              <option value="black">Black & Gold</option>
+              <option value="pastel">Pastel Dream</option>
+            </select>
+            {errors.theme && <p className="mt-1 text-sm text-red-500">{errors.theme}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="favoriteSong" className="block text-sm font-medium mb-1 black-han-sans">
+              Favorite BTS Song <span className="text-gray-400">(optional)</span>
+            </label>
+            <div className="relative">
+              <input
+                ref={songInputRef}
+                type="text"
+                id="favoriteSong"
+                name="favoriteSong"
+                value={songQuery}
+                onChange={e => {
+                  setSongQuery(e.target.value);
+                  setFormData(prev => ({ ...prev, favoriteSong: e.target.value }));
+                  handleSongSearch(e.target.value);
+                }}
+                className={`w-full px-4 py-2 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+                placeholder="Search for your favorite BTS song..."
+                autoComplete="off"
+                maxLength={40}
+              />
+              {showSongSuggestions && songSuggestions.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border-2 border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                  {songSuggestions.map((song) => (
+                    <div
+                      key={song.title}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleSongSelect(song)}
+                    >
+                      <div className="font-medium">{song.title}</div>
+                      <div className="text-sm text-gray-600">{song.album} ({song.year})</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="cardStyle" className="block text-sm font-medium mb-1 black-han-sans">
+              Card Style
+            </label>
+            <select
+              id="cardStyle"
+              name="cardStyle"
+              value={formData.cardStyle}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 border-2 ${
+                errors.cardStyle ? "border-red-500" : "border-black"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
+            >
+              <option value="classic">Classic</option>
+              <option value="minimal">Minimal</option>
+              <option value="fun">Fun</option>
+            </select>
+            {errors.cardStyle && <p className="mt-1 text-sm text-red-500">{errors.cardStyle}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="badge" className="block text-sm font-medium mb-1 black-han-sans">
+              Badge/Icon <span className="text-gray-400">(optional)</span>
+            </label>
+            <select
+              id="badge"
+              name="badge"
+              value={formData.badge}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            >
+              <option value="💜">💜 Purple Heart</option>
+              <option value="🎤">🎤 Mic</option>
+              <option value="🐨">🐨 RM</option>
+              <option value="🐹">🐹 Jin</option>
+              <option value="🐱">🐱 Suga</option>
+              <option value="🐿️">🐿️ J-Hope</option>
+              <option value="🐥">🐥 Jimin</option>
+              <option value="🐻">🐻 V</option>
+              <option value="🐰">🐰 Jungkook</option>
+              <option value="⭐">⭐ Star</option>
+              <option value="">None</option>
+            </select>
           </div>
 
           <button
@@ -482,14 +664,37 @@ export function ArmyCardGenerator() {
           )}
 
           {cardGenerated && (
-            <div className="w-full h-full flex flex-col">
+            <div
+              className={`w-full h-full flex flex-col ${
+                formData.cardStyle === 'fun' ? 'rounded-3xl shadow-2xl' : formData.cardStyle === 'minimal' ? 'rounded-md border border-gray-300 shadow-none' : 'rounded-lg shadow-lg'
+              }`}
+              style={{
+                borderColor: themeMap[formData.theme as keyof typeof themeMap].border,
+                background: themeMap[formData.theme as keyof typeof themeMap].bodyBg,
+                borderWidth: 2,
+                overflow: 'hidden',
+              }}
+            >
               {/* Card Header */}
-              <div className="bg-[#FFDE00] p-3 border-b-2 border-black">
-                <h3 className="text-center black-han-sans text-xl">ARMY CARD</h3>
+              <div
+                className="p-3 border-b-2 flex items-center justify-between"
+                style={{
+                  background: themeMap[formData.theme as keyof typeof themeMap].headerBg,
+                  borderColor: themeMap[formData.theme as keyof typeof themeMap].border,
+                }}
+              >
+                <h3
+                  className="text-center flex-1 black-han-sans text-xl"
+                  style={{ color: themeMap[formData.theme as keyof typeof themeMap].headerText }}
+                >
+                  ARMY CARD
+                </h3>
+                {formData.badge && (
+                  <span className="ml-2 text-2xl" style={{ fontFamily: 'Black Han Sans, sans-serif' }}>{formData.badge}</span>
+                )}
               </div>
-              
               {/* Member Image */}
-              <div className="w-full aspect-square relative border-b-2 border-black">
+              <div className="w-full aspect-square relative border-b-2" style={{ borderColor: themeMap[formData.theme as keyof typeof themeMap].border }}>
                 {selectedMember && (
                   <Image
                     src={selectedMember.image}
@@ -499,18 +704,18 @@ export function ArmyCardGenerator() {
                   />
                 )}
               </div>
-              
               {/* Card Info */}
-              <div className="p-4 flex-grow flex flex-col justify-between bg-gray-50">
+              <div className="p-4 flex-grow flex flex-col justify-between" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bodyBg }}>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-[#FFDE00]"></span>
-                    <p className="font-bold black-han-sans text-lg">Name: <span className="font-normal">{formData.name}</span></p>
+                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                    <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                      Name: <span className="font-normal">{formData.name}</span>
+                    </p>
                   </div>
-                  
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-[#FFDE00]"></span>
-                    <p className="font-bold black-han-sans text-lg mr-1">Country: </p>
+                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                    <p className="font-bold black-han-sans text-lg mr-1" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>Country: </p>
                     <span className="flex items-center gap-1">
                       {formData.country && (
                         <Image
@@ -521,22 +726,31 @@ export function ArmyCardGenerator() {
                           className="inline-block"
                         />
                       )}
-                      <span className="font-normal">{formData.country}</span>
+                      <span className="font-normal" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>{formData.country}</span>
                     </span>
                   </div>
-                  
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-[#FFDE00]"></span>
-                    <p className="font-bold black-han-sans text-lg">Bias: <span className="font-normal">{selectedMember?.name}</span></p>
+                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                    <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                      Bias: <span className="font-normal">{selectedMember?.name}</span>
+                    </p>
                   </div>
-                  
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-[#FFDE00]"></span>
-                    <p className="font-bold black-han-sans text-lg">ARMY Since: <span className="font-normal">{formData.armySince}</span></p>
+                    <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                    <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                      ARMY Since: <span className="font-normal">{formData.armySince}</span>
+                    </p>
                   </div>
+                  {formData.favoriteSong && (
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full" style={{ background: themeMap[formData.theme as keyof typeof themeMap].bullet }}></span>
+                      <p className="font-bold black-han-sans text-lg" style={{ color: themeMap[formData.theme as keyof typeof themeMap].text }}>
+                        Fav. Song: <span className="font-normal">{formData.favoriteSong}</span>
+                      </p>
+                    </div>
+                  )}
                 </div>
-                
-                <div className="mt-auto pt-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                <div className="mt-auto pt-2 text-center text-xs font-medium uppercase tracking-wider" style={{ color: 'rgba(0,0,0,0.5)', fontFamily: 'Inter, sans-serif' }}>
                   LOVEFORBTS.COM
                 </div>
               </div>

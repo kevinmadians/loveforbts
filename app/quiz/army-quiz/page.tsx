@@ -226,7 +226,7 @@ export default function ARMYKnowledgeQuiz() {
         text: `I scored ${score}/10 on the ARMY Knowledge Quiz at Love for BTS! ${getScoreMessage()}`,
         url: window.location.href,
       }).catch(err => {
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV === 'development') {
           console.log('Error sharing:', err);
         }
       });

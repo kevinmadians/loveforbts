@@ -1,4 +1,4 @@
-import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment } from './supabase'
+import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment, type SupabaseMessageComment } from './supabase'
 import { format, addDays } from 'date-fns'
 import { nanoid } from 'nanoid'
 
@@ -8,11 +8,13 @@ import { nanoid } from 'nanoid'
 export async function saveMessage(name: string, country: string, message: string): Promise<SupabaseMessage | null> {
   try {
     const now = new Date()
+    const message_id = nanoid(10) // Generate a unique string ID for the message
     
     const { data, error } = await supabase
       .from('messages')
       .insert([
         { 
+          message_id,
           name, 
           country, 
           message, 
@@ -449,5 +451,82 @@ export async function getStoryComments(storyId: string): Promise<SupabaseStoryCo
   } catch (error) {
     console.error('Error in getStoryComments:', error)
     return []
+  }
+}
+
+/**
+ * Save a comment on a message
+ */
+export async function saveMessageComment(
+  messageId: number,
+  name: string,
+  country: string,
+  message: string
+): Promise<SupabaseMessageComment | null> {
+  try {
+    const now = new Date()
+    
+    const { data, error } = await supabase
+      .from('message_comments')
+      .insert([
+        { 
+          message_id: messageId,
+          name, 
+          country, 
+          message, 
+          created_at: now.toISOString(),
+        }
+      ])
+      .select()
+      .single()
+    
+    if (error) {
+      console.error('Error saving message comment:', error)
+      return null
+    }
+    
+    return data
+  } catch (error) {
+    console.error('Error in saveMessageComment:', error)
+    return null
+  }
+}
+
+/**
+ * Get all comments for a specific message
+ */
+export async function getMessageComments(messageId: number): Promise<SupabaseMessageComment[]> {
+  try {
+    const { data, error } = await supabase
+      .from('message_comments')
+      .select('*')
+      .eq('message_id', messageId)
+      .order('created_at', { ascending: true })
+    
+    if (error) {
+      console.error('Error fetching message comments:', error)
+      return []
+    }
+    
+    return data || []
+  } catch (error) {
+    console.error('Error in getMessageComments:', error)
+    return []
+  }
+}
+
+export async function getMessageByMessageId(message_id: string): Promise<SupabaseMessage | null> {
+  try {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('message_id', message_id)
+      .single();
+    if (error) {
+      return null;
+    }
+    return data;
+  } catch {
+    return null;
   }
 } 

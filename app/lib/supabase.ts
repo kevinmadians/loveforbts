@@ -9,6 +9,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey)
 // Types for our database tables
 export type SupabaseMessage = {
   id: number
+  message_id: string
   name: string
   country: string
   message: string
@@ -39,6 +40,15 @@ export type SupabaseArmyStory = {
 export type SupabaseStoryComment = {
   id: number
   story_id: string
+  name: string
+  country: string
+  message: string
+  created_at: string
+}
+
+export type SupabaseMessageComment = {
+  id: number
+  message_id: number
   name: string
   country: string
   message: string

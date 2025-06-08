@@ -324,5 +324,37 @@ In November 2023, Jungkook released his first solo album "GOLDEN", which broke n
       tiktok: "https://www.tiktok.com/@jungkook",
       weverse: "https://weverse.io/bts"
     }
+  },
+  {
+    name: "OT7 (All Members)",
+    stageName: "OT7",
+    fullName: "BTS (All Members)",
+    role: "All Members",
+    birthDate: "June 13, 2013",
+    birthPlace: "Seoul, South Korea",
+    height: "Varies",
+    weight: "Varies",
+    bloodType: "Varies",
+    image: "/images/members/ot7.jpg",
+    slug: "ot7",
+    shortBio: "OT7 represents all seven members of BTS together as a group, symbolizing unity and the power of teamwork.",
+    biography: `OT7 is a term used by ARMY to refer to all seven members of BTS as a whole. It celebrates the group's unity, friendship, and the magic they create together. Whether performing on stage, making music, or sharing moments with fans, OT7 embodies the spirit of BTS as a family and a team.`,
+    funFacts: [
+      "OT7 means all seven members are together.",
+      "ARMY often uses OT7 to express love for the whole group.",
+      "BTS debuted as seven on June 13, 2013.",
+      "The group's synergy is a key to their global success."
+    ],
+    achievements: [
+      "First K-pop group to be nominated for a Grammy.",
+      "Seven consecutive MAMA Artist of the Year awards.",
+      "Multiple Billboard Hot 100 #1 hits as a group.",
+      "Historic speeches at the United Nations as a group."
+    ],
+    socialMedia: {
+      instagram: "https://www.instagram.com/bts.bighitofficial/",
+      twitter: "https://x.com/BTS_twt",
+      weverse: "https://weverse.io/bts"
+    }
   }
 ] 

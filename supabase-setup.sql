@@ -70,4 +70,9 @@ CREATE POLICY army_stories_select_policy ON army_stories
 
 -- Allow authenticated insert access to army_stories (or anonymous if using public API key)
 CREATE POLICY army_stories_insert_policy ON army_stories 
-  FOR INSERT WITH CHECK (true); 
+  FOR INSERT WITH CHECK (true);
+
+-- Add message_id column for unique string IDs
+ALTER TABLE messages ADD COLUMN IF NOT EXISTS message_id TEXT UNIQUE;
+
+-- For existing rows, you may want to backfill message_id with random values using an update script in Supabase SQL editor. 

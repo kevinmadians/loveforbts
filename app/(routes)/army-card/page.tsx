@@ -13,12 +13,11 @@ export default function ArmyCardPage() {
       {/* Hero Section */}
       <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
         <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
-          Create Your ARMY Card
+          BTS ARMY Card Maker
         </h1>
         
         <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
-          Generate a personalized ARMY membership card with your name, bias, and other details. 
-          Download and share your card with fellow fans!
+          Design your own BTS ARMY Card! Personalize it with your name, bias, country, favorite song, and more. Download and share your card to show your ARMY pride!
         </p>
       </div>
       

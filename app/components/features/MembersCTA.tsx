@@ -42,7 +42,7 @@ export function MembersCTA() {
       </div>
       
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-3 mb-4">
-        {membersData.map((member) => {
+        {membersData.filter(member => member.slug !== 'ot7').map((member) => {
           // Only use varied photos after initial render is complete
           const imageSrc = !isInitialRender && memberImages[member.slug] 
             ? memberImages[member.slug] 

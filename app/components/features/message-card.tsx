@@ -2,6 +2,7 @@
 
 import React from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { getCountryCode } from "@/app/lib/country-codes"
 import { type Message } from "@/app/lib/message-context"
 import { truncateText } from "@/app/lib/utils"
@@ -21,9 +22,10 @@ export function MessageCard({ message, isHighlighted = false, className = "" }: 
   const countryCode = message.country ? getCountryCode(message.country) : null;
   
   return (
-    <div 
+    <Link 
+      href={`/messages/${message.message_id}`}
       className={`
-        bg-white border-2 border-black rounded-xl overflow-hidden transition-all
+        block bg-white border-2 border-black rounded-xl overflow-hidden transition-all
         ${isHighlighted 
           ? "transform-gpu md:scale-105 shadow-md"
           : "hover:-translate-y-1 hover:shadow-lg"
@@ -53,7 +55,7 @@ export function MessageCard({ message, isHighlighted = false, className = "" }: 
         </div>
         
         {/* Footer */}
-        <div className="mt-3 flex flex-wrap items-center justify-between pt-3 border-t border-gray-200">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-gray-200">
           {/* Country with flag */}
           <div className="flex items-center text-sm">
             <span className="mr-1">From: {message.country}</span>
@@ -74,6 +76,6 @@ export function MessageCard({ message, isHighlighted = false, className = "" }: 
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 } 

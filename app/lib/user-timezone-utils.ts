@@ -54,7 +54,9 @@ export function formatDateInLocalFormat(dateString: string): string {
     
     return new Intl.DateTimeFormat(navigator.language || "en-US", options).format(date);
   } catch (error) {
-    console.error("Error formatting date:", error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Error formatting date:", error);
+    }
     return "Unknown date";
   }
 }
@@ -72,7 +74,9 @@ export function getLocalDaysLeft(targetDate: Date): number {
     const diffTime = targetDate.getTime() - currentDate.getTime();
     return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
   } catch (error) {
-    console.error("Error calculating days left:", error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Error calculating days left:", error);
+    }
     return 0;
   }
 }
