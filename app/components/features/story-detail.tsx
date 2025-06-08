@@ -8,6 +8,8 @@ import { type SupabaseArmyStory } from "@/app/lib/supabase"
 import { getCountryCode } from "@/app/lib/country-codes"
 import { ArrowLeft, HeartHandshake, ArrowUp, ChevronUp } from "lucide-react"
 import { StoryComments } from "./story-comments"
+import { LoveButton } from "@/app/components/ui/love-button"
+import { hasUserLikedStory } from "@/app/lib/supabase-service"
 
 interface StoryDetailProps {
   story: SupabaseArmyStory
@@ -54,6 +56,33 @@ export function StoryDetail({ story }: StoryDetailProps) {
 
   // State to track scroll position
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+  
+  // Like button state - let LoveButton manage its own state
+  const [isLiked, setIsLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(story.like_count || 0)
+
+  // Check if user has liked this story on mount
+  useEffect(() => {
+    const checkLikeStatus = async () => {
+      try {
+        const liked = await hasUserLikedStory(story.story_id)
+        setIsLiked(liked)
+        console.log(`StoryDetail: Initial like status - Liked: ${liked}, Count: ${story.like_count || 0}`)
+      } catch (error) {
+        console.error('Error checking like status:', error)
+      }
+    }
+    
+    checkLikeStatus()
+  }, [story.story_id])
+
+  // Handle like button updates - update local state to keep in sync
+  const handleLike = (newLikeCount: number, newIsLiked: boolean) => {
+    console.log(`StoryDetail received update: Count: ${newLikeCount}, Liked: ${newIsLiked}`)
+    // Update local state to keep components synchronized
+    setLikeCount(newLikeCount)
+    setIsLiked(newIsLiked)
+  }
 
   // Handle scroll to top
   const scrollToTop = () => {
@@ -102,10 +131,24 @@ export function StoryDetail({ story }: StoryDetailProps) {
       </div>
       
       <div className="bg-white rounded-2xl border-2 border-black p-4 md:p-6 shadow-md">
-        {/* Story Title */}
-        <h1 className="text-2xl md:text-3xl font-bold mb-3 black-han-sans">
-          {title}
-        </h1>
+        {/* Story Title and Love Button */}
+        <div className="flex items-start justify-between mb-3">
+          <h1 className="text-2xl md:text-3xl font-bold black-han-sans flex-1 mr-4">
+            {title}
+          </h1>
+          
+          {/* Love Button */}
+          <LoveButton
+            key={`love-button-${story.story_id}-${likeCount}-${isLiked}`}
+            itemId={story.story_id}
+            itemType="story"
+            initialLikeCount={likeCount}
+            initialIsLiked={isLiked}
+            onLike={handleLike}
+            size="lg"
+            variant="default"
+          />
+        </div>
         
         {/* Author & Meta Info */}
         <div className="flex flex-wrap items-center gap-2 mb-6 pb-4 border-b border-gray-200">

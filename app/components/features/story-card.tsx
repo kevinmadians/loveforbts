@@ -6,6 +6,7 @@ import Image from "next/image"
 import { formatDate, truncateText } from "@/app/lib/utils"
 import { type SupabaseArmyStory } from "@/app/lib/supabase"
 import { getCountryCode } from "@/app/lib/country-codes"
+import { Heart } from "lucide-react"
 
 interface StoryCardProps {
   story: SupabaseArmyStory
@@ -113,6 +114,14 @@ export function StoryCard({ story, isHighlighted = false, className = "" }: Stor
           <div className="px-2 py-0.5 bg-yellow-100 rounded-full text-yellow-800">
             Since {armySince}
           </div>
+          
+          {/* Like count display (read-only) */}
+          {story.like_count > 0 && (
+            <div className="flex items-center gap-1 px-2 py-0.5 bg-purple-50 rounded-full text-purple-600">
+              <Heart className="w-3 h-3 fill-purple-600" />
+              <span>{story.like_count}</span>
+            </div>
+          )}
           
           {/* Post Date */}
           <div className="text-gray-500">

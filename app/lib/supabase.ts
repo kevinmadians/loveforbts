@@ -15,6 +15,8 @@ export type SupabaseMessage = {
   message: string
   created_at: string
   expires_at: string
+  like_count: number
+  is_featured: boolean
 }
 
 export type SupabaseHeartCount = {
@@ -35,6 +37,8 @@ export type SupabaseArmyStory = {
   army_since: number
   created_at: string
   updated_at: string
+  like_count: number
+  is_featured: boolean
 }
 
 export type SupabaseStoryComment = {
@@ -52,5 +56,21 @@ export type SupabaseMessageComment = {
   name: string
   country: string
   message: string
+  created_at: string
+}
+
+export type SupabaseMessageLike = {
+  id: number
+  message_id: string
+  user_ip: string
+  user_session: string | null
+  created_at: string
+}
+
+export type SupabaseStoryLike = {
+  id: number
+  story_id: string
+  user_ip: string
+  user_session: string | null
   created_at: string
 } 

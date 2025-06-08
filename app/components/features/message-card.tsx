@@ -6,6 +6,7 @@ import Link from "next/link"
 import { getCountryCode } from "@/app/lib/country-codes"
 import { type Message } from "@/app/lib/message-context"
 import { truncateText } from "@/app/lib/utils"
+import { Heart } from "lucide-react"
 
 interface MessageCardProps {
   message: Message
@@ -69,6 +70,14 @@ export function MessageCard({ message, isHighlighted = false, className = "" }: 
               />
             )}
           </div>
+          
+          {/* Like count display (read-only) */}
+          {message.like_count > 0 && (
+            <div className="flex items-center gap-1 text-xs text-purple-600">
+              <Heart className="w-3 h-3 fill-purple-600" />
+              <span>{message.like_count}</span>
+            </div>
+          )}
           
           {/* Date */}
           <div className="text-xs text-gray-500">

@@ -18,7 +18,7 @@ The website uses Supabase for two main features:
 
 ### 2. Database Schema Setup
 
-Run the SQL commands from the `supabase-setup.sql` file in the Supabase SQL Editor. This will:
+Run the SQL commands from the `sql/supabase-setup.sql` file in the Supabase SQL Editor. This will:
 
 - Create the `messages` table for storing user messages
 - Create the `heart_clicks` table for tracking heart button counts

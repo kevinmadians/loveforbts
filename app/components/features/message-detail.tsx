@@ -8,6 +8,8 @@ import { type Message } from "@/app/lib/message-context"
 import { getCountryCode } from "@/app/lib/country-codes"
 import { ArrowLeft, HeartHandshake, ArrowUp, ChevronUp } from "lucide-react"
 import { MessageComments } from "./message-comments"
+import { LoveButton } from "@/app/components/ui/love-button"
+import { hasUserLikedMessage } from "@/app/lib/supabase-service"
 
 interface MessageDetailProps {
   message: Message
@@ -16,6 +18,33 @@ interface MessageDetailProps {
 export function MessageDetail({ message }: MessageDetailProps) {
   // State to track scroll position
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+  
+  // Like button state - let LoveButton manage its own state
+  const [isLiked, setIsLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(message.like_count || 0)
+
+  // Check if user has liked this message on mount
+  useEffect(() => {
+    const checkLikeStatus = async () => {
+      try {
+        const liked = await hasUserLikedMessage(message.message_id)
+        setIsLiked(liked)
+        console.log(`MessageDetail: Initial like status - Liked: ${liked}, Count: ${message.like_count || 0}`)
+      } catch (error) {
+        console.error('Error checking like status:', error)
+      }
+    }
+    
+    checkLikeStatus()
+  }, [message.message_id])
+
+  // Handle like button updates - update local state to keep in sync
+  const handleLike = (newLikeCount: number, newIsLiked: boolean) => {
+    console.log(`MessageDetail received update: Count: ${newLikeCount}, Liked: ${newIsLiked}`)
+    // Update local state to keep components synchronized
+    setLikeCount(newLikeCount)
+    setIsLiked(newIsLiked)
+  }
 
   // Handle scroll to top
   const scrollToTop = () => {
@@ -71,6 +100,18 @@ export function MessageDetail({ message }: MessageDetailProps) {
           <h2 className="text-2xl md:text-3xl font-bold black-han-sans">
             {message.name}
           </h2>
+          
+          {/* Love Button */}
+          <LoveButton
+            key={`love-button-${message.message_id}-${likeCount}-${isLiked}`}
+            itemId={message.message_id}
+            itemType="message"
+            initialLikeCount={likeCount}
+            initialIsLiked={isLiked}
+            onLike={handleLike}
+            size="lg"
+            variant="default"
+          />
         </div>
         
         {/* Message Content */}

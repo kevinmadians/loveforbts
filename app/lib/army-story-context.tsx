@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { 
   getArmyStories, 
   saveArmyStory, 
@@ -52,6 +52,7 @@ export function ArmyStoryProvider({ children }: { children: React.ReactNode }) {
   const [lastRefreshTime, setLastRefreshTime] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize] = useState(10)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
   
   // Calculate total pages
   const totalPages = Math.max(1, Math.ceil(totalStories / pageSize))
@@ -80,7 +81,13 @@ export function ArmyStoryProvider({ children }: { children: React.ReactNode }) {
       const result = await getArmyStories(page, size)
       // Only update stories if we got a valid array
       if (Array.isArray(result.data)) {
-        setStories(result.data)
+        // Ensure each story has like_count and is_featured fields
+        const storiesWithDefaults = result.data.map(story => ({
+          ...story,
+          like_count: story.like_count || 0,
+          is_featured: story.is_featured || false
+        }))
+        setStories(storiesWithDefaults)
         setTotalStories(result.total)
       }
     } catch (error) {
@@ -144,13 +151,24 @@ export function ArmyStoryProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     refreshStories(1)
     
-    // Set up a periodic refresh every 2 minutes
+    // Clear existing interval if any
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+    
+    // Set up a periodic refresh every 5 minutes (reduced frequency)
     const intervalId = setInterval(() => {
       refreshStories(currentPage)
-    }, 2 * 60 * 1000)
+    }, 5 * 60 * 1000)
     
-    return () => clearInterval(intervalId)
-  }, [])
+    intervalRef.current = intervalId
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [currentPage]) // Add currentPage as dependency to prevent stale closure
 
   return (
     <ArmyStoryContext.Provider 

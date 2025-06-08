@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar, BookOpen, HelpCircle } from "lucide-react"
+import { Music, MessageSquare, Menu, X, Info, Users, Heart, Disc, IdCard, ChevronDown, Quote, Calendar, BookOpen, HelpCircle, Gamepad2 } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,11 +59,11 @@ export function Navbar() {
                 ]}
               />
               
-              {/* ARMY Dropdown - Contains Messages, Story, ARMY Card, Bias Test, Vocabulary */}
+              {/* ARMY Dropdown - Contains Messages, Story, ARMY Card, Bias Test, Vocabulary, Games */}
               <NavDropdown 
                 label="ARMY" 
                 icon={<Image src="/images/army-bomb.svg" alt="ARMY Bomb" width={22} height={22} />} 
-                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary" || pathname === "/quiz"}
+                active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary" || pathname === "/quiz" || pathname.startsWith("/games")}
                 items={[
                   { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
                   { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
@@ -71,6 +71,7 @@ export function Navbar() {
                   { href: "/bias-test", label: "Bias Test", icon: <Users size={16} /> },
                   { href: "/vocabulary", label: "Vocabulary", icon: <BookOpen size={16} /> },
                   { href: "/quiz", label: "Quiz", icon: <HelpCircle size={16} /> },
+                  { href: "/games", label: "Games", icon: <Gamepad2 size={16} /> },
                 ]}
               />
               
@@ -219,6 +220,14 @@ export function Navbar() {
                           <span className="flex items-center">
                             <HelpCircle size={16} className="mr-2" />
                             Quiz
+                          </span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/games" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/games") ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                          <span className="flex items-center">
+                            <Gamepad2 size={16} className="mr-2" />
+                            Games
                           </span>
                         </Link>
                       </li>

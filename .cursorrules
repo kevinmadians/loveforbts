@@ -57,6 +57,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - When implementing SEO in Next.js, metadata cannot be exported from client components (with "use client" directive). For client pages, create a separate metadata.ts file in the same directory.
 - For date and time displays that need to work across different user timezones, implement client-side timezone handling using the browser's Date API instead of server-side fixed timezones.
 - When working with third-party APIs like Spotify that have rate limits, implement these strategies to prevent 429 errors: 1) Add local caching, 2) Use exponential backoff for retries, 3) Process batch requests sequentially with delays, 4) Add client-side throttling, and 5) Provide clear user feedback during retries.
+- When Supabase operations fail with empty error objects `{}`, it usually means the database tables don't exist yet. Always provide helpful error messages that mention "Database tables may not exist. Please run the SQL schema first." instead of just logging the empty error object.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries
@@ -79,63 +80,143 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-[X] Implement varied photos for BTS members and OT7 in ARMY Card page
-  - [X] Created OT7 folder in public/images/members/varied/ot7
-  - [X] Added 4 group photos (ot7-1.jpg through ot7-4.jpg) to the OT7 folder
-  - [X] Updated member-photos.ts to include OT7 photos in memberVariedPhotos object
-  - [X] Enhanced getRandomMemberPhoto function with time-based rotation (changes every 4 hours)
-  - [X] Created new getArmyCardPhoto function for consistent daily photo selection
-  - [X] Updated ARMY Card Generator to use dynamic photos instead of static member.image
-  - [X] Added memberPhoto state to track the current dynamic photo
-  - [X] Updated all image loading logic to use the dynamic memberPhoto
-  - [X] Ensured photos change dynamically over time while remaining consistent during user sessions
-  - [X] Added manual photo refresh button below bias selection dropdown
-  - [X] Created getRandomVariedPhoto function for manual photo cycling
-  - [X] Added handleRefreshPhoto function to manually change displayed photos
-  - [X] Added refresh icon and contextual button text (individual member vs. OT7 group)
-  - [X] Implemented toast notification for user feedback when photo is refreshed
+## Current Task: Create BTS Member Whack-a-Mole Mini-Game ✅ COMPLETED
+[X] Explored existing games structure and patterns
+[X] Created BTSWhackAMole component with engaging gameplay
+[X] Added BTS member rarity system (Common, Rare, Legendary)
+[X] Implemented combo system and streak bonuses
+[X] Added mobile-friendly touch controls and animations
+[X] Updated games index to export new component
+[X] Added new game to games page listing
+[X] Created dedicated game page with tips and member guide
+[X] Added SEO metadata for the new game page
+[X] Used BTS-themed colors and official emojis for each member
 
-[X] Implement user photo upload feature for ARMY Card Generator
-  - [X] Updated form schema to include photoOption field with validation
-  - [X] Added new state variables for user photo management (userPhoto, userPhotoFile, userImageLoaded)
-  - [X] Created file input ref and photo upload handling functions
-  - [X] Implemented photo upload with validation (file type, size limits)
-  - [X] Added photo option selection (Member Photo Only, My Photo Only, Member + My Photo)
-  - [X] Created conditional photo upload UI that appears based on selected option
-  - [X] Added photo preview with upload status indicator
-  - [X] Implemented photo removal functionality with proper cleanup
-  - [X] Updated card preview logic to handle all three photo layout options
-  - [X] Enhanced canvas drawing logic for different photo layouts:
-    - [X] Single member photo layout
-    - [X] Single user photo layout  
-    - [X] Split layout with both photos side-by-side with labels
-  - [X] Updated downloadCard function to properly load user images for canvas rendering
-  - [X] Added proper error handling and user feedback with toast notifications
-  - [X] Included upload guidelines and file format/size restrictions
-  - [X] Maintained all existing functionality while adding new photo options
+## Game Features Implemented:
+- **3x3 Grid Layout**: Classic whack-a-mole hole arrangement
+- **BTS Member System**: All 7 members with unique emojis and point values
+- **Rarity System**: Common (RM, Jin), Rare (Suga, J-Hope, Jimin, V), Legendary (Jungkook)
+- **Dynamic Scoring**: Base points + level bonuses + combo multipliers
+- **Visual Timer**: Red ring showing time left for each member
+- **Animations**: Smooth pop-up/down animations with Framer Motion
+- **Confetti Effects**: Canvas confetti for hits, combos, and level ups
+- **Game Statistics**: Score, accuracy, streaks, level progression
+- **Pause/Resume**: Full game state management
+- **Mobile Optimized**: Touch controls and responsive design
 
-[X] Fix ARMY Card photo display and remove labels
-  - [X] Remove member name and "You" labels from canvas drawing in downloadCard function
-  - [X] Improve image sizing and centering for visual balance in canvas
-  - [X] Fix user photo preview aspect ratio and visibility in JSX preview
-  - [X] Ensure both photos are proportionally sized and centered
-  - [X] Maintain background styling and other card elements intact
+## Previous Task: Purple Hearts Collector Game - Speed Balancing ✅ COMPLETED
+[X] Fixed heart spawning and animation loop issues
+[X] Fixed game timer dependency problems  
+[X] Fixed heart positioning and collision detection
+[X] Balanced game difficulty for better user experience
+[X] Removed debug console logs
 
-[X] Optimize photo preview and text layout in ARMY Card
-  - [X] Resize user uploaded photo preview to compact size (32x32 with centered positioning)
-  - [X] Implement auto-scaling font sizes to prevent text cutoff
-  - [X] Add text wrapping functionality for long text phrases
-  - [X] Ensure consistent formatting and spacing between bullet point lines
-  - [X] Optimize text layout to fit within canvas boundaries
-  - [X] Maintain all current color schemes, emojis, and styling
-  - [X] Ensure balanced, clean, and readable output on all devices
-  - [X] Fix font sizes to match preview (reduced from 80px/70px to 56px/52px)
-  - [X] Improve header title and badge sizing for better proportions
-  - [X] Optimize bullet point sizes and positioning
-  - [X] Enhance flag sizing and positioning relative to country text
-  - [X] Fix information section positioning and spacing for all photo options
-  - [X] Fix "My Photo Only" option to show both user photo and complete information section
-  - [X] Fix user photo cropping - ensure full photos are visible in preview and downloaded cards
-  - [X] Increase user photo preview size to 40x40 (160px) for better visibility
-  - [X] Change from object-cover to object-contain to prevent cropping
-  - [X] Add light gray backgrounds for better photo presentation
+## Issues Fixed:
+- **Heart Spawning**: Fixed infinite recursion in spawnHeart setTimeout
+- **Animation Loop**: Removed updateHearts callback causing dependency issues
+- **Game Timer**: Fixed circular dependency by separating timer logic
+- **Collision Detection**: Changed from window.innerHeight to game area height (550px)
+- **Cleanup**: Added proper timer cleanup in startGame function
+- **Game Balance**: Adjusted speeds and spawn rates for better progression
+
+## Speed & Difficulty Adjustments:
+- **Level 1 Speed**: Reduced from 2.5-4.5 to 1.1-1.6 pixels per frame (much easier!)
+- **Level Progression**: More gradual speed increase (+0.3 per level instead of +0.5)
+- **Spawn Rate**: Slower initial spawn (1.5s instead of 1s) with better progression
+- **Minimum Spawn Delay**: Increased from 300ms to 500ms for better gameplay
+
+## Previous Task: Build Purple Hearts Collector Mini-Game ✅ COMPLETED
+[X] Explore current navigation structure
+[X] Create Purple Hearts Collector game component  
+[X] Add Games dropdown menu to navigation
+[X] Add Purple Hearts Collector to Games menu
+[X] Make it mobile-friendly and BTS-themed
+[X] Test the complete implementation
+
+## Summary:
+✅ Built engaging Purple Hearts Collector mini-game with:
+   - Falling hearts with different point values (Purple: 10, Gold: 25, Silver: 15)
+   - Streak system with multiplier bonuses
+   - Level progression and increasing difficulty
+   - Mobile-friendly touch controls
+   - BTS-themed colors and styling
+   - Pause/resume functionality
+   - Confetti effects and animations
+   - Game statistics tracking
+
+✅ Added complete navigation structure:
+   - Games added to ARMY dropdown menu (both desktop and mobile)
+   - Created /games main page showcasing all mini-games
+   - Created /games/purple-hearts-collector dedicated game page
+   - Added proper metadata for SEO
+
+✅ Features implemented:
+   - Responsive design works perfectly on mobile devices
+   - Framer Motion animations for smooth gameplay
+   - Canvas confetti effects for celebrations
+   - Official BTS colors used throughout (#FFDE00 yellow, purple hearts)
+   - Game statistics and score tracking
+   - Professional game UI with pause/resume
+   - Tips and instructions for players
+
+## Previous Tasks Completed:
+[X] Codebase Cleanup - Remove unused files and organize SQL files
+  - [X] Identified redundant SQL files:
+    - fix-message-likes-table.sql (redundant with love-button-schema.sql)
+    - recreate-likes-tables.sql (redundant with love-button-schema.sql)  
+    - sql-to-run.sql (redundant with story-comments.sql and supabase-setup.sql)
+  - [X] Identified duplicate documentation:
+    - docs/supabase-setup.md vs SUPABASE_SETUP.md (different content, both needed)
+    - app/.cursorrules vs .cursorrules (app version is outdated)
+  - [X] Move SQL files to organized structure in sql/ directory
+  - [X] Remove redundant SQL files from root
+  - [X] Remove outdated app/.cursorrules file
+  - [X] Verify no breaking changes to existing functionality
+
+## Files Successfully Removed:
+1. ✅ fix-message-likes-table.sql - Redundant with love-button-schema.sql
+2. ✅ recreate-likes-tables.sql - Redundant with love-button-schema.sql  
+3. ✅ app/.cursorrules - Outdated version of root .cursorrules
+
+## Files Successfully Organized:
+- ✅ Moved love-button-schema.sql to sql/
+- ✅ Moved supabase-setup.sql to sql/ (updated SUPABASE_SETUP.md reference)
+- ✅ Moved message-comments.sql to sql/
+- ✅ Moved story-comments.sql to sql/
+
+## Files Kept (All Active):
+- ✅ compatibility/ directory - ACTIVELY USED by next.config.mjs for React 19 compatibility
+- ✅ docs/supabase-setup.md - Different from root SUPABASE_SETUP.md (playlists vs messages)
+- ✅ All component files - All imports verified and working
+- ✅ All library files - All being used by components
+
+## Unused Dependencies Found:
+- ⚠️ react-quill (2.0.0) - Not used anywhere in codebase
+- ⚠️ chart.js (4.4.9) - Not used anywhere in codebase  
+- ⚠️ react-chartjs-2 (5.3.0) - Not used anywhere in codebase
+
+## Dependencies Verified as Used:
+- ✅ recharts - Used in chart.tsx component
+- ✅ framer-motion - Used in quiz pages and components
+- ✅ All other dependencies verified as actively used
+
+## Next Steps:
+1. [⚠️ URGENT] Run the SQL schema in Supabase dashboard (sql/love-button-schema.sql)
+   - Error: Database tables don't exist yet, causing empty error objects `{}`
+   - Fixed: Improved error handling to show helpful messages
+   - Created: SUPABASE_LOVE_BUTTON_SETUP.md with step-by-step instructions
+2. [✅] Fixed love button counter synchronization issue
+   - Issue: Counter wasn't updating when users clicked the love button
+   - Fix: Updated state management to properly sync between LoveButton and parent components
+   - Solution: Parent components now update their local state and pass correct props to LoveButton
+3. Update homepage to show featured messages and stories
+4. Update message and story front pages to highlight featured content
+5. Test the complete love button functionality
+6. Consider removing unused dependencies: react-quill, chart.js, react-chartjs-2
+
+## Implementation Summary:
+- **Listing Pages**: Show read-only like count with purple heart icon (only if > 0 likes)
+- **Detail Pages**: Show interactive love button with full functionality
+- **Database**: Complete schema with triggers for auto-featured content (10+ likes)
+- **Error Fixed**: Server-side rendering issue resolved with browser environment check
+- **Codebase**: Clean and well-organized with no unused files or broken imports

@@ -34,6 +34,8 @@ export default function MessageDetailPage() {
           country: dbMessage.country,
           message: dbMessage.message,
           date: new Date(dbMessage.created_at).toISOString().split('T')[0],
+          like_count: dbMessage.like_count || 0,
+          is_featured: dbMessage.is_featured || false
         });
         setIsLoading(false);
       } else {

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react'
 import { saveMessage, getPaginatedMessages, searchMessages } from './supabase-service'
 import type { SupabaseMessage } from './supabase'
 
@@ -12,6 +12,8 @@ export type Message = {
   country: string
   message: string
   date: string
+  like_count: number
+  is_featured: boolean
 }
 
 interface MessageContextType {
@@ -37,6 +39,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize] = useState(10)
   const [totalMessages, setTotalMessages] = useState(0)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
   
   // Calculate total pages
   const totalPages = Math.max(1, Math.ceil(totalMessages / pageSize))
@@ -49,7 +52,9 @@ export function MessageProvider({ children }: { children: ReactNode }) {
       name: dbMessage.name,
       country: dbMessage.country,
       message: dbMessage.message,
-      date: new Date(dbMessage.created_at).toISOString().split('T')[0] // Format as YYYY-MM-DD
+      date: new Date(dbMessage.created_at).toISOString().split('T')[0], // Format as YYYY-MM-DD
+      like_count: dbMessage.like_count || 0,
+      is_featured: dbMessage.is_featured || false
     }
   }
 
@@ -129,13 +134,24 @@ export function MessageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     refreshMessages(1)
     
-    // Set up a periodic refresh every 2 minutes
+    // Clear existing interval if any
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+    
+    // Set up a periodic refresh every 5 minutes (reduced frequency)
     const intervalId = setInterval(() => {
       refreshMessages(currentPage)
-    }, 2 * 60 * 1000)
+    }, 5 * 60 * 1000)
     
-    return () => clearInterval(intervalId)
-  }, [])
+    intervalRef.current = intervalId
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [currentPage]) // Add currentPage as dependency to prevent stale closure
 
   return (
     <MessageContext.Provider value={{ 

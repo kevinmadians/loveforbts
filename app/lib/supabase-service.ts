@@ -1,4 +1,4 @@
-import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment, type SupabaseMessageComment } from './supabase'
+import { supabase, type SupabaseMessage, type SupabaseHeartCount, type SupabaseArmyStory, type SupabaseStoryComment, type SupabaseMessageComment, type SupabaseMessageLike, type SupabaseStoryLike } from './supabase'
 import { format, addDays } from 'date-fns'
 import { nanoid } from 'nanoid'
 
@@ -528,5 +528,295 @@ export async function getMessageByMessageId(message_id: string): Promise<Supabas
     return data;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Helper function to get user's IP address and session identifier
+ */
+function getUserIdentifier(): { userIp: string; userSession: string } {
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    // Return default values for server-side rendering
+    return { userIp: 'server', userSession: 'server' };
+  }
+  
+  // Get IP address (for client-side, we'll use a simple hash of navigator info)
+  const userAgent = navigator.userAgent;
+  const language = navigator.language;
+  const platform = navigator.platform;
+  const userIp = btoa(`${userAgent}-${language}-${platform}`).substring(0, 32);
+  
+  // Get or create session identifier
+  let userSession = localStorage.getItem('love_session_id');
+  if (!userSession) {
+    userSession = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    localStorage.setItem('love_session_id', userSession);
+  }
+  
+  return { userIp, userSession };
+}
+
+/**
+ * Like a message
+ */
+export async function likeMessage(messageId: string): Promise<{ success: boolean; likeCount: number; isLiked: boolean }> {
+  try {
+    const { userIp, userSession } = getUserIdentifier();
+    console.log(`likeMessage: Starting for messageId=${messageId}, userIp=${userIp}, userSession=${userSession}`);
+    
+    // Check if user already liked this message
+    const { data: existingLike, error: checkError } = await supabase
+      .from('message_likes')
+      .select('id')
+      .eq('message_id', messageId)
+      .eq('user_ip', userIp)
+      .eq('user_session', userSession)
+      .maybeSingle();
+    
+    if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Error checking existing like:', checkError.message || checkError.code || 'Database tables may not exist. Please run the SQL schema first.');
+      return { success: false, likeCount: 0, isLiked: false };
+    }
+    
+    console.log(`likeMessage: existingLike found:`, existingLike);
+    
+    if (existingLike) {
+      // Unlike the message
+      console.log(`likeMessage: Unliking message ${messageId}`);
+    } else {
+      // Like the message  
+      console.log(`likeMessage: Liking message ${messageId}`);
+    }
+    
+    if (existingLike) {
+      // Unlike the message
+      const { error: deleteError } = await supabase
+        .from('message_likes')
+        .delete()
+        .eq('id', existingLike.id);
+      
+      if (deleteError) {
+        console.error('Error unliking message:', deleteError);
+        return { success: false, likeCount: 0, isLiked: true };
+      }
+    } else {
+      // Like the message
+      const { error: insertError } = await supabase
+        .from('message_likes')
+        .insert([
+          {
+            message_id: messageId,
+            user_ip: userIp,
+            user_session: userSession
+          }
+        ]);
+      
+      if (insertError) {
+        console.error('Error liking message:', insertError);
+        return { success: false, likeCount: 0, isLiked: false };
+      }
+    }
+    
+    // Get updated like count
+    const { data: messageData, error: messageError } = await supabase
+      .from('messages')
+      .select('like_count')
+      .eq('message_id', messageId)
+      .single();
+    
+    if (messageError) {
+      console.error('Error getting message like count:', messageError);
+      return { success: false, likeCount: 0, isLiked: !existingLike };
+    }
+    
+    const result = {
+      success: true,
+      likeCount: messageData.like_count || 0,
+      isLiked: !existingLike
+    };
+    
+    console.log(`likeMessage: Returning result:`, result);
+    return result;
+  } catch (error) {
+    console.error('Error in likeMessage:', error);
+    return { success: false, likeCount: 0, isLiked: false };
+  }
+}
+
+/**
+ * Like a story
+ */
+export async function likeStory(storyId: string): Promise<{ success: boolean; likeCount: number; isLiked: boolean }> {
+  try {
+    const { userIp, userSession } = getUserIdentifier();
+    
+    // Check if user already liked this story
+    const { data: existingLike, error: checkError } = await supabase
+      .from('story_likes')
+      .select('id')
+      .eq('story_id', storyId)
+      .eq('user_ip', userIp)
+      .eq('user_session', userSession)
+      .maybeSingle();
+    
+    if (checkError && checkError.code !== 'PGRST116') {
+      console.error('Error checking existing like:', checkError.message || checkError.code || 'Database tables may not exist. Please run the SQL schema first.');
+      return { success: false, likeCount: 0, isLiked: false };
+    }
+    
+    if (existingLike) {
+      // Unlike the story
+      const { error: deleteError } = await supabase
+        .from('story_likes')
+        .delete()
+        .eq('id', existingLike.id);
+      
+      if (deleteError) {
+        console.error('Error unliking story:', deleteError);
+        return { success: false, likeCount: 0, isLiked: true };
+      }
+    } else {
+      // Like the story
+      const { error: insertError } = await supabase
+        .from('story_likes')
+        .insert([
+          {
+            story_id: storyId,
+            user_ip: userIp,
+            user_session: userSession
+          }
+        ]);
+      
+      if (insertError) {
+        console.error('Error liking story:', insertError);
+        return { success: false, likeCount: 0, isLiked: false };
+      }
+    }
+    
+    // Get updated like count
+    const { data: storyData, error: storyError } = await supabase
+      .from('army_stories')
+      .select('like_count')
+      .eq('story_id', storyId)
+      .single();
+    
+    if (storyError) {
+      console.error('Error getting story like count:', storyError);
+      return { success: false, likeCount: 0, isLiked: !existingLike };
+    }
+    
+    return {
+      success: true,
+      likeCount: storyData.like_count || 0,
+      isLiked: !existingLike
+    };
+  } catch (error) {
+    console.error('Error in likeStory:', error);
+    return { success: false, likeCount: 0, isLiked: false };
+  }
+}
+
+/**
+ * Check if user has liked a message
+ */
+export async function hasUserLikedMessage(messageId: string): Promise<boolean> {
+  try {
+    const { userIp, userSession } = getUserIdentifier();
+    
+    const { data, error } = await supabase
+      .from('message_likes')
+      .select('id')
+      .eq('message_id', messageId)
+      .eq('user_ip', userIp)
+      .eq('user_session', userSession)
+      .maybeSingle();
+    
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error checking message like status:', error.message || error.code || 'Database tables may not exist. Please run the SQL schema first.');
+      return false;
+    }
+    
+    return !!data;
+  } catch (error) {
+    console.error('Error in hasUserLikedMessage:', error);
+    return false;
+  }
+}
+
+/**
+ * Check if user has liked a story
+ */
+export async function hasUserLikedStory(storyId: string): Promise<boolean> {
+  try {
+    const { userIp, userSession } = getUserIdentifier();
+    
+    const { data, error } = await supabase
+      .from('story_likes')
+      .select('id')
+      .eq('story_id', storyId)
+      .eq('user_ip', userIp)
+      .eq('user_session', userSession)
+      .maybeSingle();
+    
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error checking story like status:', error.message || error.code || 'Database tables may not exist. Please run the SQL schema first.');
+      return false;
+    }
+    
+    return !!data;
+  } catch (error) {
+    console.error('Error in hasUserLikedStory:', error);
+    return false;
+  }
+}
+
+/**
+ * Get featured messages (most liked)
+ */
+export async function getFeaturedMessages(limit: number = 5): Promise<SupabaseMessage[]> {
+  try {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('is_featured', true)
+      .order('like_count', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    
+    if (error) {
+      console.error('Error fetching featured messages:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getFeaturedMessages:', error);
+    return [];
+  }
+}
+
+/**
+ * Get featured stories (most liked)
+ */
+export async function getFeaturedStories(limit: number = 5): Promise<SupabaseArmyStory[]> {
+  try {
+    const { data, error } = await supabase
+      .from('army_stories')
+      .select('*')
+      .eq('is_featured', true)
+      .order('like_count', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    
+    if (error) {
+      console.error('Error fetching featured stories:', error);
+      return [];
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error in getFeaturedStories:', error);
+    return [];
   }
 } 
