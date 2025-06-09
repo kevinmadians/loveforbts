@@ -117,11 +117,10 @@ export function WhackAMoleLeaderboard({
     <div className="w-full max-w-4xl mx-auto">
       <div className="bg-white rounded-xl border-2 border-black overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 md:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold black-han-sans flex items-center gap-2">
-                <Trophy className="w-8 h-8" />
+              <h1 className="text-2xl md:text-3xl font-bold black-han-sans">
                 BTS Whack-a-Mole Leaderboard
               </h1>
               <p className="text-purple-100 mt-2">Compete with ARMY worldwide!</p>

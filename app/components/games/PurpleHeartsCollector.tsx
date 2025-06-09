@@ -312,9 +312,8 @@ export function PurpleHeartsCollector() {
           className="text-center"
         >
           <div className="mb-6">
-            <Heart className="w-20 h-20 text-purple-600 mx-auto mb-4" />
-            <h1 className="text-4xl font-bold black-han-sans mb-2">Purple Hearts Collector</h1>
-            <p className="text-lg text-gray-600 max-w-md">
+            <h1 className="text-3xl md:text-4xl font-bold black-han-sans mb-4">Purple Hearts Collector</h1>
+            <p className="text-base md:text-lg text-gray-600 max-w-md">
               Catch falling purple hearts and avoid missing them! Gold hearts give bonus points!
             </p>
           </div>
@@ -362,8 +361,7 @@ export function PurpleHeartsCollector() {
           animate={{ scale: 1 }}
           className="text-center"
         >
-          <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold black-han-sans mb-4">Game Over!</h2>
+          <h2 className="text-3xl md:text-4xl font-bold black-han-sans mb-4">Game Over!</h2>
           
           <div className="bg-white rounded-lg border-2 border-black p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -412,33 +410,30 @@ export function PurpleHeartsCollector() {
   return (
     <div className="relative w-full max-w-2xl mx-auto">
       {/* Game UI */}
-      <div className="bg-white rounded-t-xl border-2 border-black border-b-0 p-4">
-        <div className="flex justify-between items-center text-sm font-bold">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span>{stats.score}</span>
+      <div className="bg-white rounded-t-xl border-2 border-black border-b-0 p-2 md:p-3">
+        <div className="flex justify-between items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-3 flex-wrap text-xs md:text-sm">
+            <div className="font-bold text-yellow-600">
+              Score: <span className="text-black">{stats.score}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Heart className="w-4 h-4 text-purple-600" />
-              <span>{stats.heartsCollected}</span>
+            <div className="font-bold text-purple-600">
+              Hearts: <span className="text-black">{stats.heartsCollected}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Zap className="w-4 h-4 text-orange-500" />
-              <span>{stats.streak}</span>
+            <div className="font-bold text-orange-500">
+              Streak: <span className="text-black">{stats.streak}</span>
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
-            <div className="text-blue-600">Level {stats.level}</div>
-            <div className="text-red-600">{formatTime(gameTime)}</div>
+          <div className="flex items-center gap-1 text-xs md:text-sm">
+            <div className="text-blue-600 font-bold">Level {stats.level}</div>
+            <div className="text-red-600 font-bold">{formatTime(gameTime)}</div>
             <Button
               onClick={pauseGame}
               size="sm"
               variant="outline"
-              className="border-2 border-black"
+              className="border border-black p-1 ml-1"
             >
-              {gameState === 'paused' ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+              {gameState === 'paused' ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
             </Button>
           </div>
         </div>
@@ -454,10 +449,10 @@ export function PurpleHeartsCollector() {
         <AnimatePresence>
           {showStreakBonus && (
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-4 py-2 rounded-full font-bold z-10"
+              initial={{ opacity: 0, x: 100, scale: 0.5 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 100, scale: 0.5 }}
+              className="absolute top-2 right-2 bg-orange-500 text-white px-3 py-1.5 rounded-full font-bold text-sm z-10"
             >
               Streak Bonus! 🔥
             </motion.div>
@@ -468,7 +463,7 @@ export function PurpleHeartsCollector() {
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-6 py-3 rounded-xl font-bold text-xl z-10"
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-xl font-bold text-sm z-10"
             >
               Level Up! 🎉
             </motion.div>

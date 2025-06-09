@@ -147,6 +147,8 @@ Current state: Website uses "Butter" theme with #FFDE00 yellow as primary color.
 - [X] Implement theme-specific animations and effects
 - [X] Fix hardcoded #FFDE00 colors in bias-test, messages, army-story pages
 - [X] Fix hardcoded colors in quiz pages and user-generated content pages
+- [X] Update game page headers to match site layout patterns (remove icons, improve mobile responsiveness)
+- [X] Remove remaining emojis/icons from page headers and make fully responsive with engaging Back to Games buttons
 - [ ] Add theme-specific sound effects (optional)
 
 #### Phase 4: Advanced Features

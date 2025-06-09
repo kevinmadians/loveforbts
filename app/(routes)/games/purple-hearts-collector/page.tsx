@@ -1,27 +1,28 @@
 import { PurpleHeartsCollector } from "@/app/components/games/PurpleHeartsCollector"
 import Link from "next/link"
-import { ArrowLeft, Gamepad2 } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 
 export default function PurpleHeartsCollectorPage() {
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-8">
+    <div className="container max-w-4xl mx-auto px-4 py-6 md:py-8">
       {/* Header */}
-      <div className="mb-8">
-        <Link 
-          href="/games" 
-          className="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors mb-4"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back to Games
-        </Link>
-        
-        <div className="flex items-center gap-3 mb-2">
-          <Gamepad2 className="h-8 w-8 text-purple-600" />
-          <h1 className="text-3xl font-bold black-han-sans">Purple Hearts Collector</h1>
+      <div className="mb-6 md:mb-8">
+        <div className="flex justify-center mb-4">
+          <Link 
+            href="/games" 
+            className="inline-flex items-center bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium px-4 py-2 rounded-full transition-colors border-2 border-purple-300 hover:border-purple-400"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Games
+          </Link>
         </div>
-        <p className="text-gray-600">
-          A fun mini-game for ARMY! Catch falling purple hearts and build your streak for bonus points.
-        </p>
+        
+        <div className="text-center mb-4">
+          <h1 className="text-2xl md:text-3xl font-bold black-han-sans mb-3">Purple Hearts Collector</h1>
+          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+            A fun mini-game for ARMY! Catch falling purple hearts and build your streak for bonus points.
+          </p>
+        </div>
       </div>
 
       {/* Game Component */}

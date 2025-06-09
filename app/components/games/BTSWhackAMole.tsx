@@ -651,9 +651,8 @@ export function BTSWhackAMole() {
           className="text-center max-w-md w-full"
         >
           <div className="mb-8">
-            <User className="w-20 h-20 text-purple-600 mx-auto mb-4" />
-            <h1 className="text-4xl font-bold black-han-sans mb-2">Welcome to BTS Whack-a-Mole!</h1>
-            <p className="text-lg text-gray-600">
+            <h1 className="text-3xl md:text-4xl font-bold black-han-sans mb-4">Welcome to BTS Whack-a-Mole!</h1>
+            <p className="text-base md:text-lg text-gray-600">
               Enter your ARMY name to join the global leaderboard and compete with other fans!
             </p>
           </div>
@@ -718,9 +717,8 @@ export function BTSWhackAMole() {
           className="text-center max-w-md"
         >
           <div className="mb-6">
-            <Hammer className="w-20 h-20 text-purple-600 mx-auto mb-4" />
-            <h1 className="text-4xl font-bold black-han-sans mb-2">BTS Whack-a-Mole</h1>
-            <p className="text-lg text-gray-600 mb-3">
+            <h1 className="text-3xl md:text-4xl font-bold black-han-sans mb-4">BTS Whack-a-Mole</h1>
+            <p className="text-base md:text-lg text-gray-600 mb-3">
               Whack your favorite BTS members as they pop up! Each member has special abilities!
             </p>
             <div className="bg-yellow-100 border-2 border-yellow-400 rounded-lg p-3 mb-4">
@@ -803,8 +801,7 @@ export function BTSWhackAMole() {
           animate={{ scale: 1 }}
           className="text-center max-w-md"
         >
-          <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold black-han-sans mb-4">Game Over!</h2>
+          <h2 className="text-3xl md:text-4xl font-bold black-han-sans mb-4">Game Over!</h2>
           
           <div className="bg-white rounded-lg border-2 border-black p-6 mb-6">
             <div className="grid grid-cols-2 gap-4 text-sm mb-4">
@@ -923,7 +920,7 @@ export function BTSWhackAMole() {
   return (
     <div className="relative w-full max-w-2xl mx-auto">
       {/* Game UI Header */}
-      <div className="bg-white rounded-t-xl border-2 border-black border-b-0 p-4 relative overflow-hidden">
+      <div className="bg-white rounded-t-xl border-2 border-black border-b-0 p-2 md:p-3 relative overflow-hidden">
         {/* Level-up notification in header */}
         <AnimatePresence>
           {showLevelUp && (
@@ -934,57 +931,50 @@ export function BTSWhackAMole() {
               exit={{ opacity: 0, y: -50, scale: 0.8 }}
               className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-purple-500 to-pink-500 text-white flex items-center justify-center z-10 rounded-t-lg"
             >
-              <div className="flex items-center gap-2">
-                <Zap className="w-6 h-6 animate-pulse" />
-                <span className="text-xl font-bold">LEVEL {levelUpInfo.newLevel}!</span>
-                <Sparkles className="w-6 h-6 animate-pulse" />
-                <span className="text-sm">+{levelUpInfo.bonus} bonus!</span>
-                <Heart className="w-5 h-5 text-pink-200 animate-bounce" />
+              <div className="flex items-center gap-1 md:gap-2 text-sm md:text-base">
+                <Zap className="w-4 h-4 md:w-6 md:h-6 animate-pulse" />
+                <span className="font-bold">LEVEL {levelUpInfo.newLevel}!</span>
+                <Sparkles className="w-4 h-4 md:w-6 md:h-6 animate-pulse" />
+                <span className="text-xs md:text-sm">+{levelUpInfo.bonus} bonus!</span>
+                <Heart className="w-4 h-4 md:w-5 md:h-5 text-pink-200 animate-bounce" />
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className="flex justify-between items-center relative z-5">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="font-bold">{stats.score}</span>
+        <div className="flex justify-between items-center relative z-5 gap-2">
+          <div className="flex items-center gap-1 md:gap-3 flex-wrap text-xs md:text-sm">
+            <div className="font-bold text-yellow-600">
+              Score: <span className="text-black">{stats.score}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Target className="w-4 h-4 text-green-600" />
-              <span>{stats.accuracy}%</span>
+            <div className="font-bold text-green-600">
+              Acc: <span className="text-black">{stats.accuracy}%</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Hammer className="w-4 h-4 text-purple-600" />
-              <span>{stats.streak}</span>
+            <div className="font-bold text-purple-600">
+              Streak: <span className="text-black">{stats.streak}</span>
             </div>
             {hopeBonus > 0 && (
-              <div className="flex items-center gap-1 bg-yellow-100 px-2 py-1 rounded-lg border">
-                <span className="text-xs">Hope Bonus: +{hopeBonus}</span>
+              <div className="bg-yellow-100 px-1 py-0.5 rounded border text-xs">
+                Hope: +{hopeBonus}
               </div>
             )}
             {powerUpActive && (
-              <div className="flex items-center gap-1 bg-purple-100 px-2 py-1 rounded-lg border animate-pulse">
-                <Sparkles className="w-3 h-3" />
-                <span className="text-xs">Power-Up!</span>
+              <div className="bg-purple-100 px-1 py-0.5 rounded border text-xs animate-pulse">
+                Power-Up!
               </div>
             )}
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 text-xs md:text-sm">
             <div className="text-blue-600 font-bold">Lv.{stats.level}</div>
-            <div className="flex items-center gap-1 text-red-600 font-bold">
-              <Timer className="w-4 h-4" />
-              <span>{formatTime(gameTime)}</span>
-            </div>
+            <div className="text-red-600 font-bold">{formatTime(gameTime)}</div>
             <Button
               onClick={pauseGame}
               size="sm"
               variant="outline"
-              className="border-2 border-black"
+              className="border border-black p-1 ml-1"
             >
-              {gameState === 'paused' ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+              {gameState === 'paused' ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
             </Button>
           </div>
         </div>
@@ -1020,10 +1010,10 @@ export function BTSWhackAMole() {
           {showCombo && (
             <motion.div
               key="combo-notification"
-              initial={{ opacity: 0, y: 50, scale: 0.5 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -50, scale: 0.5 }}
-              className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold text-lg z-10 shadow-lg"
+              initial={{ opacity: 0, x: 100, scale: 0.5 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 100, scale: 0.5 }}
+              className="absolute top-2 right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full font-bold text-sm z-10 shadow-lg"
             >
               COMBO x{Math.floor(stats.streak / COMBO_THRESHOLD)} 🔥
             </motion.div>
@@ -1035,7 +1025,7 @@ export function BTSWhackAMole() {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white px-4 py-2 rounded-lg font-bold z-10"
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-3 py-1.5 rounded-lg font-bold text-sm z-10"
             >
               Miss! 😅
             </motion.div>

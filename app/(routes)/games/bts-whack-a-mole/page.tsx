@@ -1,39 +1,44 @@
 import { BTSWhackAMole } from "@/app/components/games/BTSWhackAMole"
 import Link from "next/link"
-import { ArrowLeft, Gamepad2, Trophy } from "lucide-react"
+import { ArrowLeft, Trophy } from "lucide-react"
 import { Button } from "@/app/components/ui/button"
 
 export default function BTSWhackAMolePage() {
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-8">
+    <div className="container max-w-4xl mx-auto px-4 py-6 md:py-8">
       {/* Header */}
-      <div className="mb-8">
-        <Link 
-          href="/games" 
-          className="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors mb-4"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back to Games
-        </Link>
-        
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-3">
-            <Gamepad2 className="h-8 w-8 text-yellow-600" />
-            <h1 className="text-3xl font-bold black-han-sans">BTS Whack-a-Mole</h1>
-          </div>
-          <Link href="/games/bts-whack-a-mole/leaderboard">
-            <Button 
-              variant="outline"
-              className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50"
-            >
-              <Trophy className="w-4 h-4 mr-2" />
-              Leaderboard
-            </Button>
+      <div className="mb-6 md:mb-8">
+        <div className="flex justify-center mb-4">
+          <Link 
+            href="/games" 
+            className="inline-flex items-center bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium px-4 py-2 rounded-full transition-colors border-2 border-purple-300 hover:border-purple-400"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Games
           </Link>
         </div>
-        <p className="text-gray-600">
-          Classic whack-a-mole fun with your favorite BTS members! Each member has different point values and rarity levels.
-        </p>
+        
+        <div className="text-center mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-3xl font-bold black-han-sans text-center sm:text-left">BTS Whack-a-Mole</h1>
+            </div>
+            <div className="flex justify-center sm:justify-end">
+              <Link href="/games/bts-whack-a-mole/leaderboard">
+                <Button 
+                  variant="outline"
+                  className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 text-sm"
+                >
+                  <Trophy className="w-4 h-4 mr-2" />
+                  Leaderboard
+                </Button>
+              </Link>
+            </div>
+          </div>
+          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+            Classic whack-a-mole fun with your favorite BTS members! Each member has different point values and rarity levels.
+          </p>
+        </div>
       </div>
 
       {/* Game Component */}
