@@ -2,24 +2,24 @@
 
 import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Trophy, Medal, Award, Crown, Star, Calendar, TrendingUp, Target, Timer, Zap } from "lucide-react"
+import { Trophy, Medal, Award, Crown, Star, Calendar, TrendingUp, Target, Timer, Zap, Heart } from "lucide-react"
 import { Button } from "../ui/button"
-import { getTopScores, getRecentScores, WhackAMoleScore } from "@/app/lib/supabase-whack-a-mole"
+import { getTopPurpleHeartsScores, getRecentPurpleHeartsScores, PurpleHeartsScore } from "@/app/lib/supabase-purple-hearts"
 import { cn } from "@/app/lib/utils"
 
-interface WhackAMoleLeaderboardProps {
+interface PurpleHeartsLeaderboardProps {
   onBackToGame?: () => void
-  currentPlayerScore?: WhackAMoleScore
+  currentPlayerScore?: PurpleHeartsScore
   showBackButton?: boolean
 }
 
-export function WhackAMoleLeaderboard({ 
+export function PurpleHeartsLeaderboard({ 
   onBackToGame, 
   currentPlayerScore, 
   showBackButton = true 
-}: WhackAMoleLeaderboardProps) {
-  const [topScores, setTopScores] = useState<WhackAMoleScore[]>([])
-  const [recentScores, setRecentScores] = useState<WhackAMoleScore[]>([])
+}: PurpleHeartsLeaderboardProps) {
+  const [topScores, setTopScores] = useState<PurpleHeartsScore[]>([])
+  const [recentScores, setRecentScores] = useState<PurpleHeartsScore[]>([])
   const [activeTab, setActiveTab] = useState<'all-time' | 'recent'>('all-time')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -34,8 +34,8 @@ export function WhackAMoleLeaderboard({
     
     try {
       const [topData, recentData] = await Promise.all([
-        getTopScores(10),
-        getRecentScores(10)
+        getTopPurpleHeartsScores(10),
+        getRecentPurpleHeartsScores(10)
       ])
       
       setTopScores(topData)
@@ -86,7 +86,7 @@ export function WhackAMoleLeaderboard({
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[500px] bg-gradient-to-br from-yellow-100 to-purple-100 rounded-xl border-2 border-black p-8">
+      <div className="flex flex-col items-center justify-center min-h-[500px] bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl border-2 border-black p-8">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
         <p className="text-lg text-gray-600">Loading leaderboard...</p>
       </div>
@@ -95,9 +95,9 @@ export function WhackAMoleLeaderboard({
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[500px] bg-gradient-to-br from-yellow-100 to-purple-100 rounded-xl border-2 border-black p-8">
+      <div className="flex flex-col items-center justify-center min-h-[500px] bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl border-2 border-black p-8">
         <div className="text-center">
-          <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-4">Leaderboard Unavailable</h2>
           <p className="text-gray-600 mb-6">{error}</p>
           {showBackButton && (
@@ -121,9 +121,9 @@ export function WhackAMoleLeaderboard({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="text-center sm:text-left">
               <h1 className="text-xl md:text-3xl font-bold black-han-sans">
-                BTS Whack-a-Mole Leaderboard
+                Purple Hearts Collector Leaderboard
               </h1>
-              <p className="text-purple-100 mt-1 text-sm md:text-base">Compete with ARMY worldwide!</p>
+              <p className="text-purple-100 mt-1 text-sm md:text-base">Catch hearts and compete with ARMY worldwide!</p>
             </div>
             {showBackButton && (
               <Button 
@@ -203,7 +203,7 @@ export function WhackAMoleLeaderboard({
         <div className="p-3 md:p-6">
           {currentScores.length === 0 ? (
             <div className="text-center py-8 md:py-12">
-              <Trophy className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-4" />
+              <Heart className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg md:text-xl font-bold text-gray-500 mb-2">No scores yet!</h3>
               <p className="text-gray-400 text-sm md:text-base">
                 {activeTab === 'all-time' 
@@ -310,15 +310,18 @@ export function WhackAMoleLeaderboard({
                           <div className="text-gray-500">Acc</div>
                         </div>
                         <div className="hidden md:block">
-                          <div className="font-bold text-blue-600 flex items-center justify-center gap-1">
+                          <div className="font-bold text-orange-500 flex items-center justify-center gap-1">
                             <Zap className="w-3 h-3" />
                             {score.best_streak}
                           </div>
                           <div className="text-gray-500">Streak</div>
                         </div>
                         <div className="hidden md:block">
-                          <div className="font-bold text-orange-500">Lv.{score.level}</div>
-                          <div className="text-gray-500">Level</div>
+                          <div className="font-bold text-pink-500 flex items-center justify-center gap-1">
+                            <Heart className="w-3 h-3" />
+                            {score.hearts_collected}
+                          </div>
+                          <div className="text-gray-500">Hearts</div>
                         </div>
                       </div>
                     </div>

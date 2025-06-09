@@ -51,6 +51,107 @@ ALTER PUBLICATION supabase_realtime ADD TABLE user_playlists;
 
 5. Click "Run" to execute the SQL commands
 
+## Setting Up Purple Hearts Collector Game Tables
+
+The Purple Hearts Collector game requires tables to store player scores and leaderboard data.
+
+1. In the SQL Editor, create a new query and run these commands:
+
+```sql
+-- Create the purple_hearts_scores table for storing game scores
+CREATE TABLE IF NOT EXISTS purple_hearts_scores (
+    id BIGSERIAL PRIMARY KEY,
+    player_name TEXT NOT NULL,
+    score INTEGER NOT NULL DEFAULT 0,
+    level INTEGER NOT NULL DEFAULT 1,
+    accuracy DECIMAL(5,2) NOT NULL DEFAULT 0,
+    hearts_collected INTEGER NOT NULL DEFAULT 0,
+    misses INTEGER NOT NULL DEFAULT 0,
+    best_streak INTEGER NOT NULL DEFAULT 0,
+    fast_catches INTEGER NOT NULL DEFAULT 0,
+    perfect_catches INTEGER NOT NULL DEFAULT 0,
+    members_caught JSONB DEFAULT '{}',
+    game_duration INTEGER NOT NULL DEFAULT 60,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_purple_hearts_scores_score ON purple_hearts_scores(score DESC);
+CREATE INDEX IF NOT EXISTS idx_purple_hearts_scores_created_at ON purple_hearts_scores(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_purple_hearts_scores_player_name ON purple_hearts_scores(player_name);
+
+-- Enable Row Level Security
+ALTER TABLE purple_hearts_scores ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for public access
+CREATE POLICY "Allow public read access" ON purple_hearts_scores
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow anyone to insert scores" ON purple_hearts_scores
+    FOR INSERT WITH CHECK (true);
+
+-- Create view for top scores with ranking
+CREATE OR REPLACE VIEW top_purple_hearts_scores AS
+SELECT 
+    *,
+    ROW_NUMBER() OVER (ORDER BY score DESC, created_at ASC) as rank
+FROM purple_hearts_scores
+ORDER BY score DESC, created_at ASC;
+
+-- Add realtime capabilities for the table (optional)
+ALTER PUBLICATION supabase_realtime ADD TABLE purple_hearts_scores;
+```
+
+## Setting Up Whack-a-Mole Game Tables
+
+The Whack-a-Mole game requires tables to store player scores and leaderboard data.
+
+1. In the SQL Editor, create a new query and run these commands:
+
+```sql
+-- Create the whack_a_mole_scores table for storing game scores
+CREATE TABLE IF NOT EXISTS whack_a_mole_scores (
+    id BIGSERIAL PRIMARY KEY,
+    player_name TEXT NOT NULL,
+    score INTEGER NOT NULL DEFAULT 0,
+    level INTEGER NOT NULL DEFAULT 1,
+    accuracy DECIMAL(5,2) NOT NULL DEFAULT 0,
+    hits INTEGER NOT NULL DEFAULT 0,
+    misses INTEGER NOT NULL DEFAULT 0,
+    best_streak INTEGER NOT NULL DEFAULT 0,
+    fast_hits INTEGER NOT NULL DEFAULT 0,
+    perfect_hits INTEGER NOT NULL DEFAULT 0,
+    game_duration INTEGER NOT NULL DEFAULT 60,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_whack_a_mole_scores_score ON whack_a_mole_scores(score DESC);
+CREATE INDEX IF NOT EXISTS idx_whack_a_mole_scores_created_at ON whack_a_mole_scores(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_whack_a_mole_scores_player_name ON whack_a_mole_scores(player_name);
+
+-- Enable Row Level Security
+ALTER TABLE whack_a_mole_scores ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for public access
+CREATE POLICY "Allow public read access" ON whack_a_mole_scores
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow anyone to insert scores" ON whack_a_mole_scores
+    FOR INSERT WITH CHECK (true);
+
+-- Create view for top scores with ranking
+CREATE OR REPLACE VIEW top_whack_a_mole_scores AS
+SELECT 
+    *,
+    ROW_NUMBER() OVER (ORDER BY score DESC, created_at ASC) as rank
+FROM whack_a_mole_scores
+ORDER BY score DESC, created_at ASC;
+
+-- Add realtime capabilities for the table (optional)
+ALTER PUBLICATION supabase_realtime ADD TABLE whack_a_mole_scores;
+```
+
 ## Setting Up Text Search (Optional)
 
 If you want to enable text search functionality for playlists (search by title or creator name), you'll need to add the `pg_trgm` extension. Run the following commands:

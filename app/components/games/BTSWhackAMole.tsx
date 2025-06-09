@@ -193,6 +193,17 @@ export function BTSWhackAMole() {
     setCurrentPlayerScore(null)
     setPlayerRank(null)
     
+    // Auto-scroll to game area after starting
+    setTimeout(() => {
+      const gameElement = document.querySelector('[data-game-container]')
+      if (gameElement) {
+        gameElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        })
+      }
+    }, 100)
+    
     // Start game timer
     gameTimerRef.current = window.setInterval(() => {
       setGameTime(prev => {
@@ -651,16 +662,16 @@ export function BTSWhackAMole() {
           className="text-center max-w-md w-full"
         >
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold black-han-sans mb-4">Welcome to BTS Whack-a-Mole!</h1>
+            
             <p className="text-base md:text-lg text-gray-600">
-              Enter your ARMY name to join the global leaderboard and compete with other fans!
+              Enter your name to join the global leaderboard and compete with ARMYs!
             </p>
           </div>
           
           <form onSubmit={handleNameSubmit} className="space-y-6">
             <div className="bg-white rounded-lg border-2 border-black p-6">
               <label htmlFor="playerName" className="block text-left font-bold text-lg mb-3">
-                Your ARMY Name:
+                Your Name:
               </label>
               <Input
                 id="playerName"
@@ -674,7 +685,7 @@ export function BTSWhackAMole() {
                 autoFocus
               />
               <p className="text-sm text-gray-500 mt-2 text-left">
-                💡 Choose a fun name - it will appear on the public leaderboard!
+                Input yourname - it will appear on the public leaderboard!
               </p>
             </div>
             
@@ -683,7 +694,7 @@ export function BTSWhackAMole() {
               disabled={!playerName.trim()}
               className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white font-bold text-lg px-8 py-6 rounded-xl border-2 border-black w-full"
             >
-              Start Playing! 💜
+              Start Playing
             </Button>
           </form>
           
@@ -918,7 +929,7 @@ export function BTSWhackAMole() {
 
   // Render game
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
+    <div className="relative w-full max-w-2xl mx-auto" data-game-container>
       {/* Game UI Header */}
       <div className="bg-white rounded-t-xl border-2 border-black border-b-0 p-2 md:p-3 relative overflow-hidden">
         {/* Level-up notification in header */}
