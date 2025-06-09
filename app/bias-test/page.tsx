@@ -130,7 +130,7 @@ export default function BiasTestPage() {
                   <button
                     key={member.slug}
                     onClick={() => handleBiasSelect(member.slug)}
-                    className="flex flex-col items-center p-3 border-2 border-black rounded-xl hover:bg-[#FFDE00] transition-colors group"
+                    className="flex flex-col items-center p-3 border-2 border-black rounded-xl hover:bg-bts-accent transition-colors group"
                   >
                     <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-black mb-2 relative">
                       <Image
@@ -163,7 +163,7 @@ export default function BiasTestPage() {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5">
                   <div 
-                    className="bg-[#FFDE00] h-2.5 rounded-full" 
+                    className="bg-bts-accent h-2.5 rounded-full" 
                     style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
                   ></div>
                 </div>
@@ -176,7 +176,7 @@ export default function BiasTestPage() {
                   <button
                     key={option.id}
                     onClick={() => handleOptionSelect(questions[currentQuestion].id, option.traits)}
-                    className="w-full p-4 border-2 border-black rounded-lg hover:bg-[#FFDE00] transition-colors text-left flex justify-between items-center"
+                    className="w-full p-4 border-2 border-black rounded-lg hover:bg-bts-accent transition-colors text-left flex justify-between items-center"
                   >
                     <span>{option.text}</span>
                     <ArrowRight className="h-5 w-5 text-black" />
@@ -267,7 +267,7 @@ export default function BiasTestPage() {
                   </button>
                   <button
                     onClick={handleShare}
-                    className="flex-1 py-3 px-6 bg-[#FFDE00] border-2 border-black rounded-lg hover:bg-[#FFD000] transition-colors flex items-center justify-center"
+                    className="flex-1 py-3 px-6 bg-bts-accent text-black border-2 border-black rounded-lg hover:bg-navbar-hover transition-colors flex items-center justify-center"
                     disabled={isSharing}
                   >
                     <Share2 className="w-5 h-5 mr-2" />

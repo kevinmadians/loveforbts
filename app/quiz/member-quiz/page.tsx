@@ -399,7 +399,7 @@ export default function MemberQuizPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <button 
               onClick={() => setQuizType("knowledge")}
-              className="flex flex-col items-center p-6 rounded-xl border-2 border-black hover:bg-[#FFDE00] transition-colors"
+              className="flex flex-col items-center p-6 rounded-xl border-2 border-black hover:bg-bts-accent transition-colors"
             >
               <Users className="h-12 w-12 mb-4" />
               <h3 className="text-xl font-bold mb-2 black-han-sans">Member Knowledge</h3>
@@ -409,7 +409,7 @@ export default function MemberQuizPage() {
 
             <button 
               onClick={() => setQuizType("personality")}
-              className="flex flex-col items-center p-6 rounded-xl border-2 border-black hover:bg-[#FFDE00] transition-colors"
+              className="flex flex-col items-center p-6 rounded-xl border-2 border-black hover:bg-bts-accent transition-colors"
             >
               <Sparkles className="h-12 w-12 mb-4" />
               <h3 className="text-xl font-bold mb-2 black-han-sans">Member Match</h3>
@@ -449,7 +449,7 @@ export default function MemberQuizPage() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div 
-                  className="bg-[#FFDE00] h-2.5 rounded-full transition-all duration-300" 
+                  className="bg-bts-accent h-2.5 rounded-full transition-all duration-300" 
                   style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
                 ></div>
               </div>
@@ -464,7 +464,7 @@ export default function MemberQuizPage() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div 
-                  className="bg-[#FFDE00] h-2.5 rounded-full transition-all duration-300" 
+                  className="bg-bts-accent h-2.5 rounded-full transition-all duration-300" 
                   style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
                 ></div>
               </div>
@@ -540,7 +540,7 @@ export default function MemberQuizPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={resetQuiz}
-                className="bg-[#FFDE00] text-black px-8 py-3 rounded-full font-bold border-2 border-black hover:bg-yellow-400 transition-colors"
+                className="bg-bts-accent text-black px-8 py-3 rounded-full font-bold border-2 border-black hover:bg-navbar-hover transition-colors"
               >
                 Play Again
               </button>
@@ -572,7 +572,7 @@ export default function MemberQuizPage() {
           <h2 className="text-2xl font-bold mb-2 black-han-sans">Your BTS Member Match!</h2>
           <div className="py-8">
             <div className="flex justify-center mb-8">
-              <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-[#FFDE00]">
+              <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-bts-accent">
                 <Image
                   src={getMemberImagePath(topMatch)}
                   alt={topMatch}
@@ -594,12 +594,12 @@ export default function MemberQuizPage() {
               {Object.entries(memberMatches).sort((a, b) => b[1] - a[1]).map(([member, count]) => (
                 <div 
                   key={member} 
-                  className={`p-3 rounded-lg border-2 ${member === topMatch ? 'border-[#FFDE00] bg-yellow-50' : 'border-gray-200'}`}
+                  className={`p-3 rounded-lg border-2 ${member === topMatch ? 'border-bts-accent bg-yellow-50' : 'border-gray-200'}`}
                 >
                   <div className="font-bold">{member}</div>
                   <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
                     <div 
-                      className={`h-2.5 rounded-full ${member === topMatch ? 'bg-[#FFDE00]' : 'bg-purple-400'}`}
+                      className={`h-2.5 rounded-full ${member === topMatch ? 'bg-bts-accent' : 'bg-purple-400'}`}
                       style={{ width: `${(count / personalityQuestions.length) * 100}%` }}
                     ></div>
                   </div>
@@ -610,7 +610,7 @@ export default function MemberQuizPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={resetQuiz}
-                className="bg-[#FFDE00] text-black px-8 py-3 rounded-full font-bold border-2 border-black hover:bg-yellow-400 transition-colors"
+                className="bg-bts-accent text-black px-8 py-3 rounded-full font-bold border-2 border-black hover:bg-navbar-hover transition-colors"
               >
                 Play Again
               </button>

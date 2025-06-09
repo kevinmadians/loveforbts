@@ -315,7 +315,7 @@ export function StoryForm({ onSubmit }: StoryFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full bg-black text-[#FFDE00] py-3 px-4 rounded-md transition-colors black-han-sans
+          className={`w-full bg-black text-bts-accent py-3 px-4 rounded-md transition-colors black-han-sans
             ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-900"}`}
         >
           {isSubmitting ? "Submitting..." : "Share My ARMY Story 💜"}

@@ -56,7 +56,7 @@ export default function AboutPage() {
           </div>
           
           <div className="bg-[#fff9d9] rounded-xl border-2 border-black p-5 text-center hover:shadow-md transition">
-            <div className="bg-[#FFDE00] w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <div className="bg-bts-accent w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Heart className="w-8 h-8 text-black" />
             </div>
             <h3 className="font-bold text-lg mb-2">Authenticity</h3>
@@ -70,7 +70,7 @@ export default function AboutPage() {
         <h2 className="text-2xl font-bold mb-6 black-han-sans text-center">What We Offer</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-xl border-2 border-black p-6 flex items-start space-x-4 hover:shadow-md transition">
-            <div className="bg-[#FFDE00] p-3 rounded-full">
+            <div className="bg-bts-accent p-3 rounded-full">
               <CircleUser className="w-6 h-6" />
             </div>
             <div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
           </div>
           
           <div className="bg-white rounded-xl border-2 border-black p-6 flex items-start space-x-4 hover:shadow-md transition">
-            <div className="bg-[#FFDE00] p-3 rounded-full">
+            <div className="bg-bts-accent p-3 rounded-full">
               <Music className="w-6 h-6" />
             </div>
             <div>
@@ -90,7 +90,7 @@ export default function AboutPage() {
           </div>
           
           <div className="bg-white rounded-xl border-2 border-black p-6 flex items-start space-x-4 hover:shadow-md transition">
-            <div className="bg-[#FFDE00] p-3 rounded-full">
+            <div className="bg-bts-accent p-3 rounded-full">
               <Calendar className="w-6 h-6" />
             </div>
             <div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
           </div>
           
           <div className="bg-white rounded-xl border-2 border-black p-6 flex items-start space-x-4 hover:shadow-md transition">
-            <div className="bg-[#FFDE00] p-3 rounded-full">
+            <div className="bg-bts-accent p-3 rounded-full">
               <Book className="w-6 h-6" />
             </div>
             <div>
@@ -110,7 +110,7 @@ export default function AboutPage() {
           </div>
           
           <div className="bg-white rounded-xl border-2 border-black p-6 flex items-start space-x-4 hover:shadow-md transition">
-            <div className="bg-[#FFDE00] p-3 rounded-full">
+            <div className="bg-bts-accent p-3 rounded-full">
               <MessageCircle className="w-6 h-6" />
             </div>
             <div>
@@ -120,7 +120,7 @@ export default function AboutPage() {
           </div>
           
           <div className="bg-white rounded-xl border-2 border-black p-6 flex items-start space-x-4 hover:shadow-md transition">
-            <div className="bg-[#FFDE00] p-3 rounded-full">
+            <div className="bg-bts-accent p-3 rounded-full">
               <Users className="w-6 h-6" />
             </div>
             <div>
@@ -137,7 +137,7 @@ export default function AboutPage() {
         <p className="mb-6 max-w-2xl mx-auto">
           Love for BTS is maintained by passionate ARMY volunteers. Your support helps us keep this space running and allows us to create more content and features for our community.
         </p>
-        <Link href="/support" className="inline-flex items-center px-8 py-3 bg-black text-[#FFDE00] rounded-lg font-bold hover:bg-gray-800 transition">
+        <Link href="/support" className="inline-flex items-center px-8 py-3 bg-black text-bts-accent rounded-lg font-bold hover:bg-gray-800 transition">
           <HeartHandshake className="mr-2 h-5 w-5" />
           Support Us
         </Link>

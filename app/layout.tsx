@@ -5,9 +5,11 @@ import { Toaster } from "sonner"
 import { MessageProvider } from "./lib/message-context"
 import { ArmyStoryProvider } from "./lib/army-story-context"
 import { NotificationProvider } from "./lib/notification-context"
+import { ThemeProvider } from "./lib/themes/theme-context"
 import { Navbar } from "./components/layout/navbar"
 import { Footer } from "./components/layout/footer"
 import { FanChantButtonWrapper } from "./components/FanChantButtonWrapper"
+import { CelebrationEffects } from "./components/theme/celebration-effects"
 import { CustomHead } from "./components/layout/CustomHead"
 import GoogleAnalytics from "./lib/google-analytics"
 import "./globals.css"
@@ -100,33 +102,36 @@ export default function RootLayout({
         {/* Custom component to force page titles */}
         <CustomHead />
         
-        <NotificationProvider>
-          <ArmyStoryProvider>
-            <MessageProvider>
-              <div className="flex flex-col min-h-screen">
-                <Navbar />
-                <main className="flex-grow pt-4 md:pt-8 flex justify-center w-full">
-                  {children}
-                </main>
-                <Footer />
-              </div>
-              
-              <FanChantButtonWrapper />
-              
-              <Toaster 
-                position="bottom-right"
-                toastOptions={{
-                  style: {
-                    background: 'white',
-                    border: '2px solid black',
-                    borderRadius: '12px',
-                  },
-                  className: 'font-medium',
-                }}
-              />
-            </MessageProvider>
-          </ArmyStoryProvider>
-        </NotificationProvider>
+        <ThemeProvider>
+          <NotificationProvider>
+            <ArmyStoryProvider>
+              <MessageProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Navbar />
+                  <main className="flex-grow pt-4 md:pt-8 flex justify-center w-full">
+                    {children}
+                  </main>
+                  <Footer />
+                </div>
+                
+                <FanChantButtonWrapper />
+                <CelebrationEffects />
+                
+                <Toaster 
+                  position="bottom-right"
+                  toastOptions={{
+                    style: {
+                      background: 'white',
+                      border: '2px solid black',
+                      borderRadius: '12px',
+                    },
+                    className: 'font-medium',
+                  }}
+                />
+              </MessageProvider>
+            </ArmyStoryProvider>
+          </NotificationProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

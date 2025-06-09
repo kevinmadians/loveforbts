@@ -303,7 +303,7 @@ export function DischargeDates() {
                       </div>
                       <button
                         onClick={() => handleAddToCalendar(member)}
-                        className="inline-flex items-center px-1.5 sm:px-2 py-1 rounded text-[10px] sm:text-xs bg-black text-[#FFDE00] hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95 transition-all duration-200 ease-out font-medium"
+                        className="inline-flex items-center px-1.5 sm:px-2 py-1 rounded text-[10px] sm:text-xs bg-black text-bts-accent hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95 transition-all duration-200 ease-out font-medium"
                         aria-label={`Add ${member.name}'s discharge date to calendar`}
                       >
                         <CalendarPlus size={14} className="mr-1" />

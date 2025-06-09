@@ -148,7 +148,7 @@ export function MessageDetail({ message }: MessageDetailProps) {
       <div className="flex justify-center my-8">
         <button
           onClick={scrollToTop}
-          className="inline-flex items-center gap-2 bg-black text-[#FFDE00] px-5 py-3 rounded-lg hover:bg-purple-900 transition-colors black-han-sans border-2 border-[#FFDE00] shadow-md transform hover:scale-105 active:scale-95"
+                        className="inline-flex items-center gap-2 bg-black text-bts-accent px-5 py-3 rounded-lg hover:bg-purple-900 transition-colors black-han-sans border-2 border-bts-accent shadow-md transform hover:scale-105 active:scale-95"
           aria-label="Scroll back to top"
         >
           <ArrowUp size={18} />
@@ -172,7 +172,7 @@ export function MessageDetail({ message }: MessageDetailProps) {
           </div>
           <Link 
             href="/support" 
-            className="inline-flex items-center px-4 py-2 bg-[#FFDE00] text-black border-2 border-black rounded-md hover:bg-yellow-300 transition-colors black-han-sans whitespace-nowrap"
+                          className="inline-flex items-center px-4 py-2 bg-bts-accent text-black border-2 border-black rounded-md hover:bg-navbar-hover transition-colors black-han-sans whitespace-nowrap"
           >
             Support Us 💜
           </Link>
@@ -189,8 +189,8 @@ export function MessageDetail({ message }: MessageDetailProps) {
         <button
           onClick={scrollToTop}
           className="fixed bottom-6 left-6 z-40 flex items-center justify-center w-12 h-12 rounded-full 
-            bg-black hover:bg-purple-900 text-[#FFDE00] shadow-lg transition-all duration-300
-            border-2 border-[#FFDE00] transform hover:scale-110 active:scale-95"
+            bg-black hover:bg-purple-900 text-bts-accent shadow-lg transition-all duration-300
+            border-2 border-bts-accent transform hover:scale-110 active:scale-95"
           aria-label="Scroll back to top"
         >
           <ChevronUp size={24} />

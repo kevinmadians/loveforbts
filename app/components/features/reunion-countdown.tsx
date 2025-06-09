@@ -310,7 +310,7 @@ export function ReunionCountdown() {
               >
                 {/* Flip animation on seconds change */}
                 <div className={`transform transition-all duration-500 ${isClient && index === 3 && unit.value % 2 === 0 ? 'scale-105' : 'scale-100'}`}>
-                  <span className="text-3xl sm:text-4xl md:text-6xl font-bold black-han-sans text-[#FFDE00]">
+                  <span className="text-3xl sm:text-4xl md:text-6xl font-bold black-han-sans" style={{ color: 'var(--bts-accent)' }}>
                     {unit.value.toString().padStart(2, '0')}
                   </span>
                 </div>
@@ -320,7 +320,7 @@ export function ReunionCountdown() {
                 
                 {/* Unit-specific progress bar */}
                 <div 
-                  className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-[#FFDE00] to-purple-500 transition-all duration-500"
+                  className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-[var(--bts-accent)] to-purple-500 transition-all duration-500"
                   style={{ 
                     width: `${unit.progress}%`,
                     opacity: 0.7
@@ -357,7 +357,8 @@ export function ReunionCountdown() {
                 });
               });
             }}
-            className="inline-flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-2 px-4 rounded-lg mb-4 hover:bg-purple-900 transition-colors black-han-sans border-2 border-[#FFDE00]"
+            className="inline-flex items-center justify-center gap-2 bg-black py-2 px-4 rounded-lg mb-4 hover:bg-purple-900 transition-colors black-han-sans border-2"
+            style={{ color: 'var(--bts-accent)', borderColor: 'var(--bts-accent)' }}
             aria-label="Add BTS reunion to your Google Calendar"
           >
             <Calendar size={18} />

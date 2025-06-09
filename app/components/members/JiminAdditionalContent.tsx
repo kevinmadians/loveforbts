@@ -84,7 +84,7 @@ export function JiminAdditionalContent() {
                   href="https://open.spotify.com/album/4xc3Lc9yASZgEJGH7acWMB" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -130,7 +130,7 @@ export function JiminAdditionalContent() {
                     href="https://soundcloud.com/user-179929042/sets/jimin" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                    className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                   >
                     <Music className="mr-2 h-4 w-4" />
                     <span>Listen on SoundCloud</span>
@@ -163,7 +163,7 @@ export function JiminAdditionalContent() {
                     href="https://soundcloud.com/bangtan/christmas-love-by-jimin-of-bts" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                    className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                   >
                     <Music className="mr-2 h-4 w-4" />
                     <span>Listen on SoundCloud</span>
@@ -201,7 +201,7 @@ export function JiminAdditionalContent() {
                     href="https://open.spotify.com/track/14XLUySagFhP9KoqOTg5ka" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                    className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                   >
                     <Music className="mr-2 h-4 w-4" />
                     <span>Listen on Spotify</span>
@@ -243,7 +243,7 @@ export function JiminAdditionalContent() {
                     href="https://open.spotify.com/track/2gzhQaCTeNgxpeB2TPllyY" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                    className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                   >
                     <Music className="mr-2 h-4 w-4" />
                     <span>Listen on Spotify</span>

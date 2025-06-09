@@ -66,6 +66,12 @@ const config: Config = {
           ring: "hsl(var(--sidebar-ring))",
         },
         butter: "#FFDE00",
+        // BTS Theme variables
+        "bts-accent": "var(--bts-accent)",
+        "bts-secondary": "var(--bts-secondary)",
+        "navbar-bg": "var(--navbar-bg)",
+        "navbar-text": "var(--navbar-text)",
+        "navbar-hover": "var(--navbar-hover)",
       },
       borderRadius: {
         lg: "var(--radius)",

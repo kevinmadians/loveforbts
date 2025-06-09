@@ -233,7 +233,7 @@ export function StoryComments({ storyId }: StoryCommentsProps) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-black text-[#FFDE00] py-3 px-6 rounded-lg hover:bg-purple-900 transition-colors black-han-sans flex items-center justify-center disabled:opacity-70"
+            className="w-full bg-black text-bts-accent py-3 px-6 rounded-lg hover:bg-purple-900 transition-colors black-han-sans flex items-center justify-center disabled:opacity-70"
           >
             {isSubmitting ? (
               <>

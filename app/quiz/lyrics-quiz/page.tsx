@@ -837,7 +837,7 @@ export default function LyricsQuizPage() {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
             <button 
               onClick={() => setQuizType("guess-song")}
-              className="flex flex-col items-center p-6 rounded-xl border-2 border-black hover:bg-[#FFDE00] transition-colors"
+              className="flex flex-col items-center p-6 rounded-xl border-2 border-black hover:bg-bts-accent transition-colors"
             >
               <Music className="h-12 w-12 mb-4" />
               <h3 className="text-xl font-bold mb-2 black-han-sans">Guess the Song</h3>
@@ -869,7 +869,7 @@ export default function LyricsQuizPage() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
               <div 
-                className="bg-[#FFDE00] h-2.5 rounded-full transition-all duration-300" 
+                className="bg-bts-accent h-2.5 rounded-full transition-all duration-300" 
                 style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
               ></div>
             </div>
@@ -994,7 +994,7 @@ export default function LyricsQuizPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={resetQuiz}
-                className="bg-[#FFDE00] text-black px-8 py-3 rounded-full font-bold border-2 border-black hover:bg-yellow-400 transition-colors"
+                className="bg-bts-accent text-black px-8 py-3 rounded-full font-bold border-2 border-black hover:bg-navbar-hover transition-colors"
               >
                 Play Again
               </button>

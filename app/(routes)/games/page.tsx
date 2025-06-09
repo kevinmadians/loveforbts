@@ -86,7 +86,7 @@ export default function GamesPage() {
 
             {/* Play Button */}
             <Link href={game.href}>
-              <Button className="w-full bg-black text-[#FFDE00] hover:bg-gray-800 font-bold border-2 border-black">
+              <Button className="w-full bg-black text-bts-accent hover:bg-gray-800 font-bold border-2 border-black">
                 <Gamepad2 className="w-4 h-4 mr-2" />
                 Play Now
               </Button>

@@ -72,7 +72,7 @@ export function MembersCTA() {
       <div className="flex justify-center mt-2">
         <Link 
           href="/members" 
-          className="bg-black text-[#FFDE00] py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
+          className="bg-black text-bts-accent py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
         >
           Explore All Members
         </Link>

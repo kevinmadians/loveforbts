@@ -97,9 +97,10 @@ export function Pagination({ currentPage, totalPages, onPageChange, className = 
               onClick={() => typeof page === 'number' && onPageChange(page)}
               className={`px-3 py-1 rounded-md border-2 transition-colors
                 ${currentPage === page 
-                  ? 'bg-black text-[#FFDE00] font-bold border-black' 
-                  : 'bg-white border-black hover:bg-purple-100 hover:text-purple-800'}
-              `}
+                  ? 'bg-black font-bold border-black' 
+                                      : 'bg-white border-black hover:bg-purple-100 hover:text-purple-800'}
+                `}
+                style={currentPage === page ? { color: 'var(--bts-accent)' } : {}}
               aria-label={`Go to page ${page}`}
               aria-current={currentPage === page ? 'page' : undefined}
             >

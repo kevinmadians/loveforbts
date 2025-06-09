@@ -159,7 +159,7 @@ export function VocabularyGuide() {
               setSearchQuery("");
               setSelectedCategory('all');
             }}
-            className="px-6 py-2 bg-[#FFDE00] text-black rounded-full font-medium hover:bg-yellow-400 transition-colors border-2 border-black"
+            className="px-6 py-2 bg-bts-accent text-black rounded-full font-medium hover:bg-navbar-hover transition-colors border-2 border-black"
           >
             View All Terms
           </button>

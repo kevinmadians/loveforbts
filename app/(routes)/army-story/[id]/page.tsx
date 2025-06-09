@@ -64,7 +64,7 @@ export default function StoryDetailPage() {
           <p className="mb-6 text-gray-600">{error || 'This story could not be found.'}</p>
           <button
             onClick={() => router.push('/army-story')}
-            className="inline-flex items-center px-5 py-3 bg-black text-[#FFDE00] rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
+                          className="inline-flex items-center px-5 py-3 bg-black text-bts-accent rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
           >
             Back to All Stories
           </button>

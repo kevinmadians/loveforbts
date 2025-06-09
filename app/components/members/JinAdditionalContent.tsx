@@ -85,7 +85,7 @@ export function JinAdditionalContent() {
                   href="https://www.youtube.com/watch?v=ArHGiOxYwHM&pp=ygUKc3VwZXJ0IHVuYQ%3D%3D" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <ExternalLink className="mr-2 h-4 w-4" />
                   <span>Watch on YouTube</span>
@@ -130,7 +130,7 @@ export function JinAdditionalContent() {
                   href="https://open.spotify.com/album/6nT2VfGN07ar1vdZyJY6ox" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -184,7 +184,7 @@ export function JinAdditionalContent() {
                   href="https://open.spotify.com/track/6L88EH68XwlaXwvChlTS41" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen to Epiphany</span>

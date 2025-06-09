@@ -102,7 +102,7 @@ export function EventCard({
           {showAddToCalendarButton && (
             <button 
               onClick={handleAddToCalendar}
-              className="mt-2 px-3 py-1 bg-black text-[#FFDE00] text-xs sm:text-sm rounded-lg"
+              className="mt-2 px-3 py-1 bg-black text-bts-accent text-xs sm:text-sm rounded-lg"
               aria-label={`Add ${event.title} to Google Calendar`}
             >
               Add to Calendar

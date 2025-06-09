@@ -113,7 +113,7 @@ export default function MessagesPage() {
         
         <Link 
           href="/messages/create" 
-          className="flex items-center justify-center px-5 py-3 bg-[#FFDE00] text-black border-2 border-black rounded-lg transition-colors hover:bg-[#E5C700] black-han-sans mx-auto md:mx-0 min-w-[200px] shadow-md"
+                      className="flex items-center justify-center px-5 py-3 bg-bts-accent text-black border-2 border-black rounded-lg transition-colors hover:bg-navbar-hover black-han-sans mx-auto md:mx-0 min-w-[200px] shadow-md"
         >
           <PenSquare size={18} className="mr-2" />
           <span>Write a Message</span>
@@ -162,7 +162,7 @@ export default function MessagesPage() {
           {!isSearchMode && (
             <Link 
               href="/messages/create" 
-              className="inline-flex items-center px-5 py-3 bg-black text-[#FFDE00] rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
+              className="inline-flex items-center px-5 py-3 bg-black text-bts-accent rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
             >
               <PenSquare size={18} className="mr-2" />
               <span>Write a Message</span>

@@ -96,7 +96,7 @@ export function StorySearch({ onSearch, className = "" }: StorySearchProps) {
         <button
           type="submit"
           disabled={isSearching || !searchQuery.trim()}
-          className="absolute inset-y-0 right-0 flex items-center px-4 bg-black text-[#FFDE00] rounded-r-lg border-2 border-black black-han-sans disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="absolute inset-y-0 right-0 flex items-center px-4 bg-black text-bts-accent rounded-r-lg border-2 border-black black-han-sans disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isSearching ? "Searching..." : "Search"}
         </button>

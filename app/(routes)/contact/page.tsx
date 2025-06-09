@@ -134,7 +134,7 @@ export default function ContactPage() {
                   href="https://twitter.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-black text-[#FFDE00] p-2 rounded-full hover:bg-purple-900 transition-colors"
+                  className="bg-black text-bts-accent p-2 rounded-full hover:bg-purple-900 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
@@ -144,7 +144,7 @@ export default function ContactPage() {
                   href="https://instagram.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-black text-[#FFDE00] p-2 rounded-full hover:bg-purple-900 transition-colors"
+                  className="bg-black text-bts-accent p-2 rounded-full hover:bg-purple-900 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -156,7 +156,7 @@ export default function ContactPage() {
                   href="https://youtube.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-black text-[#FFDE00] p-2 rounded-full hover:bg-purple-900 transition-colors"
+                  className="bg-black text-bts-accent p-2 rounded-full hover:bg-purple-900 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
@@ -248,7 +248,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-3 px-4 rounded-md transition-colors black-han-sans
+                className={`w-full flex items-center justify-center gap-2 bg-black text-bts-accent py-3 px-4 rounded-md transition-colors black-han-sans
                   ${isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-900"}`}
               >
                 {isSubmitting ? "Sending..." : (
@@ -270,7 +270,7 @@ export default function ContactPage() {
               <p className="text-gray-600 mb-4">Your message has been sent successfully. We'll get back to you soon!</p>
               <button
                 onClick={() => setSubmitted(false)}
-                className="bg-black text-[#FFDE00] py-2 px-4 rounded-md hover:bg-purple-900 transition-colors black-han-sans"
+                className="bg-black text-bts-accent py-2 px-4 rounded-md hover:bg-purple-900 transition-colors black-han-sans"
               >
                 Send Another Message
               </button>

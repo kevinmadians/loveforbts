@@ -65,7 +65,7 @@ export default function QuizIndexPage() {
         <h2 className="text-2xl font-bold mb-4 black-han-sans text-center">Why Take Our Quizzes?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-[#FFDE00] flex items-center justify-center mb-3">
+            <div className="w-16 h-16 rounded-full bg-bts-accent flex items-center justify-center mb-3">
               <HelpCircle className="w-8 h-8" />
             </div>
             <h3 className="font-bold mb-2">Learn While Playing</h3>
@@ -73,7 +73,7 @@ export default function QuizIndexPage() {
           </div>
           
           <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-[#FFDE00] flex items-center justify-center mb-3">
+            <div className="w-16 h-16 rounded-full bg-bts-accent flex items-center justify-center mb-3">
               <Users className="w-8 h-8" />
             </div>
             <h3 className="font-bold mb-2">Connect With ARMY</h3>
@@ -81,7 +81,7 @@ export default function QuizIndexPage() {
           </div>
           
           <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-[#FFDE00] flex items-center justify-center mb-3">
+            <div className="w-16 h-16 rounded-full bg-bts-accent flex items-center justify-center mb-3">
               <Music className="w-8 h-8" />
             </div>
             <h3 className="font-bold mb-2">Celebrate BTS</h3>

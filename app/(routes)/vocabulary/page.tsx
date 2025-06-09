@@ -19,7 +19,7 @@ export default function VocabularyPage() {
         
         <div className="flex items-center justify-center mb-6">
           <div className="h-0.5 bg-gray-200 flex-grow max-w-xs"></div>
-          <span className="mx-3 text-[#FFDE00] text-2xl">💜</span>
+          <span className="mx-3 text-bts-accent text-2xl">💜</span>
           <div className="h-0.5 bg-gray-200 flex-grow max-w-xs"></div>
         </div>
       </section>

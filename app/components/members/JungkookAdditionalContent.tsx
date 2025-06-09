@@ -84,7 +84,7 @@ export function JungkookAdditionalContent() {
                   href="https://open.spotify.com/album/5pSk3c3wVwnb2arb6ohCPU" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -138,7 +138,7 @@ export function JungkookAdditionalContent() {
                   href="https://open.spotify.com/track/7x9aauaA9cu6tyfpHnqDLo" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -202,7 +202,7 @@ export function JungkookAdditionalContent() {
                   href="https://open.spotify.com/track/5YMXGBD6vcYP7IolemyLtK" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Euphoria on Spotify</span>

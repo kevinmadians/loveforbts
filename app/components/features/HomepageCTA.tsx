@@ -25,7 +25,8 @@ const CtaCard = ({ title, description, icon, href, bgColor, buttonText, iconColo
       <p className="mb-5">{description}</p>
       <Link 
         href={href} 
-        className="mt-auto bg-black text-[#FFDE00] py-2 px-4 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
+        className="mt-auto bg-black py-2 px-4 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
+        style={{ color: 'var(--bts-accent)' }}
       >
         {buttonText}
       </Link>
@@ -132,7 +133,7 @@ export function HomepageCTA() {
           icon={<BadgeCheck size={24} className="text-white" />}
           href="/army-card"
           bgColor="bg-[#fff9cc]"
-          iconColor="bg-[#FFDE00]"
+                      iconColor="bg-bts-accent"
           buttonText="Create Your Card"
         />
       </div>
@@ -165,7 +166,8 @@ export function HomepageCTA() {
             </p>
             <button 
               onClick={scrollToCountdown}
-              className="bg-black text-[#FFDE00] py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
+              className="bg-black py-3 px-6 rounded-md inline-flex items-center justify-center hover:bg-purple-900 transition-colors black-han-sans"
+            style={{ color: 'var(--bts-accent)' }}
             >
               See the Countdown
             </button>
@@ -193,7 +195,10 @@ export function HomepageCTA() {
             </p>
             <Link 
               href="/support" 
-              className="bg-[#FFDE00] text-black py-2 px-6 rounded-md inline-flex items-center justify-center hover:bg-yellow-400 transition-colors shadow-sm border-2 border-black black-han-sans"
+              className="text-black py-2 px-6 rounded-md inline-flex items-center justify-center transition-colors shadow-sm border-2 border-black black-han-sans"
+              style={{ backgroundColor: 'var(--bts-accent)' }}
+              onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(0.9)'}
+              onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
             >
               Support ARMY 💜
             </Link>

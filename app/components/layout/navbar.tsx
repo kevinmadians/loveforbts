@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
+import { ThemeSelector } from "../theme/theme-selector"
 
 export function Navbar() {
   const pathname = usePathname() || ""
@@ -26,7 +27,7 @@ export function Navbar() {
   }, [pathname])
 
   return (
-    <nav className="bg-[#FFDE00] border-b-2 border-black sticky top-0 z-50">
+    <nav className="border-b-2 border-black sticky top-0 z-50" style={{ backgroundColor: 'var(--navbar-bg)' }}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
@@ -39,7 +40,7 @@ export function Navbar() {
                 height={32} 
                 className="h-8 w-8"
               />
-              <span className="ml-2 text-xl font-bold black-han-sans text-[#9333EA]">Love for BTS</span>
+              <span className="ml-2 text-xl font-bold black-han-sans" style={{ color: 'var(--navbar-text)' }}>Love for BTS</span>
             </Link>
           </div>
 
@@ -79,12 +80,16 @@ export function Navbar() {
               <NavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
                 About
               </NavLink>
+              
+              {/* Theme Selector */}
+              <ThemeSelector />
             </div>
           </div>
 
           {/* Mobile Menu Button - Only visible on mobile */}
           <button 
-            className="md:hidden flex items-center px-3 py-2 border rounded text-black border-black hover:text-purple-900 hover:border-purple-900"
+            className="md:hidden flex items-center px-3 py-2 border rounded border-black hover:border-purple-900"
+            style={{ color: 'var(--navbar-text)' }}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle mobile menu"
           >
@@ -99,7 +104,7 @@ export function Navbar() {
         {/* Mobile Menu - Overlay style */}
         {mobileMenuOpen && (
           <div className="fixed inset-x-0 top-16 z-50 md:hidden">
-            <div className="bg-[#FFDE00] border-b-2 border-x-2 border-black shadow-lg py-2 pb-4">
+            <div className="border-b-2 border-x-2 border-black shadow-lg py-2 pb-4" style={{ backgroundColor: 'var(--navbar-bg)' }}>
               <div className="flex flex-col space-y-2">
                 {/* BTS Section - Contains Members, Discography, and Quotes */}
                 <div className="px-4 py-2">
@@ -239,6 +244,14 @@ export function Navbar() {
                 <MobileNavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
                   About
                 </MobileNavLink>
+                
+                {/* Theme Selector for Mobile */}
+                <div className="px-4 py-2 border-t border-black mt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium black-han-sans" style={{ color: 'var(--navbar-text)' }}>Theme</span>
+                    <ThemeSelector />
+                  </div>
+                </div>
               </div>
             </div>
             {/* Overlay backdrop to capture clicks outside the menu */}
@@ -270,9 +283,25 @@ function NavLink({
       href={href}
       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
         ${active 
-          ? "bg-black text-[#FFDE00]" 
-          : "text-black hover:bg-black hover:text-[#FFDE00]"
+          ? "bg-black" 
+          : "hover:bg-black"
         }`}
+      style={{ 
+        color: active ? 'var(--bts-accent)' : 'var(--navbar-text)',
+        backgroundColor: active ? 'black' : 'transparent'
+      }}
+      onMouseEnter={(e) => {
+        if (!active) {
+          e.currentTarget.style.backgroundColor = 'black'
+          e.currentTarget.style.color = 'var(--bts-accent)'
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!active) {
+          e.currentTarget.style.backgroundColor = 'transparent'
+          e.currentTarget.style.color = 'var(--navbar-text)'
+        }
+      }}
     >
       <span className="mr-1.5">{icon}</span>
       <span className="black-han-sans">{children}</span>
@@ -299,9 +328,25 @@ function NavDropdown({
         <button
           className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
             ${active 
-              ? "bg-black text-[#FFDE00]" 
-              : "text-black hover:bg-black hover:text-[#FFDE00]"
+              ? "bg-black" 
+              : "hover:bg-black"
             }`}
+          style={{ 
+            color: active ? 'var(--bts-accent)' : 'var(--navbar-text)',
+            backgroundColor: active ? 'black' : 'transparent'
+          }}
+          onMouseEnter={(e) => {
+            if (!active) {
+              e.currentTarget.style.backgroundColor = 'black'
+              e.currentTarget.style.color = 'var(--bts-accent)'
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!active) {
+              e.currentTarget.style.backgroundColor = 'transparent'
+              e.currentTarget.style.color = 'var(--navbar-text)'
+            }
+          }}
           aria-label={`${label} menu`}
         >
           <span className="mr-1.5">{icon}</span>
@@ -316,7 +361,16 @@ function NavDropdown({
         className="bg-white border-2 border-black rounded-md shadow-lg p-1 min-w-[180px] animate-in fade-in-80 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2"
       >
         {items.map((item) => (
-          <DropdownMenuItem key={item.href} asChild className="px-3 py-2 rounded-md text-sm font-medium cursor-pointer hover:bg-black hover:text-[#FFDE00]">
+          <DropdownMenuItem key={item.href} asChild className="px-3 py-2 rounded-md text-sm font-medium cursor-pointer hover:bg-black"
+            style={{ color: 'inherit' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'black'
+              e.currentTarget.style.color = 'var(--bts-accent)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+              e.currentTarget.style.color = 'inherit'
+            }}>
             <Link href={item.href} className="flex items-center">
               {item.icon && <span className="mr-2">{item.icon}</span>}
               {item.label}
@@ -344,9 +398,13 @@ function MobileNavLink({
       href={href}
       className={`flex items-center px-4 py-2 text-sm font-medium transition-colors
         ${active 
-          ? "bg-black text-[#FFDE00]" 
-          : "text-black hover:bg-black hover:text-[#FFDE00]"
+          ? "bg-black" 
+          : "hover:bg-black"
         }`}
+      style={{ 
+        color: active ? 'var(--bts-accent)' : 'var(--navbar-text)',
+        backgroundColor: active ? 'black' : 'transparent'
+      }}
     >
       <span className="mr-1.5">{icon}</span>
       <span className="black-han-sans">{children}</span>

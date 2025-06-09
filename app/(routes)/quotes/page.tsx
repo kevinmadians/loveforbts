@@ -17,7 +17,7 @@ export default function QuotesPage() {
         
         <div className="flex items-center justify-center mb-6">
           <div className="h-0.5 bg-gray-200 flex-grow max-w-xs"></div>
-          <Quote size={24} className="mx-3 text-[#FFDE00]" />
+          <Quote size={24} className="mx-3 text-bts-accent" />
           <div className="h-0.5 bg-gray-200 flex-grow max-w-xs"></div>
         </div>
       </section>

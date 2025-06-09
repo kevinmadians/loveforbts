@@ -86,7 +86,7 @@ export function SugaAdditionalContent() {
                   href="https://open.spotify.com/album/446ROKmKfpEwkbi2SjELVX" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -142,7 +142,7 @@ export function SugaAdditionalContent() {
                   href="https://open.spotify.com/album/7lhFsAaVCFaYbkNvBMw5Zf" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -198,7 +198,7 @@ export function SugaAdditionalContent() {
                   href="https://open.spotify.com/album/1qHUxg0YIm6caZQrDJvDdk" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>

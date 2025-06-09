@@ -70,7 +70,7 @@ export default function ArmyCardPage() {
           </div>
           <Link 
             href="/support" 
-            className="bg-[#FFDE00] text-black py-2 px-6 rounded-md inline-flex items-center justify-center hover:bg-yellow-400 transition-colors border-2 border-black black-han-sans whitespace-nowrap"
+            className="bg-bts-accent text-black py-2 px-6 rounded-md inline-flex items-center justify-center hover:bg-navbar-hover transition-colors border-2 border-black black-han-sans whitespace-nowrap"
           >
             Support Us 💜
           </Link>

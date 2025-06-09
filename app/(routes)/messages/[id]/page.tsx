@@ -67,7 +67,7 @@ export default function MessageDetailPage() {
           <p className="mb-6 text-gray-600">{error || 'This message could not be found.'}</p>
           <button
             onClick={() => router.push('/messages')}
-            className="inline-flex items-center px-5 py-3 bg-black text-[#FFDE00] rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
+                          className="inline-flex items-center px-5 py-3 bg-black text-bts-accent rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
           >
             Back to Messages
           </button>

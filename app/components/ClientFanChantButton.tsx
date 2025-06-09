@@ -84,7 +84,7 @@ export function ClientFanChantButton() {
         <div className="fixed inset-0 flex items-center justify-center z-[99999]" style={{ pointerEvents: 'none' }}>
           <div className="bg-white border-2 border-black rounded-2xl p-6 shadow-lg max-w-md w-full mx-4" style={{ pointerEvents: 'auto' }}>
             <div className="flex items-center mb-2">
-              <div className="bg-[#FFDE00] rounded-full p-1 mr-2">
+              <div className="rounded-full p-1 mr-2" style={{ backgroundColor: 'var(--bts-accent)' }}>
                 <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-black">
                   <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -100,9 +100,17 @@ export function ClientFanChantButton() {
       <button
         onClick={handlePlayFanChant}
         className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-lg 
-          bg-[#FFDE00] hover:bg-[#E5C700] text-black transition-all duration-300
-          border-2 border-black
-          transform hover:scale-110 active:scale-95"
+          transition-all duration-300 border-2 border-black transform hover:scale-110 active:scale-95"
+        style={{ 
+          backgroundColor: 'var(--bts-accent)', 
+          color: 'var(--navbar-text)' 
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.filter = 'brightness(0.9)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.filter = 'brightness(1)'
+        }}
         aria-label={isPlaying ? "Pause BTS fan chant" : "Play BTS fan chant"}
         title={isPlaying ? "Pause fan chant" : "Play BTS fan chant"}
       >
@@ -122,7 +130,7 @@ export function ClientFanChantButton() {
         {/* Ripple Animation when playing */}
         {isPlaying && (
           <div className="absolute inset-0 z-0 pointer-events-none">
-            <div className="w-full h-full rounded-full bg-[#FFDE00] opacity-50 animate-ping"></div>
+            <div className="w-full h-full rounded-full opacity-50 animate-ping" style={{ backgroundColor: 'var(--bts-accent)' }}></div>
           </div>
         )}
       </button>

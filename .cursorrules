@@ -80,200 +80,89 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Fix BTS Whack-a-Mole Hydration Error & Update Member Displays ✅ COMPLETED
-[X] Fixed hydration error by changing nested div inside p tag to div container
-[X] Updated BTS Whack-a-Mole page to use PNG member photos instead of emojis
-[X] Removed emoji references from member guide section
-[X] Applied consistent PNG photo display across all member representations
+## Current Task: BTS Album Theme Selection Feature
 
-## Fixed Issues:
-- **Hydration Error**: Changed `<p>` to `<div>` in saving status to prevent invalid HTML nesting
-- **Member Photos**: Replaced emoji displays (🧠🌹🎹☀️🦋🐯🐰) with actual PNG photos in member guide
-- **Visual Consistency**: All member displays now use PNG images from `/images/members/` directory
-- **Error Handling**: Added proper onError handlers for image loading
+### Project Analysis
+Current state: Website uses "Butter" theme with #FFDE00 yellow as primary color. Found existing theme system in ARMY Card Generator with 4 themes: classic, purple, black, pastel.
 
-## Previous Task: BTS Whack-a-Mole Leaderboard & Social Features ✅ COMPLETED
-[X] Updated all member displays to use PNG photos exclusively (no emoji fallbacks)
-[X] Added player name input screen before game starts
-[X] Created comprehensive leaderboard system with database integration
-[X] Implemented score saving with Supabase backend
-[X] Added player ranking calculation and display
-[X] Created social media sharing functionality with multiple platforms
-[X] Built engaging leaderboard component with tabs (All-time vs Recent)
-[X] Added dedicated leaderboard page with SEO metadata
-[X] Enhanced game over screen with sharing and leaderboard CTAs
-[X] Integrated real-time score competition features
+### BTS Album Theme Suggestions
 
-## New Leaderboard & Social Features Added:
-- **Player Identity System**: Name input screen with validation and welcome interface
-- **Database Integration**: Complete Supabase schema for storing game scores permanently
-- **Global Leaderboard**: View top scores from ARMY worldwide with ranking system
-- **Social Sharing**: Share scores on Twitter, Facebook, WhatsApp, Reddit, Telegram
-- **Real-time Competition**: See your rank among all players globally
-- **Leaderboard Tabs**: All-time best vs Recent 24h scores with different views
-- **Visual PNG Display**: All member images use PNG files exclusively (no emoji fallbacks)
-- **Enhanced Game Over**: Score saving, ranking display, sharing options, and CTAs
-- **Dedicated Pages**: Separate leaderboard page with full SEO optimization
-- **Error Handling**: Graceful fallbacks when database unavailable with helpful messages
+#### 1. **Butter (Current)**
+- **Colors**: Golden Yellow (#FFDE00), Cream (#FFF8DC), Black (#000000)
+- **Description**: Smooth, bright, summery vibes
+- **Elements**: Sunflower motifs, smooth gradients
 
-## Database Schema Created:
-- **whack_a_mole_scores table**: Stores player names, scores, statistics, and timestamps
-- **Indexes**: Optimized for fast score queries and ranking calculations
-- **Views**: Top scores view for easy leaderboard generation
-- **RLS Policies**: Public read/insert access for community participation
+#### 2. **Dynamite** 
+- **Colors**: Electric Blue (#1E90FF), Hot Pink (#FF69B4), Yellow (#FFDE00)
+- **Description**: Disco, retro, energetic 70s vibes
+- **Elements**: Disco balls, neon effects, retro patterns
 
-## Previous Task: BTS Whack-a-Mole Game Improvements ✅ COMPLETED
-[X] Modified member photo styling to use transparent PNG backgrounds  
-[X] Removed white circular backgrounds from member images
-[X] Increased level progression difficulty (500 points per level instead of 200)
-[X] Added engaging level-up popup with bonus points and encouragement
-[X] Enhanced confetti effects for level-ups only (no spam on regular hits)
-[X] Improved visual design with semi-transparent name labels
+#### 3. **Permission to Dance**
+- **Colors**: Sunset Orange (#FF6B35), Purple (#8A2BE2), White (#FFFFFF)
+- **Description**: Festival, celebration, freedom vibes
+- **Elements**: Confetti, balloons, party decorations
 
-## Improvements Made:
-- **Transparent Images**: Removed white backgrounds, using PNG transparency properly
-- **Harder Progression**: 500 points per level makes achievements more rewarding
-- **Level-Up Popup**: 3-second animated popup with lightning bolts and bonus points
-- **Better Confetti**: Double-burst confetti sequence only for level-ups and game completion
-- **Visual Polish**: Semi-transparent name labels for better readability
+#### 4. **Black Swan**
+- **Colors**: Deep Black (#000000), Silver (#C0C0C0), Purple (#4B0082)
+- **Description**: Elegant, mysterious, artistic vibes
+- **Elements**: Swan motifs, elegant typography, shadow effects
 
-## Previous Task: Create BTS Member Whack-a-Mole Mini-Game ✅ COMPLETED
-[X] Explored existing games structure and patterns
-[X] Created BTSWhackAMole component with engaging gameplay
-[X] Added BTS member rarity system (Common, Rare, Legendary)
-[X] Implemented combo system and streak bonuses
-[X] Added mobile-friendly touch controls and animations
-[X] Updated games index to export new component
-[X] Added new game to games page listing
-[X] Created dedicated game page with tips and member guide
-[X] Added SEO metadata for the new game page
-[X] Used BTS-themed colors and official emojis for each member
+#### 5. **Spring Day**
+- **Colors**: Soft Pink (#FFB6C1), Sky Blue (#87CEEB), White (#FFFFFF)
+- **Description**: Nostalgic, gentle, emotional vibes
+- **Elements**: Cherry blossoms, clouds, gentle gradients
 
-## Game Features Implemented:
-- **3x3 Grid Layout**: Classic whack-a-mole hole arrangement
-- **BTS Member System**: All 7 members with unique emojis and point values
-- **Rarity System**: Common (RM, Jin), Rare (Suga, J-Hope, Jimin, V), Legendary (Jungkook)
-- **Dynamic Scoring**: Base points + level bonuses + combo multipliers
-- **Visual Timer**: Red ring showing time left for each member
-- **Animations**: Smooth pop-up/down animations with Framer Motion
-- **Confetti Effects**: Canvas confetti for hits, combos, and level ups
-- **Game Statistics**: Score, accuracy, streaks, level progression
-- **Pause/Resume**: Full game state management
-- **Mobile Optimized**: Touch controls and responsive design
+#### 6. **Blood Sweat & Tears**
+- **Colors**: Burgundy (#800020), Gold (#FFD700), Dark Purple (#301934)
+- **Description**: Dramatic, mature, luxury vibes
+- **Elements**: Wings, baroque patterns, rich textures
 
-## Previous Task: Purple Hearts Collector Game - Speed Balancing ✅ COMPLETED
-[X] Fixed heart spawning and animation loop issues
-[X] Fixed game timer dependency problems  
-[X] Fixed heart positioning and collision detection
-[X] Balanced game difficulty for better user experience
-[X] Removed debug console logs
+#### 7. **DNA**
+- **Colors**: Cosmic Purple (#6B46C1), Galaxy Blue (#1E40AF), Star White (#FFFFFF)
+- **Description**: Cosmic, futuristic, DNA helix vibes
+- **Elements**: Galaxy patterns, DNA helixes, geometric shapes
 
-## Issues Fixed:
-- **Heart Spawning**: Fixed infinite recursion in spawnHeart setTimeout
-- **Animation Loop**: Removed updateHearts callback causing dependency issues
-- **Game Timer**: Fixed circular dependency by separating timer logic
-- **Collision Detection**: Changed from window.innerHeight to game area height (550px)
-- **Cleanup**: Added proper timer cleanup in startGame function
-- **Game Balance**: Adjusted speeds and spawn rates for better progression
+#### 8. **Mic Drop**
+- **Colors**: Neon Green (#39FF14), Black (#000000), Silver (#C0C0C0)
+- **Description**: Bold, confident, street vibes
+- **Elements**: Urban patterns, bold typography, neon effects
 
-## Speed & Difficulty Adjustments:
-- **Level 1 Speed**: Reduced from 2.5-4.5 to 1.1-1.6 pixels per frame (much easier!)
-- **Level Progression**: More gradual speed increase (+0.3 per level instead of +0.5)
-- **Spawn Rate**: Slower initial spawn (1.5s instead of 1s) with better progression
-- **Minimum Spawn Delay**: Increased from 300ms to 500ms for better gameplay
+### Implementation Plan
 
-## Previous Task: Build Purple Hearts Collector Mini-Game ✅ COMPLETED
-[X] Explore current navigation structure
-[X] Create Purple Hearts Collector game component  
-[X] Add Games dropdown menu to navigation
-[X] Add Purple Hearts Collector to Games menu
-[X] Make it mobile-friendly and BTS-themed
-[X] Test the complete implementation
+#### Phase 1: Theme System Foundation
+- [X] Create centralized theme configuration system
+- [X] Update CSS variables for theme switching
+- [X] Create theme context provider for React
+- [X] Add theme persistence (localStorage)
 
-## Summary:
-✅ Built engaging Purple Hearts Collector mini-game with:
-   - Falling hearts with different point values (Purple: 10, Gold: 25, Silver: 15)
-   - Streak system with multiplier bonuses
-   - Level progression and increasing difficulty
-   - Mobile-friendly touch controls
-   - BTS-themed colors and styling
-   - Pause/resume functionality
-   - Confetti effects and animations
-   - Game statistics tracking
+#### Phase 2: Theme Data & Components
+- [X] Create comprehensive theme data file with all BTS album themes
+- [X] Build theme selector component with album artwork
+- [ ] Create theme preview functionality
+- [X] Add smooth transition animations between themes
 
-✅ Added complete navigation structure:
-   - Games added to ARMY dropdown menu (both desktop and mobile)
-   - Created /games main page showcasing all mini-games
-   - Created /games/purple-hearts-collector dedicated game page
-   - Added proper metadata for SEO
+#### Phase 3: UI Integration
+- [X] Add theme selector to navigation/settings
+- [X] Update existing components to use theme variables
+- [X] Implement theme-specific animations and effects
+- [X] Fix hardcoded #FFDE00 colors in bias-test, messages, army-story pages
+- [X] Fix hardcoded colors in quiz pages and user-generated content pages
+- [ ] Add theme-specific sound effects (optional)
 
-✅ Features implemented:
-   - Responsive design works perfectly on mobile devices
-   - Framer Motion animations for smooth gameplay
-   - Canvas confetti effects for celebrations
-   - Official BTS colors used throughout (#FFDE00 yellow, purple hearts)
-   - Game statistics and score tracking
-   - Professional game UI with pause/resume
-   - Tips and instructions for players
+#### Phase 4: Advanced Features
+- [ ] Theme-specific background patterns/textures
+- [ ] Album artwork integration
+- [ ] Theme-specific typography choices
+- [ ] Custom cursor/hover effects per theme
+- [ ] Theme-specific particle effects
 
-## Previous Tasks Completed:
-[X] Codebase Cleanup - Remove unused files and organize SQL files
-  - [X] Identified redundant SQL files:
-    - fix-message-likes-table.sql (redundant with love-button-schema.sql)
-    - recreate-likes-tables.sql (redundant with love-button-schema.sql)  
-    - sql-to-run.sql (redundant with story-comments.sql and supabase-setup.sql)
-  - [X] Identified duplicate documentation:
-    - docs/supabase-setup.md vs SUPABASE_SETUP.md (different content, both needed)
-    - app/.cursorrules vs .cursorrules (app version is outdated)
-  - [X] Move SQL files to organized structure in sql/ directory
-  - [X] Remove redundant SQL files from root
-  - [X] Remove outdated app/.cursorrules file
-  - [X] Verify no breaking changes to existing functionality
+#### Phase 5: Enhancement Features
+- [ ] Theme scheduling (e.g., auto-change based on time/date)
+- [ ] Theme recommendations based on user activity
+- [ ] Share theme preferences with other users
+- [ ] Theme-specific Easter eggs and animations
+- [ ] Integration with BTS comeback dates for auto-theme switching
 
-## Files Successfully Removed:
-1. ✅ fix-message-likes-table.sql - Redundant with love-button-schema.sql
-2. ✅ recreate-likes-tables.sql - Redundant with love-button-schema.sql  
-3. ✅ app/.cursorrules - Outdated version of root .cursorrules
+### Technical Implementation Strategy
 
-## Files Successfully Organized:
-- ✅ Moved love-button-schema.sql to sql/
-- ✅ Moved supabase-setup.sql to sql/ (updated SUPABASE_SETUP.md reference)
-- ✅ Moved message-comments.sql to sql/
-- ✅ Moved story-comments.sql to sql/
-
-## Files Kept (All Active):
-- ✅ compatibility/ directory - ACTIVELY USED by next.config.mjs for React 19 compatibility
-- ✅ docs/supabase-setup.md - Different from root SUPABASE_SETUP.md (playlists vs messages)
-- ✅ All component files - All imports verified and working
-- ✅ All library files - All being used by components
-
-## Unused Dependencies Found:
-- ⚠️ react-quill (2.0.0) - Not used anywhere in codebase
-- ⚠️ chart.js (4.4.9) - Not used anywhere in codebase  
-- ⚠️ react-chartjs-2 (5.3.0) - Not used anywhere in codebase
-
-## Dependencies Verified as Used:
-- ✅ recharts - Used in chart.tsx component
-- ✅ framer-motion - Used in quiz pages and components
-- ✅ All other dependencies verified as actively used
-
-## Next Steps:
-1. [⚠️ URGENT] Run the SQL schema in Supabase dashboard (sql/love-button-schema.sql)
-   - Error: Database tables don't exist yet, causing empty error objects `{}`
-   - Fixed: Improved error handling to show helpful messages
-   - Created: SUPABASE_LOVE_BUTTON_SETUP.md with step-by-step instructions
-2. [✅] Fixed love button counter synchronization issue
-   - Issue: Counter wasn't updating when users clicked the love button
-   - Fix: Updated state management to properly sync between LoveButton and parent components
-   - Solution: Parent components now update their local state and pass correct props to LoveButton
-3. Update homepage to show featured messages and stories
-4. Update message and story front pages to highlight featured content
-5. Test the complete love button functionality
-6. Consider removing unused dependencies: react-quill, chart.js, react-chartjs-2
-
-## Implementation Summary:
-- **Listing Pages**: Show read-only like count with purple heart icon (only if > 0 likes)
-- **Detail Pages**: Show interactive love button with full functionality
-- **Database**: Complete schema with triggers for auto-featured content (10+ likes)
-- **Error Fixed**: Server-side rendering issue resolved with browser environment check
-- **Codebase**: Clean and well-organized with no unused files or broken imports
+#### File Structure

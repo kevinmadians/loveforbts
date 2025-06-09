@@ -85,7 +85,7 @@ export function VAdditionalContent() {
                   href="https://open.spotify.com/album/7ixOAT89NSsgUITYc5ByB5" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>Listen on Spotify</span>
@@ -140,7 +140,7 @@ export function VAdditionalContent() {
                   href="https://www.youtube.com/watch?v=pk7ESz6vtyA" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <ExternalLink className="mr-2 h-4 w-4" />
                   <span>Winter Bear MV</span>
@@ -195,7 +195,7 @@ export function VAdditionalContent() {
                   href="https://open.spotify.com/track/4CW75mEldEGBIm2JXzqAPf" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center px-4 py-2 bg-black text-[#FFDE00] rounded-lg hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 bg-black text-bts-accent rounded-lg hover:bg-gray-800 transition-colors"
                 >
                   <Music className="mr-2 h-4 w-4" />
                   <span>It's Definitely You</span>

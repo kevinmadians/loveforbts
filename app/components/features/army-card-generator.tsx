@@ -849,7 +849,10 @@ export function ArmyCardGenerator() {
               <button
                 type="button"
                 onClick={handleRefreshPhoto}
-                className="mt-2 w-full bg-[#FFDE00] text-black py-2 px-4 rounded-md border-2 border-black hover:bg-yellow-400 transition-colors black-han-sans flex items-center justify-center gap-2"
+                className="mt-2 w-full text-black py-2 px-4 rounded-md border-2 border-black transition-colors black-han-sans flex items-center justify-center gap-2"
+          style={{ backgroundColor: 'var(--bts-accent)' }}
+          onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(0.9)'}
+          onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
               >
                 <svg 
                   className="w-4 h-4" 
@@ -1078,8 +1081,9 @@ export function ArmyCardGenerator() {
           <button
             type="submit"
             disabled={isGenerating}
-            className={`w-full bg-black text-[#FFDE00] py-3 px-4 rounded-md transition-colors black-han-sans
+            className={`w-full bg-black py-3 px-4 rounded-md transition-colors black-han-sans
               ${isGenerating ? "opacity-70 cursor-not-allowed" : "hover:bg-purple-900"}`}
+            style={{ color: 'var(--bts-accent)' }}
           >
             {isGenerating ? "Generating..." : "Generate ARMY Card 💜"}
           </button>
@@ -1096,7 +1100,7 @@ export function ArmyCardGenerator() {
         >
           {!cardGenerated && !isGenerating && (
             <div className="text-center p-6">
-              <div className="bg-[#FFDE00] py-4 mx-4 mb-4 rounded-lg">
+              <div className="py-4 mx-4 mb-4 rounded-lg" style={{ backgroundColor: 'var(--bts-accent)' }}>
                 <p className="black-han-sans text-xl">ARMY CARD</p>
               </div>
               <p className="text-gray-500">Fill out the form to generate your ARMY Card</p>
@@ -1107,7 +1111,7 @@ export function ArmyCardGenerator() {
             <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
               <div className="animate-pulse text-center">
                 <p className="black-han-sans text-xl mb-2">Creating your card...</p>
-                <div className="w-12 h-12 border-4 border-[#FFDE00] border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin mx-auto" style={{ borderColor: 'var(--bts-accent)', borderTopColor: 'transparent' }}></div>
               </div>
             </div>
           )}
@@ -1267,14 +1271,14 @@ export function ArmyCardGenerator() {
           <div className="mt-6 flex gap-3 w-full max-w-xs">
             <button
               onClick={downloadCard}
-              className="flex-1 flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-2 px-4 rounded-md hover:bg-gray-800 transition-colors black-han-sans"
+              className="flex-1 flex items-center justify-center gap-2 bg-black text-bts-accent py-2 px-4 rounded-md hover:bg-gray-800 transition-colors black-han-sans"
             >
               <Download size={18} />
               <span>Download</span>
             </button>
             <button
               onClick={shareCard}
-              className="flex-1 flex items-center justify-center gap-2 bg-black text-[#FFDE00] py-2 px-4 rounded-md hover:bg-gray-800 transition-colors black-han-sans"
+              className="flex-1 flex items-center justify-center gap-2 bg-black text-bts-accent py-2 px-4 rounded-md hover:bg-gray-800 transition-colors black-han-sans"
             >
               <Share2 size={18} />
               <span>Share</span>
