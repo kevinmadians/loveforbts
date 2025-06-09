@@ -1,6 +1,7 @@
 import { BTSWhackAMole } from "@/app/components/games/BTSWhackAMole"
 import Link from "next/link"
-import { ArrowLeft, Gamepad2 } from "lucide-react"
+import { ArrowLeft, Gamepad2, Trophy } from "lucide-react"
+import { Button } from "@/app/components/ui/button"
 
 export default function BTSWhackAMolePage() {
   return (
@@ -15,9 +16,20 @@ export default function BTSWhackAMolePage() {
           Back to Games
         </Link>
         
-        <div className="flex items-center gap-3 mb-2">
-          <Gamepad2 className="h-8 w-8 text-yellow-600" />
-          <h1 className="text-3xl font-bold black-han-sans">BTS Whack-a-Mole</h1>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <Gamepad2 className="h-8 w-8 text-yellow-600" />
+            <h1 className="text-3xl font-bold black-han-sans">BTS Whack-a-Mole</h1>
+          </div>
+          <Link href="/games/bts-whack-a-mole/leaderboard">
+            <Button 
+              variant="outline"
+              className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50"
+            >
+              <Trophy className="w-4 h-4 mr-2" />
+              Leaderboard
+            </Button>
+          </Link>
         </div>
         <p className="text-gray-600">
           Classic whack-a-mole fun with your favorite BTS members! Each member has different point values and rarity levels.
@@ -36,9 +48,9 @@ export default function BTSWhackAMolePage() {
           <div className="space-y-2">
             <h3 className="font-semibold text-purple-600">Member Rarity System:</h3>
             <ul className="text-sm space-y-1 text-gray-600">
-              <li>• 🐰 Jungkook: Legendary (20 pts) - Rare but high value!</li>
-              <li>• 🎹🦋🐯☀️ Suga, Jimin, V, J-Hope: Rare (15 pts)</li>
-              <li>• 🧠🌹 RM, Jin: Common (10 pts) - More frequent</li>
+              <li>• Jungkook: Legendary (20 pts) - Rare but high value!</li>
+              <li>• Suga, Jimin, V, J-Hope: Rare (15 pts)</li>
+              <li>• RM, Jin: Common (10 pts) - More frequent</li>
               <li>• Higher levels add bonus points to all members</li>
             </ul>
           </div>
@@ -59,37 +71,79 @@ export default function BTSWhackAMolePage() {
         <h3 className="text-lg font-bold mb-4 black-han-sans">Meet the Members:</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-blue-100 flex items-center justify-center text-xl">🧠</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/rm.png" 
+                alt="RM"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">RM</div>
             <div className="text-blue-600">10 pts</div>
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-pink-100 flex items-center justify-center text-xl">🌹</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-pink-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/jin.png" 
+                alt="Jin"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">Jin</div>
             <div className="text-pink-600">10 pts</div>
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-purple-100 flex items-center justify-center text-xl">🎹</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-purple-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/suga.png" 
+                alt="Suga"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">Suga</div>
             <div className="text-purple-600">15 pts</div>
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-yellow-100 flex items-center justify-center text-xl">☀️</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-yellow-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/jhope.png" 
+                alt="J-Hope"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">J-Hope</div>
             <div className="text-yellow-500">15 pts</div>
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-orange-100 flex items-center justify-center text-xl">🦋</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/jimin.png" 
+                alt="Jimin"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">Jimin</div>
             <div className="text-orange-500">15 pts</div>
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 flex items-center justify-center text-xl">🐯</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-green-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/v.png" 
+                alt="V"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">V</div>
             <div className="text-green-600">15 pts</div>
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
-            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-red-100 flex items-center justify-center text-xl">🐰</div>
+            <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-red-100 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/images/members/jk.png" 
+                alt="Jungkook"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
             <div className="font-semibold">Jungkook</div>
             <div className="text-red-600">20 pts ⭐</div>
           </div>

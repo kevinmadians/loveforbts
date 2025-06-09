@@ -80,7 +80,64 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Create BTS Member Whack-a-Mole Mini-Game ✅ COMPLETED
+## Current Task: Fix BTS Whack-a-Mole Hydration Error & Update Member Displays ✅ COMPLETED
+[X] Fixed hydration error by changing nested div inside p tag to div container
+[X] Updated BTS Whack-a-Mole page to use PNG member photos instead of emojis
+[X] Removed emoji references from member guide section
+[X] Applied consistent PNG photo display across all member representations
+
+## Fixed Issues:
+- **Hydration Error**: Changed `<p>` to `<div>` in saving status to prevent invalid HTML nesting
+- **Member Photos**: Replaced emoji displays (🧠🌹🎹☀️🦋🐯🐰) with actual PNG photos in member guide
+- **Visual Consistency**: All member displays now use PNG images from `/images/members/` directory
+- **Error Handling**: Added proper onError handlers for image loading
+
+## Previous Task: BTS Whack-a-Mole Leaderboard & Social Features ✅ COMPLETED
+[X] Updated all member displays to use PNG photos exclusively (no emoji fallbacks)
+[X] Added player name input screen before game starts
+[X] Created comprehensive leaderboard system with database integration
+[X] Implemented score saving with Supabase backend
+[X] Added player ranking calculation and display
+[X] Created social media sharing functionality with multiple platforms
+[X] Built engaging leaderboard component with tabs (All-time vs Recent)
+[X] Added dedicated leaderboard page with SEO metadata
+[X] Enhanced game over screen with sharing and leaderboard CTAs
+[X] Integrated real-time score competition features
+
+## New Leaderboard & Social Features Added:
+- **Player Identity System**: Name input screen with validation and welcome interface
+- **Database Integration**: Complete Supabase schema for storing game scores permanently
+- **Global Leaderboard**: View top scores from ARMY worldwide with ranking system
+- **Social Sharing**: Share scores on Twitter, Facebook, WhatsApp, Reddit, Telegram
+- **Real-time Competition**: See your rank among all players globally
+- **Leaderboard Tabs**: All-time best vs Recent 24h scores with different views
+- **Visual PNG Display**: All member images use PNG files exclusively (no emoji fallbacks)
+- **Enhanced Game Over**: Score saving, ranking display, sharing options, and CTAs
+- **Dedicated Pages**: Separate leaderboard page with full SEO optimization
+- **Error Handling**: Graceful fallbacks when database unavailable with helpful messages
+
+## Database Schema Created:
+- **whack_a_mole_scores table**: Stores player names, scores, statistics, and timestamps
+- **Indexes**: Optimized for fast score queries and ranking calculations
+- **Views**: Top scores view for easy leaderboard generation
+- **RLS Policies**: Public read/insert access for community participation
+
+## Previous Task: BTS Whack-a-Mole Game Improvements ✅ COMPLETED
+[X] Modified member photo styling to use transparent PNG backgrounds  
+[X] Removed white circular backgrounds from member images
+[X] Increased level progression difficulty (500 points per level instead of 200)
+[X] Added engaging level-up popup with bonus points and encouragement
+[X] Enhanced confetti effects for level-ups only (no spam on regular hits)
+[X] Improved visual design with semi-transparent name labels
+
+## Improvements Made:
+- **Transparent Images**: Removed white backgrounds, using PNG transparency properly
+- **Harder Progression**: 500 points per level makes achievements more rewarding
+- **Level-Up Popup**: 3-second animated popup with lightning bolts and bonus points
+- **Better Confetti**: Double-burst confetti sequence only for level-ups and game completion
+- **Visual Polish**: Semi-transparent name labels for better readability
+
+## Previous Task: Create BTS Member Whack-a-Mole Mini-Game ✅ COMPLETED
 [X] Explored existing games structure and patterns
 [X] Created BTSWhackAMole component with engaging gameplay
 [X] Added BTS member rarity system (Common, Rare, Legendary)
