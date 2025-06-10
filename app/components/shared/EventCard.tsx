@@ -24,9 +24,33 @@ export function EventCard({
     return safeFormat(new Date(event.start), "MMM d, yyyy")
   }, [event.start])
 
-  const formattedTime = useMemo(() => {
-    return event.start ? safeFormat(new Date(event.start), "h:mm a") : ""
-  }, [event.start])
+  // Check if the event is today
+  const isToday = useMemo(() => {
+    const today = new Date();
+    const eventDate = new Date(event.start);
+    return today.toDateString() === eventDate.toDateString();
+  }, [event.start]);
+
+  // Check if this is a discharge event
+  const isDischargeEvent = useMemo(() => {
+    return event.category === 'military';
+  }, [event.category]);
+
+  // Get celebration message for discharge events happening today
+  const celebrationMessage = useMemo(() => {
+    if (!isToday || !isDischargeEvent) return null;
+    
+    // Extract member name from title
+    const memberName = event.title.includes("RM") ? "RM" : 
+                      event.title.includes("V's") ? "V" :
+                      event.title.includes("Jin") ? "Jin" :
+                      event.title.includes("J-Hope") ? "J-Hope" :
+                      event.title.includes("Suga") ? "Suga" :
+                      event.title.includes("Jimin") ? "Jimin" :
+                      event.title.includes("Jungkook") ? "Jungkook" : "Member";
+    
+    return `🎉 ${memberName} is officially back! Welcome home! 💜`;
+  }, [isToday, isDischargeEvent, event.title]);
 
   // Memoize event handler
   const handleAddToCalendar = useCallback(() => {
@@ -67,14 +91,19 @@ export function EventCard({
   return (
     <div 
       className={`
-        border-2 border-black rounded-xl p-3 sm:p-4 
-        ${isHighlighted ? "bg-yellow-100" : "bg-white"}
+        border-2 border-black rounded-xl p-3 sm:p-4 transition-all duration-200
+        ${isToday && isDischargeEvent ? "bg-green-100 ring-2 ring-green-500 animate-pulse" : 
+          isDischargeEvent ? "bg-purple-50" :
+          isHighlighted ? "bg-yellow-100" : "bg-white"}
         ${className}
       `}
     >
       <div className="flex items-start gap-3">
         {/* Date Circle */}
-        <div className="min-w-[3rem] w-12 h-12 flex-shrink-0 bg-black text-white rounded-full flex flex-col items-center justify-center text-center">
+        <div className={`min-w-[3rem] w-12 h-12 flex-shrink-0 text-white rounded-full flex flex-col items-center justify-center text-center ${
+          isToday && isDischargeEvent ? "bg-green-600" :
+          isDischargeEvent ? "bg-purple-600" : "bg-black"
+        }`}>
           <span className="text-xs">
             {safeFormat(new Date(event.start), "MMM")}
           </span>
@@ -87,7 +116,12 @@ export function EventCard({
         <div className="flex-grow">
           <h4 className="font-bold text-base sm:text-lg">
             {event.title}
-            {isHighlighted && (
+            {isToday && isDischargeEvent && (
+              <span className="text-xs font-normal bg-green-600 text-white px-1.5 py-0.5 rounded ml-2 animate-bounce">
+                TODAY! 🎉
+              </span>
+            )}
+            {isHighlighted && !isToday && (
               <span className="text-xs font-normal bg-red-500 text-white px-1.5 py-0.5 rounded ml-2">
                 Closest Event
               </span>
@@ -95,18 +129,33 @@ export function EventCard({
           </h4>
           
           <div className="text-sm text-black/70">
-            <div>{formattedDate} {formattedTime ? `• ${formattedTime}` : ""}</div>
+            <div>{formattedDate}</div>
             {event.location && <div>{event.location}</div>}
           </div>
+
+          {/* Celebration message for discharge events happening today */}
+          {celebrationMessage && (
+            <div className="mt-2 text-sm font-medium text-green-700 bg-green-50 p-2 rounded-lg border border-green-200">
+              {celebrationMessage}
+            </div>
+          )}
           
-          {showAddToCalendarButton && (
+          {/* Add to Calendar button - hidden if event is today */}
+          {showAddToCalendarButton && !isToday && (
             <button 
               onClick={handleAddToCalendar}
-              className="mt-2 px-3 py-1 bg-black text-bts-accent text-xs sm:text-sm rounded-lg"
+              className="mt-2 px-3 py-1 bg-black text-bts-accent text-xs sm:text-sm rounded-lg hover:bg-purple-900 transition-colors"
               aria-label={`Add ${event.title} to Google Calendar`}
             >
               Add to Calendar
             </button>
+          )}
+
+          {/* Special message for today's events */}
+          {isToday && (
+            <div className="mt-2 text-xs text-green-600 font-medium">
+              🌟 This event is happening today!
+            </div>
           )}
         </div>
       </div>

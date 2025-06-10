@@ -1,15 +1,16 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { MessageCard } from "@/app/components/features/message-card"
 import { EnhancedMessageSearch } from "@/app/components/features/enhanced-message-search"
 import { useMessages } from "@/app/lib/message-context"
-import { PenSquare, Book, IdCard, HeartHandshake } from "lucide-react"
+import { PenSquare, Book, IdCard, HeartHandshake, Sparkles, PartyPopper } from "lucide-react"
 import { Pagination } from "@/app/components/ui/pagination"
 import { type Message } from "@/app/lib/message-context"
 import { CTAContainer } from "@/app/components/ui/cta-container"
 import { PageCTA } from "@/app/components/ui/page-cta"
+import { calendarEvents } from "@/app/lib/calendar-data"
 
 export default function MessagesPage() {
   const { 
@@ -30,6 +31,30 @@ export default function MessagesPage() {
   
   const [searchPage, setSearchPage] = useState(1)
   const [localLoading, setLocalLoading] = useState(true)
+  
+  // Check if today has any discharge events
+  const todaysDischargeEvents = useMemo(() => {
+    const today = new Date();
+    return calendarEvents.filter((event) => {
+      const eventDate = new Date(event.start);
+      return eventDate.toDateString() === today.toDateString() && 
+             event.category === 'military';
+    });
+  }, []);
+
+  // Get discharged member names
+  const dischargedMembers = useMemo(() => {
+    return todaysDischargeEvents.map(event => {
+      if (event.title.includes("RM")) return "RM";
+      if (event.title.includes("V's")) return "V";
+      if (event.title.includes("Jin")) return "Jin";
+      if (event.title.includes("J-Hope")) return "J-Hope";
+      if (event.title.includes("Suga")) return "Suga";
+      if (event.title.includes("Jimin")) return "Jimin";
+      if (event.title.includes("Jungkook")) return "Jungkook";
+      return "Member";
+    });
+  }, [todaysDischargeEvents]);
   
   // Calculate search total pages
   const searchTotalPages = searchResults ? 
@@ -93,17 +118,80 @@ export default function MessagesPage() {
   const isSearchMode = searchResults !== null
   const showLoading = isLoading && localLoading
   
+  const isDischargeDay = todaysDischargeEvents.length > 0;
+  const isMultipleMembers = dischargedMembers.length > 1;
+  
   return (
     <div className="w-full max-w-6xl mx-auto">
+      {/* Special Discharge Day Banner */}
+      {isDischargeDay && (
+        <div className="mb-8 relative overflow-hidden bg-gradient-to-r from-green-100 via-purple-50 to-green-100 border-2 border-green-500 rounded-2xl p-6 shadow-lg">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-4 -left-4 w-24 h-24 bg-green-200 rounded-full opacity-20 animate-pulse"></div>
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-200 rounded-full opacity-20 animate-pulse delay-1000"></div>
+            <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-yellow-200 rounded-full opacity-15 animate-bounce delay-500"></div>
+          </div>
+
+          <div className="relative z-10 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-4 animate-bounce">
+              <PartyPopper className="w-8 h-8 text-white" />
+            </div>
+
+            <h2 className="text-2xl md:text-3xl font-bold mb-2 black-han-sans text-green-700">
+              🎊 Discharge Celebration Day! 🎊
+            </h2>
+            
+            <p className="text-lg mb-4 text-green-600 font-medium">
+              {isMultipleMembers 
+                ? `${dischargedMembers.join(" & ")} have completed their military service today!`
+                : `${dischargedMembers[0]} has completed their military service today!`}
+            </p>
+            
+            <p className="text-base mb-4 text-gray-700 max-w-2xl mx-auto">
+              Join ARMY from around the world in celebrating this special day! 
+              Send your congratulations and show your love and support.
+            </p>
+
+            {/* Floating celebration emojis - Fixed positions to avoid hydration mismatch */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              {[
+                { emoji: '🎉', left: '10%', top: '25%', delay: '0s', duration: '2.4s' },
+                { emoji: '💜', left: '80%', top: '35%', delay: '0.5s', duration: '2.1s' },
+                { emoji: '🎊', left: '30%', top: '65%', delay: '1s', duration: '2.7s' },
+                { emoji: '✨', left: '70%', top: '75%', delay: '1.5s', duration: '2.2s' },
+                { emoji: '🥳', left: '50%', top: '20%', delay: '2s', duration: '2.6s' },
+                { emoji: '💚', left: '60%', top: '55%', delay: '2.5s', duration: '2.3s' }
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="absolute text-2xl animate-pulse"
+                  style={{
+                    left: item.left,
+                    top: item.top,
+                    animationDelay: item.delay,
+                    animationDuration: item.duration
+                  }}
+                >
+                  {item.emoji}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
         <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
-          Messages from ARMY
+          {isDischargeDay ? "Celebration Messages from ARMY" : "Messages from ARMY"}
         </h1>
         
         <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
-          Connect with fellow ARMY from around the world through messages of love and support.
-          Every message carries the passion of a fan's heart!
+          {isDischargeDay 
+            ? `Today is extra special! Send your congratulations to ${isMultipleMembers ? dischargedMembers.join(" & ") : dischargedMembers[0]} and connect with fellow ARMY celebrating this milestone.`
+            : "Connect with fellow ARMY from around the world through messages of love and support. Every message carries the passion of a fan's heart!"
+          }
         </p>
       </div>
       
@@ -113,10 +201,14 @@ export default function MessagesPage() {
         
         <Link 
           href="/messages/create" 
-                      className="flex items-center justify-center px-5 py-3 bg-bts-accent text-black border-2 border-black rounded-lg transition-colors hover:bg-navbar-hover black-han-sans mx-auto md:mx-0 min-w-[200px] shadow-md"
+          className={`flex items-center justify-center px-5 py-3 border-2 border-black rounded-lg transition-colors black-han-sans mx-auto md:mx-0 min-w-[200px] shadow-md ${
+            isDischargeDay 
+              ? "bg-green-600 text-white hover:bg-green-700" 
+              : "bg-bts-accent text-black hover:bg-navbar-hover"
+          }`}
         >
           <PenSquare size={18} className="mr-2" />
-          <span>Write a Message</span>
+          <span>{isDischargeDay ? "Send Celebration Message" : "Write a Message"}</span>
         </Link>
       </div>
       
@@ -151,21 +243,28 @@ export default function MessagesPage() {
       {!showLoading && displayMessages.length === 0 && (
         <div className="text-center py-12 bg-white rounded-2xl border-2 border-black p-6">
           <h2 className="text-xl font-bold mb-2 black-han-sans">
-            {isSearchMode ? "No messages found" : "Be the first to leave a message!"}
+            {isSearchMode ? "No messages found" : 
+             isDischargeDay ? "Be the first to send congratulations!" : "Be the first to leave a message!"}
           </h2>
           <p className="mb-6 text-gray-600">
             {isSearchMode 
               ? "Try different search terms or browse all messages."
-              : "Share your love and thoughts with BTS and ARMY from around the world."}
+              : isDischargeDay 
+                ? `Share your excitement and congratulations for ${isMultipleMembers ? dischargedMembers.join(" & ") : dischargedMembers[0]} with ARMY worldwide.`
+                : "Share your love and thoughts with BTS and ARMY from around the world."}
           </p>
           
           {!isSearchMode && (
             <Link 
               href="/messages/create" 
-              className="inline-flex items-center px-5 py-3 bg-black text-bts-accent rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
+              className={`inline-flex items-center px-5 py-3 rounded-lg transition-colors black-han-sans ${
+                isDischargeDay 
+                  ? "bg-green-600 text-white hover:bg-green-700" 
+                  : "bg-black text-bts-accent hover:bg-purple-900"
+              }`}
             >
               <PenSquare size={18} className="mr-2" />
-              <span>Write a Message</span>
+              <span>{isDischargeDay ? "Send Celebration Message" : "Write a Message"}</span>
             </Link>
           )}
         </div>
@@ -209,36 +308,58 @@ export default function MessagesPage() {
                 onPageChange={handlePageChange}
               />
             )}
-            
-            {/* Message Count */}
-            <p className="text-center text-sm text-gray-500 mt-2">
-              Showing {displayMessages.length} of {isSearchMode ? searchResults.total : totalMessages} messages
-            </p>
           </div>
         </>
       )}
-      
-      {/* Cross-promotion CTAs */}
-      <CTAContainer title="Explore More" className="mt-16 border-t-2 border-gray-100 pt-12">
+
+      {/* Statistics */}
+      <div className="mt-12 text-center">
+        <div className="bg-white rounded-2xl border-2 border-black p-6">
+          <h3 className="text-xl font-bold mb-4 black-han-sans">
+            {isDischargeDay ? "Celebration Statistics" : "Community Statistics"}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <div className="text-2xl font-bold text-purple-600">{totalMessages}</div>
+              <div className="text-sm text-gray-600">
+                {isDischargeDay ? "Celebration Messages" : "Total Messages"}
+              </div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-purple-600">∞</div>
+              <div className="text-sm text-gray-600">Love Shared</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-purple-600">💜</div>
+              <div className="text-sm text-gray-600">
+                {isDischargeDay ? "Celebration Spirit" : "ARMY Unity"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Call to Action Section */}
+      <CTAContainer title={isDischargeDay ? "Keep the Celebration Going!" : "Explore More ARMY Content"}>
         <PageCTA
-          title="Create Your ARMY Card"
-          description="Generate a personalized ARMY ID card to showcase your bias and fan credentials."
-          href="/army-card"
+          title="Meet the Members"
+          description="Learn more about all seven BTS members and their incredible journey."
+          href="/members"
           icon={IdCard}
           color="purple"
         />
         
         <PageCTA
-          title="Share Your ARMY Story"
-          description="Tell your journey with BTS and connect with fellow fans through heartfelt stories."
+          title="Your ARMY Story"
+          description="Share your own story about how BTS changed your life."
           href="/army-story"
           icon={Book}
           color="green"
         />
         
         <PageCTA
-          title="Support Our Community"
-          description="Your contribution helps keep this fan space alive and growing. Join fellow ARMYs in supporting this community."
+          title="Support Community"
+          description="Help us maintain this loving space for all ARMY."
           href="/support"
           icon={HeartHandshake}
           color="yellow"

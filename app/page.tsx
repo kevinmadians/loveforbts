@@ -6,6 +6,7 @@ import { HomepageCTA } from "@/app/components/features/HomepageCTA"
 import { BTSEras } from "@/app/components/features/BTSEras"
 import { ARMYLove } from "@/app/components/features/ARMYLove"
 import { MembersCTA } from "@/app/components/features/MembersCTA"
+import { DischargeCelebrationCTA } from "@/app/components/features/DischargeCelebrationCTA"
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
           A fan community celebrating our seven favorite stars and connecting ARMY from around the world as we await their return.
         </p>
       </section>
+      
+      {/* Discharge Celebration CTA - only shows when it's a discharge day */}
+      <DischargeCelebrationCTA />
       
       {/* Countdown section with ID for direct navigation */}
       <div id="countdown">

@@ -2,9 +2,10 @@
 
 import React, { useMemo, useCallback, useState, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { toast } from "sonner"
 import { addToGoogleCalendar } from "../../lib/utils"
-import { CalendarPlus } from "lucide-react"
+import { CalendarPlus, ExternalLink, Clock, Calendar } from "lucide-react"
 import { 
   getCurrentDate,
   getLocalDaysLeft, 
@@ -43,6 +44,7 @@ type MemberInfo = {
   status: "discharged" | "active"
   initial: string
   image: string 
+  slug: string // Add slug for navigation
 }
 
 // BTS Members information with discharge dates
@@ -54,7 +56,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.Jin),
     status: "discharged",
     initial: "J",
-    image: "/images/members/jin.jpg"
+    image: "/images/members/jin.jpg",
+    slug: "jin"
   },
   {
     name: "J-Hope",
@@ -63,7 +66,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.JHope),
     status: "discharged",
     initial: "JH",
-    image: "/images/members/jhope.jpg"
+    image: "/images/members/jhope.jpg",
+    slug: "j-hope"
   },
   {
     name: "RM",
@@ -72,7 +76,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.RM),
     status: "active",
     initial: "RM",
-    image: "/images/members/rm.jpg"
+    image: "/images/members/rm.jpg",
+    slug: "rm"
   },
   {
     name: "Suga",
@@ -81,7 +86,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.Suga),
     status: "active",
     initial: "S",
-    image: "/images/members/suga.jpg"
+    image: "/images/members/suga.jpg",
+    slug: "suga"
   },
   {
     name: "Jimin",
@@ -90,7 +96,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.Jimin),
     status: "active",
     initial: "JM",
-    image: "/images/members/jimin.jpg"
+    image: "/images/members/jimin.jpg",
+    slug: "jimin"
   },
   {
     name: "V",
@@ -99,7 +106,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.V),
     status: "active",
     initial: "V",
-    image: "/images/members/v.jpg"
+    image: "/images/members/v.jpg",
+    slug: "v"
   },
   {
     name: "Jungkook",
@@ -108,7 +116,8 @@ const btsMembers: MemberInfo[] = [
     dischargeDate: new Date(DISCHARGE_DATES.Jungkook),
     status: "active",
     initial: "JK",
-    image: "/images/members/jungkook.jpg"
+    image: "/images/members/jungkook.jpg",
+    slug: "jungkook"
   }
 ]
 
@@ -148,6 +157,24 @@ export function DischargeDates() {
     if (member.name === "Jungkook") return FORMATTED_DATES.Jungkook;
     return "Unknown date";
   }
+
+  // Helper function to check if it's discharge day
+  const isDischargeDay = (member: MemberInfo): boolean => {
+    if (!isClient) return false;
+    const today = new Date();
+    const dischargeDate = new Date(member.dischargeDateString);
+    return today.toDateString() === dischargeDate.toDateString();
+  }
+
+  // Helper function to format remaining time in a more engaging way
+  const formatRemainingTime = (daysLeft: number): string => {
+    if (daysLeft === 0) return "Today is discharge date! 🎉";
+    if (daysLeft === 1) return "1 day left! ⭐";
+    if (daysLeft <= 7) return `${daysLeft} days left! 🔥`;
+    if (daysLeft <= 30) return `${daysLeft} days left`;
+    if (daysLeft <= 90) return `${daysLeft} days left`;
+    return `${daysLeft} days left`;
+  }
   
   // Memoize member data with calculations to avoid recalculating on every render
   const membersWithData = useMemo(() => {
@@ -155,6 +182,7 @@ export function DischargeDates() {
       return btsMembers.map(member => {
         const daysLeft = getLocalDaysLeft(member.dischargeDate)
         const progress = getLocalProgress(member.dischargeDate)
+        const isDischargingToday = isDischargeDay(member)
         
         // Use consistent formatting for dates - with static dates for SSR
         const formattedDate = isClient
@@ -165,7 +193,8 @@ export function DischargeDates() {
           ...member,
           daysLeft,
           progress,
-          formattedDate
+          formattedDate,
+          isDischargingToday
         }
       })
     } catch (error) {
@@ -174,7 +203,8 @@ export function DischargeDates() {
         ...member,
         daysLeft: 0,
         progress: 0,
-        formattedDate: getFormattedDate(member) // Always use static date on error
+        formattedDate: getFormattedDate(member), // Always use static date on error
+        isDischargingToday: false
       }));
     }
   }, [currentDate, isClient]) // Re-calculate when currentDate or isClient changes
@@ -228,25 +258,29 @@ export function DischargeDates() {
           {membersWithData.map((member) => (
             <div 
               key={member.name} 
-              className="bg-white hover:bg-black/5 rounded-xl p-1 sm:p-2 transition-all duration-200" 
+              className={`bg-white hover:bg-black/5 rounded-xl p-1 sm:p-2 transition-all duration-200 ${
+                member.isDischargingToday ? 'ring-2 ring-green-500 bg-green-50' : ''
+              }`}
               role="listitem"
-              aria-label={`${member.name} ${member.status === "discharged" ? "has completed" : `has ${member.daysLeft} days left in`} military service`}
+              aria-label={`${member.name} ${member.status === "discharged" ? "has completed" : member.isDischargingToday ? "is discharging today" : `has ${member.daysLeft} days left in`} military service`}
             >
               <div className="flex items-center gap-2 sm:gap-3">
-                {/* Member Photo */}
-                <div 
-                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base sm:text-lg font-bold border-2 transition-transform hover:scale-105 duration-200 shrink-0 shadow-sm overflow-hidden"
+                {/* Member Photo - Clickable */}
+                <Link 
+                  href={`/members/${member.slug}`}
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base sm:text-lg font-bold border-2 transition-all hover:scale-105 hover:shadow-lg duration-200 shrink-0 shadow-sm overflow-hidden cursor-pointer"
                   style={{ 
-                    borderColor: member.status === "discharged" ? "#22c55e" : "#3b82f6",
+                    borderColor: member.status === "discharged" || member.isDischargingToday ? "#22c55e" : "#3b82f6",
                   }}
+                  aria-label={`View ${member.name}'s profile page`}
                 >
                   {imageErrors[member.name] ? (
                     // Fallback to initial if image fails to load
                     <div 
                       className="w-full h-full flex items-center justify-center"
                       style={{ 
-                        backgroundColor: member.status === "discharged" ? "#22c55e20" : "#3b82f620",
-                        color: member.status === "discharged" ? "#22c55e" : "#3b82f6"
+                        backgroundColor: member.status === "discharged" || member.isDischargingToday ? "#22c55e20" : "#3b82f620",
+                        color: member.status === "discharged" || member.isDischargingToday ? "#22c55e" : "#3b82f6"
                       }}
                     >
                       {member.initial}
@@ -264,32 +298,67 @@ export function DischargeDates() {
                       priority={true}
                     />
                   )}
-                </div>
+                </Link>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between mb-0.5 sm:mb-1">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1 sm:gap-1.5">
-                        <h3 className="font-bold text-sm sm:text-base text-black truncate">{member.name}</h3>
+                        {/* Member Name - Clickable */}
+                        <Link 
+                          href={`/members/${member.slug}`}
+                          className="font-bold text-sm sm:text-base text-black truncate hover:text-purple-600 transition-colors duration-200 cursor-pointer"
+                          aria-label={`View ${member.name}'s profile page`}
+                        >
+                          {member.name}
+                        </Link>
+                        <ExternalLink size={12} className="text-black/40 shrink-0" />
                       </div>
                       <p className="text-xs text-black/60 truncate">{member.role}</p>
                     </div>
                     <div className="text-right shrink-0 ml-1.5">
-                      <div className="text-xs font-medium text-black whitespace-nowrap">
+                      <div className={`text-xs font-medium whitespace-nowrap ${
+                        member.status === "discharged" 
+                          ? "text-green-600 font-bold" 
+                          : member.isDischargingToday 
+                            ? "text-green-600 font-bold animate-pulse" 
+                            : "text-black"
+                      }`}>
                         {member.status === "discharged" 
-                          ? (<span className="text-green-500 font-medium">Discharged</span>) 
-                          : `${member.daysLeft} days`}
+                          ? "✅ Discharged" 
+                          : member.isDischargingToday
+                            ? "🎉 Discharge Day!"
+                            : formatRemainingTime(member.daysLeft)}
                       </div>
-                      <div className="text-[10px] sm:text-xs text-black/60 whitespace-nowrap">
+                      <div className="text-[10px] sm:text-xs text-black/60 whitespace-nowrap flex items-center gap-1">
+                        <Calendar size={10} />
                         {member.formattedDate}
                       </div>
                     </div>
                   </div>
 
-                  {member.status === "active" && (
+                  {/* Status Information */}
+                  {member.status === "discharged" ? (
+                    <div className="flex items-center gap-2 text-xs">
+                      <div className="flex-1 bg-green-100 border border-green-300 rounded-full px-2 py-1">
+                        <span className="text-green-700 font-medium">
+                          🎉 Successfully completed military service
+                        </span>
+                      </div>
+                    </div>
+                  ) : member.isDischargingToday ? (
+                    <div className="flex items-center gap-2 text-xs">
+                      <div className="flex-1 bg-green-100 border border-green-300 rounded-full px-2 py-1 animate-pulse">
+                        <span className="text-green-700 font-bold">
+                          🌟 Today is the big day! Welcome back!
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
                     <div className="flex items-center gap-1 sm:gap-2 w-full">
+                      {/* Progress Bar with enhanced styling */}
                       <div 
-                        className="flex-1 h-1.5 bg-black/10 rounded-full overflow-hidden" 
+                        className="flex-1 h-2 bg-black/10 rounded-full overflow-hidden border border-black/20" 
                         role="progressbar" 
                         aria-valuemin={0} 
                         aria-valuemax={100} 
@@ -297,10 +366,23 @@ export function DischargeDates() {
                         aria-label={`${member.progress.toFixed(0)}% of service completed`}
                       >
                         <div 
-                          className="h-full bg-blue-500 transition-all duration-500"
+                          className={`h-full transition-all duration-500 ${
+                            member.progress > 90 
+                              ? 'bg-gradient-to-r from-green-500 to-green-400' 
+                              : member.progress > 70 
+                                ? 'bg-gradient-to-r from-yellow-500 to-orange-400'
+                                : 'bg-gradient-to-r from-blue-500 to-purple-400'
+                          }`}
                           style={{ width: `${member.progress}%` }}
                         />
                       </div>
+                      
+                      {/* Progress Percentage */}
+                      <span className="text-xs font-medium text-black/70 min-w-[35px] text-right">
+                        {member.progress.toFixed(0)}%
+                      </span>
+                      
+                      {/* Add to Calendar Button */}
                       <button
                         onClick={() => handleAddToCalendar(member)}
                         className="inline-flex items-center px-1.5 sm:px-2 py-1 rounded text-[10px] sm:text-xs bg-black text-bts-accent hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95 transition-all duration-200 ease-out font-medium"
@@ -311,10 +393,31 @@ export function DischargeDates() {
                       </button>
                     </div>
                   )}
+
+                  {/* Additional engaging info for active members */}
+                  {member.status === "active" && !member.isDischargingToday && (
+                    <div className="mt-1 text-[10px] text-black/50 flex items-center gap-1">
+                      <Clock size={10} />
+                      <span>
+                        {member.daysLeft <= 30 
+                          ? "Almost there! 🚀" 
+                          : member.daysLeft <= 90 
+                            ? "Getting closer! 💪" 
+                            : "Serving with honor 🇰🇷"}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           ))}
+        </div>
+        
+        {/* Fun fact at the bottom */}
+        <div className="mt-4 text-center">
+          <p className="text-xs text-black/60">
+            💜 Click on any member's photo or name to visit their profile page
+          </p>
         </div>
       </div>
     </div>

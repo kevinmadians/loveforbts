@@ -80,59 +80,71 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Enhanced Purple Hearts Collector Game with BTS Members & Leaderboard
+## Current Task: Enhanced BTS Military Discharge Countdown Section
 
 ### Task Description
-Enhance the Purple Hearts Collector game to include:
-1. ✅ Name input before playing (like Whack-a-Mole)
-2. ✅ BTS member heads as collectible items for bonus points
-3. ✅ Leaderboard system with Supabase integration
-4. ✅ Social sharing functionality
-5. [ ] Complete game mechanics with spawn/collect functions
-6. [ ] Responsive UI for all devices
-7. [ ] Enhanced visual effects and animations
+Enhanced the BTS Military Discharge Countdown section on homepage with:
+1. ✅ Changed "0 days" to "Today is discharge date!" with green styling
+2. ✅ Dynamic color changes when reaching discharge day (green like Jin and J-Hope)
+3. ✅ Made member photos and names clickable to navigate to individual member pages
+4. ✅ Added engaging status information for discharged members
+5. ✅ Enhanced countdown timers with progress indicators and emotive messages
+6. ✅ Improved visual styling and animations
 
-### Progress Made
+### Completed Features
 
-#### Database & Infrastructure
-- ✅ Created Supabase schema for purple_hearts_scores table
-- ✅ Built supabase-purple-hearts.ts service functions
-- ✅ Created PurpleHeartsLeaderboard component
-- ✅ Created PurpleHeartsSocialShare component
-- ✅ Updated documentation with new SQL schema
+#### Dynamic Discharge Status
+- ✅ Smart detection of discharge day with special "Today is discharge date! 🎉" message
+- ✅ Green color styling for discharged members and those discharging today
+- ✅ Animate pulse effect for members discharging today
+- ✅ Progress-based color coding (green >90%, yellow >70%, blue/purple default)
 
-#### Game Component Structure
-- ✅ Enhanced interfaces for FallingItem, BTSMember, GameStats
-- ✅ Added BTS_MEMBERS data with head images and abilities
-- ✅ Complete component state management (name input, menu, playing, gameOver, etc.)
-- ✅ Score saving and leaderboard integration functions
-- ✅ Game timer and navigation functions
-- ✅ Item spawning and physics system
-- ✅ Collection logic with member abilities
-- ✅ Visual effects (confetti, hit effects, level-up animations)
-- ✅ Responsive UI for all screen sizes
+#### Navigation & Interactivity
+- ✅ Clickable member photos and names linking to `/members/{slug}` pages
+- ✅ External link icons to indicate clickable elements
+- ✅ Hover effects with scaling and shadow animations
+- ✅ Smooth color transitions on hover
 
-#### Still Needed
-- [X] Complete game mechanics (spawn items, collect logic, physics)
-- [X] UI screens (name input, menu, game area, game over)
-- [X] BTS member abilities and special effects
-- [X] Enhanced visual effects and animations
-- [X] Mobile responsiveness optimization
-- [X] Testing and polish
-- [X] Fixed member spawning bug (all 7 BTS members now appear properly)
+#### Enhanced Visual Information
+- ✅ Status badges for discharged members ("✅ Discharged")
+- ✅ Engaging status messages ("🎉 Successfully completed military service")
+- ✅ Progress percentage display alongside progress bars
+- ✅ Emotive countdown messages ("Almost there! 🚀", "Getting closer! 💪")
+- ✅ Calendar icons for discharge dates
+- ✅ Clock icons for service status
 
-### BTS Members & Abilities
-1. **RM** (Common, 15pts): Leader Power +5 bonus
-2. **Jin** (Common, 15pts): Longer fall time
-3. **Suga** (Rare, 20pts): Double points when caught fast
-4. **J-Hope** (Rare, 20pts): +3 bonus to next catch
-5. **Jimin** (Rare, 20pts): Graceful bonus multiplier x1.5
-6. **V** (Rare, 20pts): Wild card bonus points
-7. **Jungkook** (Legendary, 30pts): All bonuses activated
+#### Improved Styling
+- ✅ Enhanced progress bars with gradient colors based on completion
+- ✅ Special ring styling for members discharging today
+- ✅ Better spacing and typography
+- ✅ Fun instructional message at bottom about clickable elements
 
-### Technical Notes
-- Using head images from `/public/images/members/head/`
-- Game duration: 60 seconds
-- Level up threshold: 100 points
-- Fast catch threshold: 800ms
-- Streak bonus threshold: 5 catches
+#### Calendar Section Enhancements
+- ✅ Changed "Upcoming Events" to celebration titles when discharge day detected
+- ✅ Hidden time display (12:00 AM) on frontend while keeping for Google Calendar
+- ✅ Removed "Add to Calendar" button for events happening today
+- ✅ Special green styling and animations for discharge events
+- ✅ Custom celebration messages for discharge events happening today
+- ✅ Special celebration banner for today's discharge events
+
+#### Homepage Discharge Celebration CTA
+- ✅ Created DischargeCelebrationCTA component that only shows on discharge days
+- ✅ Animated celebration banner with floating hearts and special styling
+- ✅ Direct links to send celebration messages
+- ✅ Dynamic messaging for single vs multiple member discharges
+
+#### Messages Page Discharge Day Enhancement
+- ✅ Special celebration banner when visiting messages page on discharge day
+- ✅ Updated hero text and CTAs for discharge celebration context
+- ✅ Green-themed buttons and styling for discharge days
+- ✅ Custom celebration statistics and messaging
+
+### Technical Implementation
+- Member slug mapping for proper navigation routing
+- Client-side discharge day detection using local timezone
+- Dynamic styling based on service status and progress
+- Accessibility improvements with proper ARIA labels
+- Responsive design maintained across all screen sizes
+- Cross-component discharge day detection system
+- Conditional UI theming for special events
+- Enhanced user engagement through contextual messaging

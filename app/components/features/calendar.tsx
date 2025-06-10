@@ -36,6 +36,37 @@ export function CalendarView() {
       )
       .slice(0, 3)
   }, [])
+
+  // Check if today has any discharge events
+  const todaysDischargeEvents = useMemo(() => {
+    const today = new Date();
+    return calendarEvents.filter((event: CalendarEvent) => {
+      const eventDate = new Date(event.start);
+      return eventDate.toDateString() === today.toDateString() && 
+             event.category === 'military';
+    });
+  }, []);
+
+  // Get the appropriate title for the upcoming events section
+  const upcomingEventsTitle = useMemo(() => {
+    if (todaysDischargeEvents.length > 0) {
+      if (todaysDischargeEvents.length === 1) {
+        // Extract member name from title
+        const event = todaysDischargeEvents[0];
+        const memberName = event.title.includes("RM") ? "RM" : 
+                          event.title.includes("V's") ? "V" :
+                          event.title.includes("Jin") ? "Jin" :
+                          event.title.includes("J-Hope") ? "J-Hope" :
+                          event.title.includes("Suga") ? "Suga" :
+                          event.title.includes("Jimin") ? "Jimin" :
+                          event.title.includes("Jungkook") ? "Jungkook" : "Member";
+        return `🎉 Welcome Home ${memberName}! 💜`;
+      } else {
+        return "🎉 Discharge Celebration Day! 💜";
+      }
+    }
+    return "Upcoming Events";
+  }, [todaysDischargeEvents]);
   
   // Memoize event modifiers
   const eventModifiers = useMemo(() => {
@@ -122,15 +153,36 @@ export function CalendarView() {
           </div>
         )}
         
-        {/* Upcoming Events */}
+        {/* Upcoming Events with dynamic title */}
         <div className="pt-1">
-          <h3 className="font-bold text-base sm:text-lg mb-3">Upcoming Events</h3>
+          <h3 className={`font-bold text-base sm:text-lg mb-3 ${
+            todaysDischargeEvents.length > 0 ? "text-green-600" : ""
+          }`}>
+            {upcomingEventsTitle}
+          </h3>
+          
+          {/* Special celebration banner for discharge day */}
+          {todaysDischargeEvents.length > 0 && (
+            <div className="mb-4 p-3 bg-gradient-to-r from-green-100 to-purple-100 border-2 border-green-500 rounded-xl">
+              <div className="text-center">
+                <p className="text-lg font-bold text-green-700 black-han-sans">
+                  {todaysDischargeEvents.length === 2 ? "Double Celebration!" : "Special Day!"}
+                </p>
+                <p className="text-sm text-green-600">
+                  {todaysDischargeEvents.length === 2 
+                    ? "Both RM and V are coming home today! 🎊" 
+                    : "A BTS member is returning from military service today! 🎊"}
+                </p>
+              </div>
+            </div>
+          )}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {upcomingEvents.map((event: CalendarEvent, index: number) => (
               <EventCard 
                 key={`${event.title}-${event.start}`}
                 event={event}
-                isHighlighted={index === 0}
+                isHighlighted={index === 0 && todaysDischargeEvents.length === 0}
                 showAddToCalendarButton
                 className={index === 0 ? "sm:col-span-1 lg:col-span-1" : ""}
               />
