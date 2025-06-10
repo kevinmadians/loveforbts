@@ -80,17 +80,44 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Mobile Theme Toggle & Homepage Element Updates
+## Current Task: Floating Glass Navbar Enhancement
 
 ### Task Description
-Updated mobile navbar theme toggle and homepage animated elements:
-1. ✅ Removed blinking circle indicator from mobile theme toggle
-2. ✅ Added smart logo switching for dark themes (white logo for dark backgrounds)
-3. ✅ Enhanced mobile theme toggle with rounded border styling for better visibility
-4. ✅ Replaced bounced yellow circle on homepage with BTS logo (/public/images/bts-logo-purple.png)
-5. ✅ Maintained all existing animations and positioning for the BTS logo element
-6. ✅ Fixed mobile menu text colors - white text for dark themes (Black Swan), black for light themes
-7. ✅ Removed all emojis from DischargeCelebrationCTA component (🎉🥳💚 etc.)
+Enhanced navbar with floating design and glass transparency effect:
+1. ✅ Converted navbar from full-width to centered floating design
+2. ✅ Added glass transparency effect with backdrop blur
+3. ✅ Implemented 80% opacity with theme color preservation
+4. ✅ Added rounded corners and shadow for floating effect
+5. ✅ Enhanced mobile menu with consistent glass styling
+6. ✅ Improved mobile menu button with subtle glass borders
+7. ✅ Maintained responsive design across all devices
+
+### Technical Implementation Details
+- **Floating Design**: Wrapped navbar in container with padding and max-width constraints
+- **Glass Effect**: Used `backdrop-blur-md` with reduced opacity (CC suffix for 80%)
+- **Mobile Optimization**: Mobile menu respects container margins with `inset-x-4`
+- **Visual Enhancements**: Added rounded borders, shadows, and refined spacing
+- **Responsive Layout**: Maintains functionality across desktop and mobile devices
+
+### Previous Completed: Theme Modal Fix & X Post Embed
+1. ✅ Fixed theme modal positioning issue for Black Swan theme on mobile
+2. ✅ Improved modal viewport handling with dvh units for better mobile support
+3. ✅ Increased z-index to prevent overlay conflicts
+4. ✅ Created TwitterEmbed component for BTS official posts
+5. ✅ Added BTS military service completion tweet to homepage
+6. ✅ Positioned X post embed between BTS Calendar and Discharge Dates sections
+
+### Technical Implementation Details
+- **Modal Positioning Fix**: 
+  - Changed z-index from z-[100] to z-[200] to prevent conflicts
+  - Used dvh (dynamic viewport height) units for better mobile support
+  - Improved overflow handling with proper viewport calculations
+  - Added proper centering with margin auto and relative positioning
+- **Twitter Embed**: 
+  - Created reusable TwitterEmbed component with TypeScript support
+  - Dynamically loads Twitter widgets script only when needed
+  - Embedded BTS official tweet about military service completion
+  - Positioned strategically between Calendar and Discharge tracking sections
 
 ### Previous Completed: Beautiful Theme Modal Enhancement
 1. ✅ Built ThemeModal component with elegant centered popup design

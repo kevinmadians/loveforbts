@@ -286,31 +286,31 @@ export const calendarEvents: CalendarEvent[] = [
     description: "J-Hope completes military service"
   },
   {
-    title: "Suga's Expected Discharge",
+    title: "Suga's Discharge Date",
     start: new Date(2025, 5, 21), // June 21, 2025
     category: 'military',
     description: "Suga's expected completion of military service"
   },
   {
-    title: "RM's Expected Discharge",
+    title: "RM's Discharge Date",
     start: new Date(2025, 5, 10), // June 10, 2025
     category: 'military',
     description: "RM's expected completion of military service"
   },
   {
-    title: "V's Expected Discharge",
+    title: "V's Discharge Date",
     start: new Date(2025, 5, 10), // June 10, 2025
     category: 'military',
     description: "V's expected completion of military service"
   },
   {
-    title: "Jimin's Expected Discharge",
+    title: "Jimin's Discharge Date",
     start: new Date(2025, 5, 11), // June 11, 2025
     category: 'military',
     description: "Jimin's expected completion of military service"
   },
   {
-    title: "Jungkook's Expected Discharge",
+    title: "Jungkook's Discharge Date",
     start: new Date(2025, 5, 11), // June 11, 2025
     category: 'military',
     description: "Jungkook's expected completion of military service"

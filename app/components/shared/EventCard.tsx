@@ -49,7 +49,7 @@ export function EventCard({
                       event.title.includes("Jimin") ? "Jimin" :
                       event.title.includes("Jungkook") ? "Jungkook" : "Member";
     
-    return `🎉 ${memberName} is officially back! Welcome home! 💜`;
+    return `${memberName} is officially back! 💜`;
   }, [isToday, isDischargeEvent, event.title]);
 
   // Memoize event handler
@@ -118,7 +118,7 @@ export function EventCard({
             {event.title}
             {isToday && isDischargeEvent && (
               <span className="text-xs font-normal bg-green-600 text-white px-1.5 py-0.5 rounded ml-2 animate-bounce">
-                TODAY! 🎉
+                TODAY!
               </span>
             )}
             {isHighlighted && !isToday && (

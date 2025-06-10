@@ -46,12 +46,16 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4 overflow-y-auto"
       onClick={handleBackdropClick}
+      style={{ minHeight: '100dvh' }}
     >
       <div 
-        className="bg-white rounded-2xl border-4 border-black shadow-2xl max-w-md w-full max-h-[80vh] overflow-hidden animate-in zoom-in-95 duration-300"
+        className="bg-white rounded-2xl border-4 border-black shadow-2xl w-full max-w-md my-8 mx-auto animate-in zoom-in-95 duration-300 relative"
         onClick={(e) => e.stopPropagation()}
+        style={{ 
+          maxHeight: 'calc(100dvh - 2rem)' 
+        }}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b-2 border-black bg-gradient-to-r from-yellow-400 to-yellow-300">
@@ -75,7 +79,7 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Theme Grid */}
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
+        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(80dvh - 8rem)' }}>
           <div className="grid gap-4">
             {availableThemes.map((theme) => (
               <button
@@ -149,7 +153,7 @@ export const ThemeModal: React.FC<ThemeModalProps> = ({ isOpen, onClose }) => {
         {/* Footer */}
         <div className="p-4 border-t-2 border-black bg-gray-50 text-center">
           <p className="text-sm text-gray-600">
-            💜 Choose a theme that matches your ARMY spirit! 💜
+            Choose a theme that matches your ARMY spirit! 💜
           </p>
         </div>
       </div>

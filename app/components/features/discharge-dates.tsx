@@ -400,7 +400,7 @@ export function DischargeDates() {
                       <Clock size={10} />
                       <span>
                         {member.daysLeft <= 30 
-                          ? "Almost there! 🚀" 
+                          ? "Almost there!" 
                           : member.daysLeft <= 90 
                             ? "Getting closer! 💪" 
                             : "Serving with honor 🇰🇷"}
