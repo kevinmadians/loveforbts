@@ -5,7 +5,7 @@ import Link from "next/link"
 import { MessageCard } from "@/app/components/features/message-card"
 import { EnhancedMessageSearch } from "@/app/components/features/enhanced-message-search"
 import { useMessages } from "@/app/lib/message-context"
-import { PenSquare, Book, IdCard, HeartHandshake, Sparkles, PartyPopper } from "lucide-react"
+import { PenSquare, Book, IdCard, HeartHandshake, Sparkles } from "lucide-react"
 import { Pagination } from "@/app/components/ui/pagination"
 import { type Message } from "@/app/lib/message-context"
 import { CTAContainer } from "@/app/components/ui/cta-container"
@@ -130,53 +130,45 @@ export default function MessagesPage() {
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-green-200 rounded-full opacity-20 animate-pulse"></div>
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-200 rounded-full opacity-20 animate-pulse delay-1000"></div>
-            <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-yellow-200 rounded-full opacity-15 animate-bounce delay-500"></div>
+            <div className="absolute top-1/2 left-1/4 w-16 h-16 opacity-30 animate-bounce delay-500">
+              <img 
+                src="/images/bts-logo-purple.png" 
+                alt="BTS Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
           </div>
 
           <div className="relative z-10 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-4 animate-bounce">
-              <PartyPopper className="w-8 h-8 text-white" />
+            {/* Celebration Icon */}
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 animate-bounce">
+              <img 
+                src="/images/bts-logo-purple.png" 
+                alt="BTS Logo" 
+                className="w-15 h-15 object-contain"
+              />
             </div>
 
+            {/* Main Headline */}
             <h2 className="text-2xl md:text-3xl font-bold mb-2 black-han-sans text-green-700">
-              🎊 Discharge Celebration Day! 🎊
-            </h2>
-            
-            <p className="text-lg mb-4 text-green-600 font-medium">
               {isMultipleMembers 
-                ? `${dischargedMembers.join(" & ")} have completed their military service today!`
-                : `${dischargedMembers[0]} has completed their military service today!`}
-            </p>
-            
-            <p className="text-base mb-4 text-gray-700 max-w-2xl mx-auto">
-              Join ARMY from around the world in celebrating this special day! 
-              Send your congratulations and show your love and support.
+                ? `${dischargedMembers.join(" & ")} Are Home!`
+                : `Welcome Home ${dischargedMembers[0]}!`}
+            </h2>
+
+            {/* Subheading */}
+            <p className="text-lg md:text-xl mb-4 text-green-600 font-medium">
+              {isMultipleMembers 
+                ? "Both members have successfully completed their military service!"
+                : "They have successfully completed their military service!"}
             </p>
 
-            {/* Floating celebration emojis - Fixed positions to avoid hydration mismatch */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              {[
-                { emoji: '🎉', left: '10%', top: '25%', delay: '0s', duration: '2.4s' },
-                { emoji: '💜', left: '80%', top: '35%', delay: '0.5s', duration: '2.1s' },
-                { emoji: '🎊', left: '30%', top: '65%', delay: '1s', duration: '2.7s' },
-                { emoji: '✨', left: '70%', top: '75%', delay: '1.5s', duration: '2.2s' },
-                { emoji: '🥳', left: '50%', top: '20%', delay: '2s', duration: '2.6s' },
-                { emoji: '💚', left: '60%', top: '55%', delay: '2.5s', duration: '2.3s' }
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="absolute text-2xl animate-pulse"
-                  style={{
-                    left: item.left,
-                    top: item.top,
-                    animationDelay: item.delay,
-                    animationDuration: item.duration
-                  }}
-                >
-                  {item.emoji}
-                </div>
-              ))}
-            </div>
+            {/* Description */}
+            <p className="text-base md:text-lg mb-6 text-gray-700 max-w-2xl mx-auto">
+              This is a special day for ARMY! Join fellow fans around the world in celebrating 
+              {isMultipleMembers ? " their " : ` ${dischargedMembers[0]}'s `}
+              safe return. Send your congratulations and love messages!
+            </p>
           </div>
         </div>
       )}

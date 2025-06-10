@@ -80,10 +80,50 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Floating Glass Navbar Enhancement
+## Current Task: Bug Fixes & Style Consistency
 
 ### Task Description
-Enhanced navbar with floating design and glass transparency effect:
+Fixed critical bugs and improved style consistency across the application:
+1. ✅ Fixed ARMY Card Generator song search field - selected songs now properly appear in input
+2. ✅ Fixed song selection behavior and input initialization 
+3. ✅ Updated discharge celebration styling on messages page to match homepage CTA
+4. ✅ Removed emojis from messages page discharge banner
+5. ✅ Replaced bouncing objects with BTS purple logo for consistency
+6. ✅ Fixed song suggestion selection issue - songs now properly appear in field when clicked
+
+### Previous Completed: Footer Floating Design & Mobile Auto-Scroll Enhancement
+1. ✅ Converted footer from full-width to floating design matching navbar
+2. ✅ Added centered container with max-width, rounded corners, backdrop blur
+3. ✅ Implemented 80% opacity with theme color preservation
+4. ✅ Enhanced responsive layout (1 col mobile, 2 col small, 3 col large screens)
+5. ✅ Added auto-scroll to card preview on mobile when Generate button is clicked
+6. ✅ Maintained all footer elements visibility and proper spacing
+
+### Technical Implementation Details
+- **Footer Hover Effects**: 
+  - Added smooth color transitions with theme-aware accent colors
+  - Implemented translateX(4px) animation on hover for visual feedback
+  - Added icon scaling effect (scale-110) with group hover classes
+  - Used onMouseEnter/onMouseLeave for precise color control
+- **Photo Change Auto-Scroll**: 
+  - Extended auto-scroll functionality to handleRefreshPhoto function
+  - Added 300ms delay for better user experience timing
+  - Maintains consistent mobile detection (window.innerWidth < 768)
+- **BTS Song Input Restriction**: 
+  - Created handleSongInputChange to validate against real BTS songs
+  - Added onBlur validation to clear invalid inputs automatically
+  - Implemented visual feedback with red border for invalid entries
+  - Added confirmation text for valid song selection
+  - Restricted input to only exact matches from BTS song database
+
+### Previous Completed: Gradient Line Removal & Multi-Tweet Enhancement
+1. ✅ Removed gradient line animations below navbar for all themes
+2. ✅ Created MultipleTwitterEmbed component for compact display
+3. ✅ Added new X post (ID: 1932232770454990855) to homepage
+4. ✅ Combined both tweets in same "Latest from BTS" container
+5. ✅ Implemented responsive grid layout (1 column on mobile, 2 on desktop)
+
+### Previous Completed: Floating Glass Navbar Enhancement
 1. ✅ Converted navbar from full-width to centered floating design
 2. ✅ Added glass transparency effect with backdrop blur
 3. ✅ Implemented 80% opacity with theme color preservation
@@ -91,13 +131,6 @@ Enhanced navbar with floating design and glass transparency effect:
 5. ✅ Enhanced mobile menu with consistent glass styling
 6. ✅ Improved mobile menu button with subtle glass borders
 7. ✅ Maintained responsive design across all devices
-
-### Technical Implementation Details
-- **Floating Design**: Wrapped navbar in container with padding and max-width constraints
-- **Glass Effect**: Used `backdrop-blur-md` with reduced opacity (CC suffix for 80%)
-- **Mobile Optimization**: Mobile menu respects container margins with `inset-x-4`
-- **Visual Enhancements**: Added rounded borders, shadows, and refined spacing
-- **Responsive Layout**: Maintains functionality across desktop and mobile devices
 
 ### Previous Completed: Theme Modal Fix & X Post Embed
 1. ✅ Fixed theme modal positioning issue for Black Swan theme on mobile

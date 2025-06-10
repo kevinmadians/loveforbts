@@ -175,7 +175,7 @@ export const btsSongs: BTSSong[] = [
   // 2022: Proof
   { title: "Born Singer", album: "Proof", year: 2022 },
   { title: "Run BTS", album: "Proof", year: 2022 },
-  { title: "Yet To Come (The Most Beautiful Moment)", album: "Proof", year: 2022, isTitleTrack: true }
+  { title: "Yet To Come", album: "Proof", year: 2022, isTitleTrack: true }
 ];
 
 export const searchBTSSongs = (query: string): BTSSong[] => {

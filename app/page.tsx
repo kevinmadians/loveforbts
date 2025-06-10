@@ -7,7 +7,7 @@ import { BTSEras } from "@/app/components/features/BTSEras"
 import { ARMYLove } from "@/app/components/features/ARMYLove"
 import { MembersCTA } from "@/app/components/features/MembersCTA"
 import { DischargeCelebrationCTA } from "@/app/components/features/DischargeCelebrationCTA"
-import { TwitterEmbed } from "@/app/components/features/TwitterEmbed"
+import { MultipleTwitterEmbed } from "@/app/components/features/TwitterEmbed"
 
 export default function Home() {
   return (
@@ -42,8 +42,8 @@ export default function Home() {
       {/* Calendar and Trackers */}
       <CalendarView />
       
-      {/* Latest BTS Tweet */}
-      <TwitterEmbed tweetId="1932290930444476674" />
+      {/* Latest BTS Tweets */}
+      <MultipleTwitterEmbed tweetIds={["1932290930444476674", "1932232770454990855"]} />
       
       <DischargeDates />
       

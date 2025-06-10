@@ -113,9 +113,10 @@ export function ArmyCardGenerator() {
   const [flagImageLoaded, setFlagImageLoaded] = useState(false)
 
   // Replace Favorite BTS Song input with Spotify search autocomplete
-  const [songQuery, setSongQuery] = useState("");
+  const [songQuery, setSongQuery] = useState(formData.favoriteSong || "");
   const [songSuggestions, setSongSuggestions] = useState<BTSSong[]>([]);
   const [showSongSuggestions, setShowSongSuggestions] = useState(false);
+  const [isSelectingSong, setIsSelectingSong] = useState(false);
 
   const songInputRef = useRef<HTMLInputElement>(null);
 
@@ -132,9 +133,60 @@ export function ArmyCardGenerator() {
   }, []);
 
   const handleSongSelect = (song: BTSSong) => {
-    setFormData(prev => ({ ...prev, favoriteSong: song.title }));
+    setIsSelectingSong(true);
+    
+    // Set both the display value and form data immediately
     setSongQuery(song.title);
+    setFormData(prev => ({ ...prev, favoriteSong: song.title }));
     setShowSongSuggestions(false);
+    
+    // Reset the selection flag after a brief moment
+    setTimeout(() => {
+      setIsSelectingSong(false);
+    }, 100);
+  };
+
+  const handleSongInputChange = (value: string) => {
+    setSongQuery(value);
+    
+    // Don't process changes if we're in the middle of selecting
+    if (isSelectingSong) {
+      return;
+    }
+    
+    // Search for songs to show suggestions
+    handleSongSearch(value);
+    
+    // Only set formData if there's an exact match or if clearing
+    const results = searchBTSSongs(value);
+    const exactMatch = results.find(song => song.title.toLowerCase() === value.toLowerCase());
+    
+    if (exactMatch) {
+      setFormData(prev => ({ ...prev, favoriteSong: exactMatch.title }));
+    } else if (value === '') {
+      setFormData(prev => ({ ...prev, favoriteSong: '' }));
+    }
+  };
+
+  const handleSongInputBlur = () => {
+    // Don't process blur if we're selecting a song
+    if (isSelectingSong) {
+      return;
+    }
+    
+    // Hide suggestions after a delay to allow clicks
+    setTimeout(() => {
+      setShowSongSuggestions(false);
+      
+      // Only clear invalid input if we're not selecting and no exact match
+      if (!isSelectingSong) {
+        const results = searchBTSSongs(songQuery);
+        const exactMatch = results.find(song => song.title.toLowerCase() === songQuery.toLowerCase());
+        if (!exactMatch && songQuery !== '' && songQuery !== formData.favoriteSong) {
+          setSongQuery(formData.favoriteSong || '');
+        }
+      }
+    }, 200);
   };
 
   const handleRefreshPhoto = () => {
@@ -143,6 +195,17 @@ export function ArmyCardGenerator() {
       setMemberPhoto(newPhoto);
       // Reset member image loaded state so it can reload the new image
       setMemberImageLoaded(false);
+      
+      // Auto-scroll to card preview on mobile devices
+      const isMobile = window.innerWidth < 768 // md breakpoint
+      if (isMobile && cardRef.current) {
+        setTimeout(() => {
+          cardRef.current?.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          })
+        }, 300)
+      }
       
       toast.success("Photo refreshed!", {
         description: "Showing a new photo for your bias",
@@ -306,6 +369,18 @@ export function ArmyCardGenerator() {
     }
     
     setIsGenerating(true)
+    
+    // Auto-scroll to card preview on mobile devices
+    const isMobile = window.innerWidth < 768 // md breakpoint
+    if (isMobile && cardRef.current) {
+      // Small delay to allow loading state to show, then scroll
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        })
+      }, 200)
+    }
     
     // Small delay to show loading state
     setTimeout(() => {
@@ -844,8 +919,8 @@ export function ArmyCardGenerator() {
             </select>
             {errors.bias && <p className="mt-1 text-sm text-red-500">{errors.bias}</p>}
             
-            {/* Photo Refresh Button */}
-            {selectedMember && (
+            {/* Photo Refresh Button - Only show after card is generated */}
+            {selectedMember && cardGenerated && (
               <button
                 type="button"
                 onClick={handleRefreshPhoto}
@@ -1006,15 +1081,20 @@ export function ArmyCardGenerator() {
                 id="favoriteSong"
                 name="favoriteSong"
                 value={songQuery}
-                onChange={e => {
-                  setSongQuery(e.target.value);
-                  setFormData(prev => ({ ...prev, favoriteSong: e.target.value }));
-                  handleSongSearch(e.target.value);
+                onChange={e => handleSongInputChange(e.target.value)}
+                onBlur={handleSongInputBlur}
+                onFocus={() => {
+                  if (songQuery) {
+                    handleSongSearch(songQuery);
+                  }
                 }}
-                className={`w-full px-4 py-2 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-black`}
-                placeholder="Search for your favorite BTS song..."
+                className={`w-full px-4 py-2 border-2 border-black rounded-md focus:outline-none focus:ring-2 focus:ring-black ${
+                  songQuery !== '' && formData.favoriteSong === '' && songQuery !== formData.favoriteSong 
+                    ? 'border-red-500 ring-red-500' 
+                    : 'border-black ring-black'
+                }`}
+                placeholder="Search and select a BTS song..."
                 autoComplete="off"
-                maxLength={40}
               />
               {showSongSuggestions && songSuggestions.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border-2 border-black rounded-lg shadow-lg max-h-60 overflow-y-auto">
@@ -1022,13 +1102,29 @@ export function ArmyCardGenerator() {
                     <div
                       key={song.title}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleSongSelect(song)}
+                      onMouseDown={(e) => {
+                        // Prevent default to stop blur event
+                        e.preventDefault();
+                      }}
+                      onClick={() => {
+                        handleSongSelect(song);
+                      }}
                     >
                       <div className="font-medium">{song.title}</div>
                       <div className="text-sm text-gray-600">{song.album} ({song.year})</div>
                     </div>
                   ))}
                 </div>
+              )}
+              {songQuery !== '' && formData.favoriteSong === '' && songQuery !== formData.favoriteSong && (
+                <p className="mt-1 text-sm text-red-500">
+                  Please select a song from the suggestions or clear the field
+                </p>
+              )}
+              {formData.favoriteSong && formData.favoriteSong === songQuery && (
+                <p className="mt-1 text-sm text-green-600">
+                  ✓ Selected: {formData.favoriteSong}
+                </p>
               )}
             </div>
           </div>
