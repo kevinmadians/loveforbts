@@ -12,6 +12,21 @@ export const MobileThemeToggle: React.FC = () => {
     return null
   }
 
+  // Determine if we should use the white logo based on navbar background darkness
+  const isDarkNavbar = (navbarBg: string): boolean => {
+    // Convert hex to RGB and calculate brightness
+    const hex = navbarBg.replace('#', '')
+    const r = parseInt(hex.substr(0, 2), 16)
+    const g = parseInt(hex.substr(2, 2), 16) 
+    const b = parseInt(hex.substr(4, 2), 16)
+    // Calculate relative luminance
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000
+    return brightness < 128 // Use white logo if brightness is less than 128 (dark background)
+  }
+
+  const shouldUseWhiteLogo = isDarkNavbar(currentTheme.colors.navbarBg)
+  const logoSrc = shouldUseWhiteLogo ? "/images/bts-logo-white.svg" : "/images/bts-logo.svg"
+
   return (
     <>
       <button
@@ -25,14 +40,12 @@ export const MobileThemeToggle: React.FC = () => {
       >
         <div className="relative">
           <img 
-            src="/images/bts-logo.svg" 
+            src={logoSrc}
             alt="BTS" 
             className="w-5 h-5"
-            style={{ filter: 'brightness(0)' }}
-          />
-          <div 
-            className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full border border-current animate-pulse" 
-            style={{ backgroundColor: currentTheme.colors.btsAccent }} 
+            style={{ 
+              filter: shouldUseWhiteLogo ? 'none' : 'brightness(0)'
+            }}
           />
         </div>
       </button>

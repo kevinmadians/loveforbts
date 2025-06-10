@@ -32,16 +32,6 @@ export function DischargeCelebrationCTA() {
     });
   }, [todaysDischargeEvents]);
 
-  // Fixed positions for floating hearts to avoid hydration mismatch
-  const floatingHearts = useMemo(() => [
-    { emoji: '💜', left: '15%', top: '20%', delay: '0s', duration: '2.5s' },
-    { emoji: '🎉', left: '85%', top: '30%', delay: '0.5s', duration: '2.2s' },
-    { emoji: '✨', left: '25%', top: '70%', delay: '1s', duration: '2.8s' },
-    { emoji: '🎊', left: '75%', top: '80%', delay: '1.5s', duration: '2.1s' },
-    { emoji: '💚', left: '45%', top: '15%', delay: '2s', duration: '2.6s' },
-    { emoji: '🥳', left: '65%', top: '60%', delay: '2.5s', duration: '2.3s' }
-  ], []);
-
   // Set client flag
   useEffect(() => {
     setIsClient(true);
@@ -61,20 +51,30 @@ export function DischargeCelebrationCTA() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-4 -left-4 w-24 h-24 bg-green-200 rounded-full opacity-20 animate-pulse"></div>
           <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-200 rounded-full opacity-20 animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-yellow-200 rounded-full opacity-15 animate-bounce delay-500"></div>
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 opacity-30 animate-bounce delay-500">
+            <img 
+              src="/images/bts-logo-purple.png" 
+              alt="BTS Logo" 
+              className="w-full h-full object-contain"
+            />
+          </div>
         </div>
 
         <div className="relative z-10 text-center">
           {/* Celebration Icon */}
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-4 animate-bounce">
-            <Sparkles className="w-8 h-8 text-white" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 animate-bounce">
+            <img 
+              src="/images/bts-logo-purple.png" 
+              alt="BTS Logo" 
+              className="w-15 h-15 object-contain"
+            />
           </div>
 
           {/* Main Headline */}
           <h2 className="text-2xl md:text-3xl font-bold mb-2 black-han-sans text-green-700">
             {isMultipleMembers 
-              ? `🎉 ${dischargedMembers.join(" & ")} Are Home! 🎉`
-              : `🎉 Welcome Home ${dischargedMembers[0]}! 🎉`}
+              ? `${dischargedMembers.join(" & ")} Are Home!`
+              : `Welcome Home ${dischargedMembers[0]}!`}
           </h2>
 
           {/* Subheading */}
@@ -123,24 +123,6 @@ export function DischargeCelebrationCTA() {
               <span>Join thousands of ARMY celebrating</span>
             </div>
           </div>
-        </div>
-
-        {/* Floating Hearts Animation - Fixed positions to avoid hydration mismatch */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {floatingHearts.map((heart, i) => (
-            <div
-              key={i}
-              className="absolute text-2xl animate-pulse"
-              style={{
-                left: heart.left,
-                top: heart.top,
-                animationDelay: heart.delay,
-                animationDuration: heart.duration
-              }}
-            >
-              {heart.emoji}
-            </div>
-          ))}
         </div>
       </div>
     </div>

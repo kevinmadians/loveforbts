@@ -80,10 +80,19 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Beautiful Theme Modal Enhancement
+## Current Task: Mobile Theme Toggle & Homepage Element Updates
 
 ### Task Description
-Created beautiful centered theme selection modal for all devices:
+Updated mobile navbar theme toggle and homepage animated elements:
+1. ✅ Removed blinking circle indicator from mobile theme toggle
+2. ✅ Added smart logo switching for dark themes (white logo for dark backgrounds)
+3. ✅ Enhanced mobile theme toggle with rounded border styling for better visibility
+4. ✅ Replaced bounced yellow circle on homepage with BTS logo (/public/images/bts-logo-purple.png)
+5. ✅ Maintained all existing animations and positioning for the BTS logo element
+6. ✅ Fixed mobile menu text colors - white text for dark themes (Black Swan), black for light themes
+7. ✅ Removed all emojis from DischargeCelebrationCTA component (🎉🥳💚 etc.)
+
+### Previous Completed: Beautiful Theme Modal Enhancement
 1. ✅ Built ThemeModal component with elegant centered popup design
 2. ✅ Enhanced mobile theme toggle with BTS logo icon instead of palette
 3. ✅ Updated desktop theme selector to use modal instead of dropdown
@@ -151,3 +160,10 @@ Created beautiful centered theme selection modal for all devices:
 - Comprehensive CSS animations with optimized performance
 - Cross-theme compatibility with consistent component behavior
 - Enhanced visual effects while maintaining accessibility standards
+
+### Technical Implementation Details
+- **Mobile Menu Color Logic**: Uses existing `isDarkNavbar()` function to detect dark themes
+- **Dynamic Text Classes**: `mobileMenuTextClass` switches between `text-white` and `text-black`
+- **Smart Hover Effects**: Different hover colors for dark vs light themes
+- **Emoji Cleanup**: Removed floating emoji animations and main headline emojis
+- **Double Border Fix**: Removed inner border on mobile theme toggle image

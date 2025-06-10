@@ -44,6 +44,11 @@ export function Navbar() {
   const shouldUseWhiteLogo = isDarkNavbar(currentTheme.colors.navbarBg)
   const logoSrc = shouldUseWhiteLogo ? "/images/bts-logo-white.png" : "/images/bts-logo.png"
   const btsIconSrc = shouldUseWhiteLogo ? "/images/bts-logo-white.svg" : "/images/bts-logo.svg"
+  
+  // Mobile menu text color based on navbar background
+  const mobileMenuTextClass = shouldUseWhiteLogo ? "text-white" : "text-black"
+  const mobileMenuHoverClass = shouldUseWhiteLogo ? "hover:text-gray-300" : "hover:text-purple-900"
+  const mobileMenuHoverBgClass = shouldUseWhiteLogo ? "hover:bg-white/10" : "hover:bg-gray-100"
 
   return (
     <nav className="border-b-2 border-black sticky top-0 z-50" style={{ backgroundColor: 'var(--navbar-bg)' }}>
@@ -135,7 +140,7 @@ export function Navbar() {
                 <div className="px-4 py-2">
                   <button 
                     onClick={() => setBtsExpanded(!btsExpanded)}
-                    className="w-full flex items-center justify-between text-black font-medium mb-1"
+                    className={`w-full flex items-center justify-between ${mobileMenuTextClass} font-medium mb-1`}
                     aria-expanded={btsExpanded}
                     aria-controls="bts-menu"
                   >
@@ -147,7 +152,7 @@ export function Navbar() {
                     </div>
                     <ChevronDown 
                       size={18} 
-                      className={`transition-transform duration-300 ${btsExpanded ? 'rotate-180' : ''}`}
+                      className={`transition-transform duration-300 ${btsExpanded ? 'rotate-180' : ''} ${mobileMenuTextClass}`}
                     />
                   </button>
                   {/* BTS Submenu */}
@@ -158,25 +163,25 @@ export function Navbar() {
                     }`}
                   >
                     {/* Members */}
-                    <Link href="/members" className="flex items-center text-black/90 hover:text-purple-900">
+                    <Link href="/members" className={`flex items-center ${mobileMenuTextClass} ${mobileMenuHoverClass} opacity-90`}>
                       <Users size={16} className="mr-1.5" />
                       <span>Members</span>
                     </Link>
                     
                     {/* Discography */}
-                    <Link href="/discography" className="flex items-center text-black/90 hover:text-purple-900">
+                    <Link href="/discography" className={`flex items-center ${mobileMenuTextClass} ${mobileMenuHoverClass} opacity-90`}>
                       <Disc size={16} className="mr-1.5" />
                       <span>Discography</span>
                     </Link>
 
                     {/* Quotes */}
-                    <Link href="/quotes" className="flex items-center text-black/90 hover:text-purple-900">
+                    <Link href="/quotes" className={`flex items-center ${mobileMenuTextClass} ${mobileMenuHoverClass} opacity-90`}>
                       <Quote size={16} className="mr-1.5" />
                       <span>Quotes</span>
                     </Link>
 
                     {/* History */}
-                    <Link href="/history" className="flex items-center text-black/90 hover:text-purple-900">
+                    <Link href="/history" className={`flex items-center ${mobileMenuTextClass} ${mobileMenuHoverClass} opacity-90`}>
                       <Calendar size={16} className="mr-1.5" />
                       <span>History</span>
                     </Link>
@@ -187,7 +192,7 @@ export function Navbar() {
                 <div className="px-4 py-2">
                   <button 
                     onClick={() => setArmyExpanded(!armyExpanded)} 
-                    className="w-full flex items-center justify-between text-black font-medium mb-1"
+                    className={`w-full flex items-center justify-between ${mobileMenuTextClass} font-medium mb-1`}
                     aria-expanded={armyExpanded}
                     aria-controls="army-menu"
                   >
@@ -199,14 +204,14 @@ export function Navbar() {
                     </div>
                     <ChevronDown 
                       size={18} 
-                      className={`transition-transform duration-300 ${armyExpanded ? 'rotate-180' : ''}`}
+                      className={`transition-transform duration-300 ${armyExpanded ? 'rotate-180' : ''} ${mobileMenuTextClass}`}
                     />
                   </button>
                   {/* ARMY Submenu */}
                   <div id="army-menu" className={`mt-1 pl-4 overflow-hidden transition-all duration-300 ${armyExpanded ? 'max-h-80' : 'max-h-0'}`}>
                     <ul className="space-y-1 py-1">
                       <li>
-                        <Link href="/messages" className={`block px-3 py-2 rounded text-sm ${pathname === "/messages" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/messages" className={`block px-3 py-2 rounded text-sm ${pathname === "/messages" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <MessageSquare size={16} className="mr-2" />
                             Messages
@@ -214,7 +219,7 @@ export function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/army-story" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/army-story") ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/army-story" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/army-story") ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <Heart size={16} className="mr-2" />
                             Story
@@ -222,7 +227,7 @@ export function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/army-card" className={`block px-3 py-2 rounded text-sm ${pathname === "/army-card" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/army-card" className={`block px-3 py-2 rounded text-sm ${pathname === "/army-card" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <IdCard size={16} className="mr-2" />
                             ARMY Card
@@ -230,7 +235,7 @@ export function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/bias-test" className={`block px-3 py-2 rounded text-sm ${pathname === "/bias-test" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/bias-test" className={`block px-3 py-2 rounded text-sm ${pathname === "/bias-test" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <Users size={16} className="mr-2" />
                             Bias Test
@@ -238,7 +243,7 @@ export function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/vocabulary" className={`block px-3 py-2 rounded text-sm ${pathname === "/vocabulary" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/vocabulary" className={`block px-3 py-2 rounded text-sm ${pathname === "/vocabulary" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <BookOpen size={16} className="mr-2" />
                             Vocabulary
@@ -246,7 +251,7 @@ export function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/quiz" className={`block px-3 py-2 rounded text-sm ${pathname === "/quiz" ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/quiz" className={`block px-3 py-2 rounded text-sm ${pathname === "/quiz" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <HelpCircle size={16} className="mr-2" />
                             Quiz
@@ -254,7 +259,7 @@ export function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/games" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/games") ? 'font-medium text-purple-600' : 'hover:bg-gray-100'}`}>
+                        <Link href="/games" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/games") ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                           <span className="flex items-center">
                             <Gamepad2 size={16} className="mr-2" />
                             Games
