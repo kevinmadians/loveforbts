@@ -9,7 +9,7 @@ export default function SupportPage() {
         <h1 className="text-4xl md:text-5xl black-han-sans mb-4">Support Our ARMY Community</h1>
         <div className="flex justify-center mb-6">
           <Image
-            src="/images/your-logo.png"
+            src="/images/bts-logo.png"
             alt="Love for BTS Logo"
             width={100}
             height={100}

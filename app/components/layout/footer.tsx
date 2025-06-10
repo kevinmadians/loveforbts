@@ -16,7 +16,7 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center mb-4">
               <Image 
-                src="/images/your-logo.png" 
+                src="/images/bts-logo.png" 
                 alt="Love for BTS Logo" 
                 width={32} 
                 height={32} 

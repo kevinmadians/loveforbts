@@ -80,71 +80,74 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: Enhanced BTS Military Discharge Countdown Section
+## Current Task: Beautiful Theme Modal Enhancement
 
 ### Task Description
-Enhanced the BTS Military Discharge Countdown section on homepage with:
-1. ✅ Changed "0 days" to "Today is discharge date!" with green styling
-2. ✅ Dynamic color changes when reaching discharge day (green like Jin and J-Hope)
-3. ✅ Made member photos and names clickable to navigate to individual member pages
-4. ✅ Added engaging status information for discharged members
-5. ✅ Enhanced countdown timers with progress indicators and emotive messages
-6. ✅ Improved visual styling and animations
+Created beautiful centered theme selection modal for all devices:
+1. ✅ Built ThemeModal component with elegant centered popup design
+2. ✅ Enhanced mobile theme toggle with BTS logo icon instead of palette
+3. ✅ Updated desktop theme selector to use modal instead of dropdown
+4. ✅ Added beautiful BTS-themed design with logo, gradients, and animations
+5. ✅ Implemented backdrop blur, animations, and smooth interactions
+6. ✅ Added theme preview bars showing gradient colors for each theme
+7. ✅ Enhanced visual feedback with current theme indicators and selection states
+
+### Previous Completed: Mobile Theme Toggle Enhancement
+1. ✅ Created dedicated MobileThemeToggle component
+2. ✅ Moved theme selector from mobile menu to main navbar header
+3. ✅ Positioned theme toggle on left side of hamburger menu
+4. ✅ Created proper icon-based button with theme color indicator
+5. ✅ Maintained theme selector functionality on mobile with better accessibility
+
+### Previous Completed: Theme Enhancements & Love Yourself Answer Addition
+1. ✅ Modified navbar to use white logo for dark themes (like Black Swan)
+2. ✅ Added dynamic logo switching based on navbar background brightness
+3. ✅ Created Love Yourself Answer theme inspired by the gradient artwork
+4. ✅ Implemented comprehensive styling with flowing animations
+5. ✅ Enhanced theme system with smart logo detection
 
 ### Completed Features
 
-#### Dynamic Discharge Status
-- ✅ Smart detection of discharge day with special "Today is discharge date! 🎉" message
-- ✅ Green color styling for discharged members and those discharging today
-- ✅ Animate pulse effect for members discharging today
-- ✅ Progress-based color coding (green >90%, yellow >70%, blue/purple default)
+#### Smart Logo System
+- ✅ Added theme context to navbar component
+- ✅ Implemented brightness detection for navbar backgrounds
+- ✅ Dynamic switching between regular and white BTS logos
+- ✅ Applied to both main logo and BTS dropdown icons
+- ✅ Works for both desktop and mobile menu interfaces
 
-#### Navigation & Interactivity
-- ✅ Clickable member photos and names linking to `/members/{slug}` pages
-- ✅ External link icons to indicate clickable elements
-- ✅ Hover effects with scaling and shadow animations
-- ✅ Smooth color transitions on hover
+#### Love Yourself Answer Theme (New)
+- ✅ Created vibrant gradient theme inspired by LY Answer artwork:
+  - Primary: Vibrant Pink (#E91E63) - left side of gradient
+  - Secondary: Deep Purple (#9C27B0) - center gradient
+  - Accent: Bright Blue (#2196F3) - right side gradient
+  - Background: Pure white to make colors pop
+- ✅ Added flowing animations: gradient-flow, love-pulse, rainbow-wave
+- ✅ Implemented colorful effects and gradient backgrounds
+- ✅ Created dynamic color-shifting animations
 
-#### Enhanced Visual Information
-- ✅ Status badges for discharged members ("✅ Discharged")
-- ✅ Engaging status messages ("🎉 Successfully completed military service")
-- ✅ Progress percentage display alongside progress bars
-- ✅ Emotive countdown messages ("Almost there! 🚀", "Getting closer! 💪")
-- ✅ Calendar icons for discharge dates
-- ✅ Clock icons for service status
+#### CSS Animations & Effects
+- ✅ Gradient flow animations with 200% background sizing
+- ✅ Love pulse and color-shift effects for elements
+- ✅ Rainbow wave animations cycling through theme colors
+- ✅ Flowing motion effects for decorative elements
+- ✅ Enhanced navbar with linear gradient background
 
-#### Improved Styling
-- ✅ Enhanced progress bars with gradient colors based on completion
-- ✅ Special ring styling for members discharging today
-- ✅ Better spacing and typography
-- ✅ Fun instructional message at bottom about clickable elements
+#### Previous Themes Maintained
+- ✅ Spring Day: Gentle pastel aesthetic for renewal and hope
+- ✅ Black Swan: Elegant dark theme with artistic sophistication
+- ✅ Permission to Dance: Festival celebration vibes
+- ✅ Butter: Smooth summery golden aesthetics
 
-#### Calendar Section Enhancements
-- ✅ Changed "Upcoming Events" to celebration titles when discharge day detected
-- ✅ Hidden time display (12:00 AM) on frontend while keeping for Google Calendar
-- ✅ Removed "Add to Calendar" button for events happening today
-- ✅ Special green styling and animations for discharge events
-- ✅ Custom celebration messages for discharge events happening today
-- ✅ Special celebration banner for today's discharge events
-
-#### Homepage Discharge Celebration CTA
-- ✅ Created DischargeCelebrationCTA component that only shows on discharge days
-- ✅ Animated celebration banner with floating hearts and special styling
-- ✅ Direct links to send celebration messages
-- ✅ Dynamic messaging for single vs multiple member discharges
-
-#### Messages Page Discharge Day Enhancement
-- ✅ Special celebration banner when visiting messages page on discharge day
-- ✅ Updated hero text and CTAs for discharge celebration context
-- ✅ Green-themed buttons and styling for discharge days
-- ✅ Custom celebration statistics and messaging
+#### Theme Integration
+- ✅ Added Love Yourself Answer to availableThemes registry
+- ✅ Comprehensive emoji and pattern elements for gradient theme
+- ✅ Enhanced navbar effects with flowing gradient lines
+- ✅ Sophisticated card styling with color-shifting hover effects
 
 ### Technical Implementation
-- Member slug mapping for proper navigation routing
-- Client-side discharge day detection using local timezone
-- Dynamic styling based on service status and progress
-- Accessibility improvements with proper ARIA labels
-- Responsive design maintained across all screen sizes
-- Cross-component discharge day detection system
-- Conditional UI theming for special events
-- Enhanced user engagement through contextual messaging
+- Smart logo detection using brightness calculation (luminance formula)
+- Dynamic theme-aware component rendering
+- Love Yourself Answer: Vibrant gradient aesthetic capturing self-love and acceptance
+- Comprehensive CSS animations with optimized performance
+- Cross-theme compatibility with consistent component behavior
+- Enhanced visual effects while maintaining accessibility standards

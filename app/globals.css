@@ -364,3 +364,455 @@ select {
   transform: translateY(-3px) rotate(1deg);
   box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
 }
+
+/* Spring Day theme */
+.theme-spring-day {
+  /* Add soft pastel effects */
+  position: relative;
+}
+
+.theme-spring-day .pastel-bg {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(168, 200, 236, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 75% 60%, rgba(212, 181, 240, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 85%, rgba(245, 198, 160, 0.04) 0%, transparent 30%);
+}
+
+/* Soft animations for Spring Day */
+@keyframes pastel-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+@keyframes pastel-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(168, 200, 236, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(168, 200, 236, 0.3), 0 0 20px rgba(212, 181, 240, 0.2);
+  }
+}
+
+@keyframes gentle-wave {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.theme-spring-day .pastel-element {
+  animation: pastel-float 5s ease-in-out infinite;
+}
+
+/* Button hover effects for Spring Day */
+.theme-spring-day button:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 4px 16px rgba(168, 200, 236, 0.2);
+  animation: pastel-glow 2.5s ease-in-out infinite;
+}
+
+/* Gradient text effect for Spring Day headers */
+.theme-spring-day .gradient-text {
+  background: linear-gradient(45deg, #A8C8EC, #D4B5F0, #F5C6A0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pastel-float 7s ease-in-out infinite;
+}
+
+/* Soft background pattern */
+.theme-spring-day::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 30% 40%, rgba(168, 200, 236, 0.015) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(212, 181, 240, 0.015) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(245, 198, 160, 0.01) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Enhanced navbar effects for Spring Day */
+.theme-spring-day nav {
+  position: relative;
+}
+
+.theme-spring-day nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #A8C8EC, #D4B5F0, #A8C8EC);
+  background-size: 200% 100%;
+  animation: gentle-wave 5s ease-in-out infinite;
+}
+
+/* Make cards more ethereal */
+.theme-spring-day .card {
+  border: 1px solid rgba(168, 200, 236, 0.2);
+  box-shadow: 0 1px 8px rgba(168, 200, 236, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(3px);
+}
+
+.theme-spring-day .card:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 4px 16px rgba(168, 200, 236, 0.2);
+  border-color: rgba(212, 181, 240, 0.3);
+}
+
+/* Black Swan theme */
+.theme-black-swan {
+  /* Add elegant darkness effects */
+  position: relative;
+}
+
+.theme-black-swan .swan-bg {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(212, 165, 116, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(248, 248, 248, 0.05) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(26, 26, 26, 0.3) 0%, transparent 60%);
+}
+
+/* Elegant animations for Black Swan */
+@keyframes graceful-drift {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes elegant-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.03);
+  }
+}
+
+@keyframes dramatic-fade {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes swan-glide {
+  0% {
+    transform: translateX(-100px) translateY(-20px) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) translateY(20px) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes shadow-dance {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(212, 165, 116, 0.5), 0 0 60px rgba(248, 248, 248, 0.2);
+  }
+}
+
+.theme-black-swan .graceful-element {
+  animation: graceful-drift 6s ease-in-out infinite;
+}
+
+.theme-black-swan .elegant-element {
+  animation: elegant-float 4s ease-in-out infinite;
+}
+
+.theme-black-swan .swan-feather {
+  animation: swan-glide 12s linear infinite;
+}
+
+/* Button hover effects for Black Swan */
+.theme-black-swan button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(212, 165, 116, 0.3);
+  animation: shadow-dance 2s ease-in-out infinite;
+}
+
+.theme-black-swan .dramatic-button {
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.theme-black-swan .dramatic-button:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.4), transparent);
+  animation: dramatic-shimmer 1.2s ease-out;
+}
+
+@keyframes dramatic-shimmer {
+  to {
+    left: 100%;
+  }
+}
+
+/* Gradient text effect for Black Swan headers */
+.theme-black-swan .gradient-text {
+  background: linear-gradient(45deg, #D4A574, #F8F8F8, #D4A574);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: elegant-float 8s ease-in-out infinite;
+}
+
+/* Dark elegant background pattern */
+.theme-black-swan::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(212, 165, 116, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(248, 248, 248, 0.01) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(26, 26, 26, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Enhanced navbar effects for Black Swan */
+.theme-black-swan nav {
+  position: relative;
+  backdrop-filter: blur(15px);
+}
+
+.theme-black-swan nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #D4A574, #F8F8F8, #D4A574);
+  background-size: 200% 100%;
+  animation: dramatic-wave 6s ease-in-out infinite;
+}
+
+@keyframes dramatic-wave {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Make cards more dramatic */
+.theme-black-swan .card {
+  border: 1px solid rgba(212, 165, 116, 0.3);
+  box-shadow: 0 4px 20px rgba(26, 26, 26, 0.4);
+  transition: all 0.4s ease;
+  backdrop-filter: blur(8px);
+}
+
+.theme-black-swan .card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(212, 165, 116, 0.4), 0 0 20px rgba(248, 248, 248, 0.1);
+  border-color: rgba(248, 248, 248, 0.4);
+}
+
+/* Love Yourself Answer theme */
+.theme-love-yourself-answer {
+  /* Add gradient love effects */
+  position: relative;
+}
+
+.theme-love-yourself-answer .gradient-bg {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(233, 30, 99, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(156, 39, 176, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(33, 150, 243, 0.06) 0%, transparent 30%);
+}
+
+/* Flowing animations for Love Yourself Answer */
+@keyframes gradient-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes love-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes color-shift {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(15deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
+@keyframes flowing-motion {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px) translateX(20px) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes rainbow-wave {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
+  }
+  33% {
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.4);
+  }
+  66% {
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.4);
+  }
+}
+
+.theme-love-yourself-answer .gradient-element {
+  animation: gradient-flow 4s ease-in-out infinite;
+}
+
+.theme-love-yourself-answer .love-element {
+  animation: love-pulse 3s ease-in-out infinite;
+}
+
+.theme-love-yourself-answer .flowing-element {
+  animation: flowing-motion 6s linear infinite;
+}
+
+/* Button hover effects for Love Yourself Answer */
+.theme-love-yourself-answer button:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+  animation: rainbow-wave 2s ease-in-out infinite;
+}
+
+.theme-love-yourself-answer .colorful-button {
+  position: relative;
+  transition: all 0.3s ease;
+  background: linear-gradient(45deg, #E91E63, #9C27B0, #2196F3);
+  background-size: 200% 200%;
+  animation: gradient-flow 3s ease-in-out infinite;
+}
+
+.theme-love-yourself-answer .colorful-button:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: colorful-shimmer 1s ease-out;
+}
+
+@keyframes colorful-shimmer {
+  to {
+    left: 100%;
+  }
+}
+
+/* Gradient text effect for Love Yourself Answer headers */
+.theme-love-yourself-answer .gradient-text {
+  background: linear-gradient(45deg, #E91E63, #9C27B0, #2196F3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradient-flow 4s ease-in-out infinite;
+}
+
+/* Colorful background pattern */
+.theme-love-yourself-answer::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(233, 30, 99, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(156, 39, 176, 0.025) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(33, 150, 243, 0.02) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Enhanced navbar effects for Love Yourself Answer */
+.theme-love-yourself-answer nav {
+  position: relative;
+  background: linear-gradient(90deg, #E91E63, #C2185B) !important;
+}
+
+.theme-love-yourself-answer nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #E91E63, #9C27B0, #2196F3);
+  background-size: 200% 100%;
+  animation: gradient-flow 3s ease-in-out infinite;
+}
+
+/* Make cards more colorful */
+.theme-love-yourself-answer .card {
+  border: 1px solid rgba(233, 30, 99, 0.3);
+  box-shadow: 0 2px 15px rgba(233, 30, 99, 0.15);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.theme-love-yourself-answer .card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 25px rgba(233, 30, 99, 0.25), 0 0 15px rgba(156, 39, 176, 0.15);
+  border-color: rgba(156, 39, 176, 0.4);
+  animation: color-shift 2s ease-in-out infinite;
+}

@@ -27,7 +27,7 @@ export function generateOrganizationStructuredData() {
     "@type": "Organization",
     "name": "Love for BTS",
     "url": "https://loveforbts.com",
-    "logo": "https://loveforbts.com/images/your-logo.png",
+    "logo": "https://loveforbts.com/images/bts-logo.png",
     "sameAs": [
       "https://twitter.com/loveforbts",
       "https://instagram.com/loveforbts"
@@ -87,7 +87,7 @@ export function generateStoryStructuredData(story: {
       "name": "Love for BTS",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://loveforbts.com/images/your-logo.png"
+        "url": "https://loveforbts.com/images/bts-logo.png"
       }
     },
     "mainEntityOfPage": {

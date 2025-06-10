@@ -12,12 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { ThemeSelector } from "../theme/theme-selector"
+import { MobileThemeToggle } from "../theme/mobile-theme-toggle"
+import { useTheme } from "@/app/lib/themes/theme-context"
 
 export function Navbar() {
   const pathname = usePathname() || ""
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [btsExpanded, setBtsExpanded] = useState(false)
   const [armyExpanded, setArmyExpanded] = useState(false)
+  const { currentTheme } = useTheme()
   
   // Close mobile menu when pathname changes (user navigates to a different page)
   useEffect(() => {
@@ -25,6 +28,22 @@ export function Navbar() {
     setBtsExpanded(false)
     setArmyExpanded(false)
   }, [pathname])
+
+  // Determine if we should use the white logo based on navbar background darkness
+  const isDarkNavbar = (navbarBg: string): boolean => {
+    // Convert hex to RGB and calculate brightness
+    const hex = navbarBg.replace('#', '')
+    const r = parseInt(hex.substr(0, 2), 16)
+    const g = parseInt(hex.substr(2, 2), 16) 
+    const b = parseInt(hex.substr(4, 2), 16)
+    // Calculate relative luminance
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000
+    return brightness < 128 // Use white logo if brightness is less than 128 (dark background)
+  }
+
+  const shouldUseWhiteLogo = isDarkNavbar(currentTheme.colors.navbarBg)
+  const logoSrc = shouldUseWhiteLogo ? "/images/bts-logo-white.png" : "/images/bts-logo.png"
+  const btsIconSrc = shouldUseWhiteLogo ? "/images/bts-logo-white.svg" : "/images/bts-logo.svg"
 
   return (
     <nav className="border-b-2 border-black sticky top-0 z-50" style={{ backgroundColor: 'var(--navbar-bg)' }}>
@@ -34,7 +53,7 @@ export function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image 
-                src="/images/your-logo.png" 
+                src={logoSrc}
                 alt="Love for BTS Logo" 
                 width={32} 
                 height={32} 
@@ -50,7 +69,7 @@ export function Navbar() {
               {/* BTS Dropdown - Contains Members, Discography, and Quotes */}
               <NavDropdown 
                 label="BTS" 
-                icon={<Image src="/images/bts-logo.svg" alt="BTS Logo" width={22} height={22} />} 
+                icon={<Image src={btsIconSrc} alt="BTS Logo" width={22} height={22} />} 
                 active={pathname.startsWith("/members") || pathname.startsWith("/discography") || pathname.startsWith("/quotes") || pathname.startsWith("/history")}
                 items={[
                   { href: "/members", label: "Members", icon: <Users size={16} /> },
@@ -86,19 +105,25 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Menu Button - Only visible on mobile */}
-          <button 
-            className="md:hidden flex items-center px-3 py-2 border rounded border-black hover:border-purple-900"
-            style={{ color: 'var(--navbar-text)' }}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle mobile menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-4 w-4" />
-            ) : (
-              <Menu className="h-4 w-4" />
-            )}
-          </button>
+          {/* Mobile Theme Toggle and Menu Button */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Mobile Theme Toggle */}
+            <MobileThemeToggle />
+            
+            {/* Mobile Menu Button */}
+            <button 
+              className="flex items-center px-3 py-2 border rounded border-black hover:border-purple-900"
+              style={{ color: 'var(--navbar-text)' }}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-4 w-4" />
+              ) : (
+                <Menu className="h-4 w-4" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu - Overlay style */}
@@ -116,7 +141,7 @@ export function Navbar() {
                   >
                     <div className="flex items-center">
                       <span className="mr-1.5">
-                        <Image src="/images/bts-logo.svg" alt="BTS Logo" width={22} height={22} />
+                        <Image src={btsIconSrc} alt="BTS Logo" width={22} height={22} />
                       </span>
                       <span className="black-han-sans">BTS</span>
                     </div>
@@ -244,14 +269,6 @@ export function Navbar() {
                 <MobileNavLink href="/about" active={pathname === "/about"} icon={<Info size={18} />}>
                   About
                 </MobileNavLink>
-                
-                {/* Theme Selector for Mobile */}
-                <div className="px-4 py-2 border-t border-black mt-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium black-han-sans" style={{ color: 'var(--navbar-text)' }}>Theme</span>
-                    <ThemeSelector />
-                  </div>
-                </div>
               </div>
             </div>
             {/* Overlay backdrop to capture clicks outside the menu */}

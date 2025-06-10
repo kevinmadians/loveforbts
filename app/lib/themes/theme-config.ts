@@ -50,6 +50,165 @@ export interface ThemeConfig {
   }
 }
 
+// Spring Day Theme - Soft pastels, renewal, gentle hope
+export const springDayTheme: ThemeConfig = {
+  id: 'spring-day',
+  name: 'spring-day',
+  displayName: 'Spring Day',
+  description: 'Soft pastels, renewal, gentle hope',
+  album: 'You Never Walk Alone',
+  colors: {
+    // Primary: Soft Pastel Blue
+    primary: '#A8C8EC',
+    primaryForeground: '#2A2A2A',
+    
+    // Secondary: Soft Peach
+    secondary: '#F5C6A0',
+    secondaryForeground: '#2A2A2A',
+    
+    // Background: Pure white
+    background: '#FFFFFF',
+    foreground: '#333333',
+    
+    // Accent: Soft Lavender
+    accent: '#D4B5F0',
+    accentForeground: '#2A2A2A',
+    
+    // UI elements
+    border: '#A8C8EC',
+    input: '#FAFCFE',
+    ring: '#A8C8EC',
+    
+    // Cards: Very light pastels
+    card: '#FAFCFE',
+    cardForeground: '#333333',
+    
+    // Muted: Light pastel grey
+    muted: '#F0F4F8',
+    mutedForeground: '#777777',
+    
+    // BTS specific colors
+    btsAccent: '#A8C8EC',
+    btsSecondary: '#D4B5F0',
+    
+    // Navbar: Soft pastel blue
+    navbarBg: '#A8C8EC',
+    navbarText: '#2A2A2A',
+    navbarHover: '#96BAEA'
+  },
+  elements: {
+    patterns: ['soft-petals', 'light-snow', 'gentle-breeze', 'morning-mist', 'pastel-clouds'],
+    animations: ['gentle-float', 'soft-glow', 'light-drift', 'subtle-bloom', 'calm-wave'],
+    emojis: ['🌸', '☁️', '🕊️', '💙', '🌺', '🦋', '🌊', '✨', '🎨', '💫']
+  }
+}
+
+// Black Swan Theme - Elegant darkness, artistic passion, fear of creative death
+export const blackSwanTheme: ThemeConfig = {
+  id: 'black-swan',
+  name: 'black-swan',
+  displayName: 'Black Swan',
+  description: 'Elegant darkness, artistic passion, fear of creative death',
+  album: 'Map of the Soul: 7',
+  colors: {
+    // Primary: Deep Charcoal Black
+    primary: '#1A1A1A',
+    primaryForeground: '#FFFFFF',
+    
+    // Secondary: Elegant Gold (like ballet decorations)
+    secondary: '#D4A574',
+    secondaryForeground: '#000000',
+    
+    // Background: Almost black with subtle warmth
+    background: '#0F0F0F',
+    foreground: '#E8E8E8',
+    
+    // Accent: Ethereal White (swan feathers)
+    accent: '#F8F8F8',
+    accentForeground: '#1A1A1A',
+    
+    // UI elements
+    border: '#333333',
+    input: '#1F1F1F',
+    ring: '#D4A574',
+    
+    // Cards: Dark grey with subtle gold tint
+    card: '#1F1F1F',
+    cardForeground: '#E8E8E8',
+    
+    // Muted: Dark greys
+    muted: '#2A2A2A',
+    mutedForeground: '#A0A0A0',
+    
+    // BTS specific colors
+    btsAccent: '#D4A574',
+    btsSecondary: '#F8F8F8',
+    
+    // Navbar: Deep black
+    navbarBg: '#1A1A1A',
+    navbarText: '#FFFFFF',
+    navbarHover: '#333333'
+  },
+  elements: {
+    patterns: ['swan-feathers', 'ballet-stage', 'dramatic-shadows', 'golden-lights', 'dark-reflections'],
+    animations: ['graceful-drift', 'elegant-float', 'dramatic-fade', 'swan-glide', 'shadow-dance'],
+    emojis: ['🖤', '🦢', '🎭', '✨', '🌙', '💫', '🎪', '🖋️', '🎨', '🔮']
+  }
+}
+
+// Love Yourself結 Answer Theme - Colorful gradient love, self-acceptance, flowing beauty
+export const loveYourselfAnswerTheme: ThemeConfig = {
+  id: 'love-yourself-answer',
+  name: 'love-yourself-answer',
+  displayName: 'Love Yourself結 Answer',
+  description: 'Colorful gradient love, self-acceptance, flowing beauty',
+  album: 'Love Yourself 結 Answer',
+  colors: {
+    // Primary: Vibrant Pink (left side of gradient)
+    primary: '#E91E63',
+    primaryForeground: '#FFFFFF',
+    
+    // Secondary: Deep Purple (center of gradient)
+    secondary: '#9C27B0',
+    secondaryForeground: '#FFFFFF',
+    
+    // Background: Pure white to let the colors pop
+    background: '#FFFFFF',
+    foreground: '#1A1A1A',
+    
+    // Accent: Bright Blue (right side of gradient)
+    accent: '#2196F3',
+    accentForeground: '#FFFFFF',
+    
+    // UI elements
+    border: '#E91E63',
+    input: '#FFF0F7',
+    ring: '#E91E63',
+    
+    // Cards: Very light pink tint
+    card: '#FEFAFC',
+    cardForeground: '#1A1A1A',
+    
+    // Muted: Soft lavender
+    muted: '#F3E5F5',
+    mutedForeground: '#666666',
+    
+    // BTS specific colors
+    btsAccent: '#E91E63',
+    btsSecondary: '#9C27B0',
+    
+    // Navbar: Gradient effect (primary pink)
+    navbarBg: '#E91E63',
+    navbarText: '#FFFFFF',
+    navbarHover: '#C2185B'
+  },
+  elements: {
+    patterns: ['flowing-lines', 'gradient-waves', 'love-hearts', 'color-streams', 'rainbow-mist'],
+    animations: ['gradient-flow', 'love-pulse', 'color-shift', 'flowing-motion', 'rainbow-wave'],
+    emojis: ['💜', '💖', '🌈', '💫', '✨', '🎨', '🦋', '💕', '🌸', '🔮']
+  }
+}
+
 // Permission to Dance Theme - Festival, celebration, freedom vibes
 export const permissionToDanceTheme: ThemeConfig = {
   id: 'permission-to-dance',
@@ -159,7 +318,10 @@ export const butterTheme: ThemeConfig = {
 // Available themes registry
 export const availableThemes: Record<string, ThemeConfig> = {
   'butter': butterTheme,
-  'permission-to-dance': permissionToDanceTheme
+  'permission-to-dance': permissionToDanceTheme,
+  'spring-day': springDayTheme,
+  'black-swan': blackSwanTheme,
+  'love-yourself-answer': loveYourselfAnswerTheme
 }
 
 // Default theme
