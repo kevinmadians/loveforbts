@@ -1111,7 +1111,13 @@ export function ArmyCardGenerator() {
                       }}
                     >
                       <div className="font-medium">{song.title}</div>
-                      <div className="text-sm text-gray-600">{song.album} ({song.year})</div>
+                      {(song.album || song.year) && (
+                        <div className="text-sm text-gray-600">
+                          {song.album && song.year ? `${song.album} (${song.year})` : 
+                           song.album ? song.album : 
+                           song.year ? `(${song.year})` : ''}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

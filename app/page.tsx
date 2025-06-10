@@ -43,7 +43,7 @@ export default function Home() {
       <CalendarView />
       
       {/* Latest BTS Tweets */}
-      <MultipleTwitterEmbed tweetIds={["1932290930444476674", "1932232770454990855"]} />
+      <MultipleTwitterEmbed tweetIds={["1932290930444476674", "1932232770454990855", "1932259383456694754", "1932288376549634272"]} />
       
       <DischargeDates />
       
