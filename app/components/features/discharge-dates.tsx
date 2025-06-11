@@ -47,6 +47,18 @@ type MemberInfo = {
   slug: string // Add slug for navigation
 }
 
+// Helper function to determine member status based on discharge date
+const getMemberStatus = (dischargeDateString: string): "discharged" | "active" => {
+  const dischargeDate = new Date(dischargeDateString);
+  const today = new Date();
+  
+  // Set both dates to start of day for accurate comparison
+  dischargeDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+  
+  return today >= dischargeDate ? "discharged" : "active";
+}
+
 // BTS Members information with discharge dates
 const btsMembers: MemberInfo[] = [
   {
@@ -54,7 +66,7 @@ const btsMembers: MemberInfo[] = [
     role: "Vocalist",
     dischargeDateString: DISCHARGE_DATES.Jin,
     dischargeDate: new Date(DISCHARGE_DATES.Jin),
-    status: "discharged",
+    status: getMemberStatus(DISCHARGE_DATES.Jin),
     initial: "J",
     image: "/images/members/jin.jpg",
     slug: "jin"
@@ -64,7 +76,7 @@ const btsMembers: MemberInfo[] = [
     role: "Rapper, Dance Leader",
     dischargeDateString: DISCHARGE_DATES.JHope,
     dischargeDate: new Date(DISCHARGE_DATES.JHope),
-    status: "discharged",
+    status: getMemberStatus(DISCHARGE_DATES.JHope),
     initial: "JH",
     image: "/images/members/jhope.jpg",
     slug: "j-hope"
@@ -74,7 +86,7 @@ const btsMembers: MemberInfo[] = [
     role: "Leader, Rapper",
     dischargeDateString: DISCHARGE_DATES.RM, 
     dischargeDate: new Date(DISCHARGE_DATES.RM),
-    status: "active",
+    status: getMemberStatus(DISCHARGE_DATES.RM),
     initial: "RM",
     image: "/images/members/rm.jpg",
     slug: "rm"
@@ -84,7 +96,7 @@ const btsMembers: MemberInfo[] = [
     role: "Rapper",
     dischargeDateString: DISCHARGE_DATES.Suga,
     dischargeDate: new Date(DISCHARGE_DATES.Suga),
-    status: "active",
+    status: getMemberStatus(DISCHARGE_DATES.Suga),
     initial: "S",
     image: "/images/members/suga.jpg",
     slug: "suga"
@@ -94,7 +106,7 @@ const btsMembers: MemberInfo[] = [
     role: "Vocalist, Lead Dancer",
     dischargeDateString: DISCHARGE_DATES.Jimin,
     dischargeDate: new Date(DISCHARGE_DATES.Jimin),
-    status: "active",
+    status: getMemberStatus(DISCHARGE_DATES.Jimin),
     initial: "JM",
     image: "/images/members/jimin.jpg",
     slug: "jimin"
@@ -104,7 +116,7 @@ const btsMembers: MemberInfo[] = [
     role: "Vocalist",
     dischargeDateString: DISCHARGE_DATES.V,
     dischargeDate: new Date(DISCHARGE_DATES.V),
-    status: "active",
+    status: getMemberStatus(DISCHARGE_DATES.V),
     initial: "V",
     image: "/images/members/v.jpg",
     slug: "v"
@@ -114,7 +126,7 @@ const btsMembers: MemberInfo[] = [
     role: "Main Vocalist",
     dischargeDateString: DISCHARGE_DATES.Jungkook,
     dischargeDate: new Date(DISCHARGE_DATES.Jungkook),
-    status: "active",
+    status: getMemberStatus(DISCHARGE_DATES.Jungkook),
     initial: "JK",
     image: "/images/members/jungkook.jpg",
     slug: "jungkook"
@@ -184,6 +196,9 @@ export function DischargeDates() {
         const progress = getLocalProgress(member.dischargeDate)
         const isDischargingToday = isDischargeDay(member)
         
+        // Recalculate status dynamically based on current date
+        const currentStatus = getMemberStatus(member.dischargeDateString)
+        
         // Use consistent formatting for dates - with static dates for SSR
         const formattedDate = isClient
           ? formatDateInLocalFormat(member.dischargeDateString)
@@ -191,6 +206,7 @@ export function DischargeDates() {
         
         return {
           ...member,
+          status: currentStatus, // Use dynamically calculated status
           daysLeft,
           progress,
           formattedDate,
@@ -201,6 +217,7 @@ export function DischargeDates() {
       console.error("Error processing member data:", error);
       return btsMembers.map(member => ({
         ...member,
+        status: getMemberStatus(member.dischargeDateString), // Use dynamic status even on error
         daysLeft: 0,
         progress: 0,
         formattedDate: getFormattedDate(member), // Always use static date on error

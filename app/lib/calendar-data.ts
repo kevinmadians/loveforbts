@@ -292,16 +292,16 @@ export const calendarEvents: CalendarEvent[] = [
     description: "Suga's expected completion of military service"
   },
   {
-    title: "RM's Discharge Date",
+    title: "RM's Military Discharge",
     start: new Date(2025, 5, 10), // June 10, 2025
     category: 'military',
-    description: "RM's expected completion of military service"
+    description: "RM completes military service"
   },
   {
-    title: "V's Discharge Date",
+    title: "V's Military Discharge",
     start: new Date(2025, 5, 10), // June 10, 2025
     category: 'military',
-    description: "V's expected completion of military service"
+    description: "V completes military service"
   },
   {
     title: "Jimin's Discharge Date",

@@ -29,7 +29,9 @@ export async function savePurpleHeartsScore(scoreData: Omit<PurpleHeartsScore, '
       .single()
 
     if (error) {
-      console.error('Error saving score:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving score:', error)
+      }
       throw new Error('Failed to save score. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -51,7 +53,9 @@ export async function getTopPurpleHeartsScores(limit = 10): Promise<PurpleHearts
       .limit(limit)
 
     if (error) {
-      console.error('Error fetching top scores:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching top scores:', error)
+      }
       throw new Error('Failed to fetch leaderboard. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -79,7 +83,9 @@ export async function getRecentPurpleHeartsScores(limit = 10): Promise<PurpleHea
       .limit(limit)
 
     if (error) {
-      console.error('Error fetching recent scores:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching recent scores:', error)
+      }
       throw new Error('Failed to fetch recent scores. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -110,7 +116,9 @@ export async function getPlayerBestPurpleHeartsScore(playerName: string): Promis
       .single()
 
     if (error && error.code !== 'PGRST116') { // PGRST116 is "not found" error
-      console.error('Error fetching player best score:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching player best score:', error)
+      }
       throw new Error('Failed to fetch player score. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -132,7 +140,9 @@ export async function getPlayerRank(score: number): Promise<number> {
       .gt('score', score)
 
     if (error) {
-      console.error('Error getting player rank:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting player rank:', error)
+      }
       return 0
     }
 

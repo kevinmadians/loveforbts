@@ -78,103 +78,6 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - Labels: Bold, black text, slightly larger than input text
 - Textarea: Taller than regular inputs, same styling pattern
 
-# Scratchpad
-
-## Current Task: Bug Fixes & Style Consistency
-
-### Task Description
-Fixed critical bugs and improved style consistency across the application:
-1. ✅ Fixed ARMY Card Generator song search field - selected songs now properly appear in input
-2. ✅ Fixed song selection behavior and input initialization 
-3. ✅ Updated discharge celebration styling on messages page to match homepage CTA
-4. ✅ Removed emojis from messages page discharge banner
-5. ✅ Replaced bouncing objects with BTS purple logo for consistency
-6. ✅ Fixed song suggestion selection issue - songs now properly appear in field when clicked
-
-### Previous Completed: Footer Floating Design & Mobile Auto-Scroll Enhancement
-1. ✅ Converted footer from full-width to floating design matching navbar
-2. ✅ Added centered container with max-width, rounded corners, backdrop blur
-3. ✅ Implemented 80% opacity with theme color preservation
-4. ✅ Enhanced responsive layout (1 col mobile, 2 col small, 3 col large screens)
-5. ✅ Added auto-scroll to card preview on mobile when Generate button is clicked
-6. ✅ Maintained all footer elements visibility and proper spacing
-
-### Technical Implementation Details
-- **Footer Hover Effects**: 
-  - Added smooth color transitions with theme-aware accent colors
-  - Implemented translateX(4px) animation on hover for visual feedback
-  - Added icon scaling effect (scale-110) with group hover classes
-  - Used onMouseEnter/onMouseLeave for precise color control
-- **Photo Change Auto-Scroll**: 
-  - Extended auto-scroll functionality to handleRefreshPhoto function
-  - Added 300ms delay for better user experience timing
-  - Maintains consistent mobile detection (window.innerWidth < 768)
-- **BTS Song Input Restriction**: 
-  - Created handleSongInputChange to validate against real BTS songs
-  - Added onBlur validation to clear invalid inputs automatically
-  - Implemented visual feedback with red border for invalid entries
-  - Added confirmation text for valid song selection
-  - Restricted input to only exact matches from BTS song database
-
-### Previous Completed: Gradient Line Removal & Multi-Tweet Enhancement
-1. ✅ Removed gradient line animations below navbar for all themes
-2. ✅ Created MultipleTwitterEmbed component for compact display
-3. ✅ Added new X post (ID: 1932232770454990855) to homepage
-4. ✅ Combined both tweets in same "Latest from BTS" container
-5. ✅ Implemented responsive grid layout (1 column on mobile, 2 on desktop)
-
-### Previous Completed: Floating Glass Navbar Enhancement
-1. ✅ Converted navbar from full-width to centered floating design
-2. ✅ Added glass transparency effect with backdrop blur
-3. ✅ Implemented 80% opacity with theme color preservation
-4. ✅ Added rounded corners and shadow for floating effect
-5. ✅ Enhanced mobile menu with consistent glass styling
-6. ✅ Improved mobile menu button with subtle glass borders
-7. ✅ Maintained responsive design across all devices
-
-### Previous Completed: Theme Modal Fix & X Post Embed
-1. ✅ Fixed theme modal positioning issue for Black Swan theme on mobile
-2. ✅ Improved modal viewport handling with dvh units for better mobile support
-3. ✅ Increased z-index to prevent overlay conflicts
-4. ✅ Created TwitterEmbed component for BTS official posts
-5. ✅ Added BTS military service completion tweet to homepage
-6. ✅ Positioned X post embed between BTS Calendar and Discharge Dates sections
-
-### Technical Implementation Details
-- **Modal Positioning Fix**: 
-  - Changed z-index from z-[100] to z-[200] to prevent conflicts
-  - Used dvh (dynamic viewport height) units for better mobile support
-  - Improved overflow handling with proper viewport calculations
-  - Added proper centering with margin auto and relative positioning
-- **Twitter Embed**: 
-  - Created reusable TwitterEmbed component with TypeScript support
-  - Dynamically loads Twitter widgets script only when needed
-  - Embedded BTS official tweet about military service completion
-  - Positioned strategically between Calendar and Discharge tracking sections
-
-### Previous Completed: Beautiful Theme Modal Enhancement
-1. ✅ Built ThemeModal component with elegant centered popup design
-2. ✅ Enhanced mobile theme toggle with BTS logo icon instead of palette
-3. ✅ Updated desktop theme selector to use modal instead of dropdown
-4. ✅ Added beautiful BTS-themed design with logo, gradients, and animations
-5. ✅ Implemented backdrop blur, animations, and smooth interactions
-6. ✅ Added theme preview bars showing gradient colors for each theme
-7. ✅ Enhanced visual feedback with current theme indicators and selection states
-
-### Previous Completed: Mobile Theme Toggle Enhancement
-1. ✅ Created dedicated MobileThemeToggle component
-2. ✅ Moved theme selector from mobile menu to main navbar header
-3. ✅ Positioned theme toggle on left side of hamburger menu
-4. ✅ Created proper icon-based button with theme color indicator
-5. ✅ Maintained theme selector functionality on mobile with better accessibility
-
-### Previous Completed: Theme Enhancements & Love Yourself Answer Addition
-1. ✅ Modified navbar to use white logo for dark themes (like Black Swan)
-2. ✅ Added dynamic logo switching based on navbar background brightness
-3. ✅ Created Love Yourself Answer theme inspired by the gradient artwork
-4. ✅ Implemented comprehensive styling with flowing animations
-5. ✅ Enhanced theme system with smart logo detection
-
 ### Completed Features
 
 #### Smart Logo System
@@ -227,3 +130,146 @@ Fixed critical bugs and improved style consistency across the application:
 - **Smart Hover Effects**: Different hover colors for dark vs light themes
 - **Emoji Cleanup**: Removed floating emoji animations and main headline emojis
 - **Double Border Fix**: Removed inner border on mobile theme toggle image
+
+# Scratchpad
+
+## Current Task: SEO Optimization & Games CTA Simplification
+
+User requested to add comprehensive SEO metadata for all games pages and simplify the GamesCTA component to match site style.
+
+### Plan:
+[X] Add comprehensive SEO metadata for main games page (/games)
+[X] Add SEO metadata for BTS Whack-a-Mole game page
+[X] Add SEO metadata for Purple Hearts Collector game page
+[X] Simplify GamesCTA component to match site design
+[X] Remove excessive gradients, animations, and emojis from CTA
+[X] Use consistent white background with black borders styling
+
+### Completed Features:
+
+#### Homepage Games CTA
+- ✅ Created GamesCTA component with BTS styling
+- ✅ Purple hearts, gradients, and floating animation elements
+- ✅ Game preview cards for Hearts Collector and Whack-a-Mole
+- ✅ Engaging "Play Games Now" button with hover effects
+- ✅ Added stats section (High Scores, Mobile Friendly, BTS Themed)
+
+#### Enhanced Games Page Layout
+- ✅ Redesigned header with "ARMY Gaming Zone" title
+- ✅ Added floating decorative elements (Sparkles, Stars, Hearts)
+- ✅ Enhanced game cards with larger size, better gradients
+- ✅ Added gradient overlays and improved typography
+- ✅ Replaced all Gamepad2 icons with appropriate alternatives (Crown, Target, Timer, Award, Sparkles)
+- ✅ Added leaderboard buttons for quick access to rankings
+
+#### Leaderboard Integration
+- ✅ Added leaderboard preview section showing top 3 players
+- ✅ Mock leaderboard data with ARMY-themed usernames
+- ✅ Crown, Trophy, and Award icons for different rankings
+- ✅ Quick access buttons to full leaderboards
+
+#### Coming Soon Section
+- ✅ Enhanced upcoming games preview
+- ✅ Added preview cards for: Memory Match, Lyrics Quiz, Dance Steps, Trivia Battle
+- ✅ Better visual design with gradients and borders
+
+#### Visual Improvements
+- ✅ Removed all joystick/controller emojis as requested
+- ✅ Enhanced typography with better hierarchy
+- ✅ Added hover animations and scale effects
+- ✅ Improved color schemes matching BTS brand
+- ✅ Better spacing and responsive design
+
+### Recent Updates:
+
+#### Fixed Leaderboard Integration
+- ✅ Replaced mock leaderboard data with actual database data
+- ✅ Added real-time fetching from Supabase for both games
+- ✅ Fixed leaderboard button navigation to correct URLs
+- ✅ Added loading states and empty state handling
+
+#### Simplified UI Design
+- ✅ Removed excessive animations, emojis, and decorative elements
+- ✅ Simplified gradient headings to match other pages
+- ✅ Used consistent white background with black borders
+- ✅ Reduced hover effects and kept only subtle shadows
+- ✅ Cleaned up color scheme to be less overwhelming
+
+#### Technical Improvements
+- ✅ Added useEffect and useState for leaderboard data fetching
+- ✅ Integrated getTopPurpleHeartsScores and getTopScores functions
+- ✅ Created dedicated Purple Hearts Collector leaderboard page
+- ✅ Fixed leaderboard navigation URLs for both games
+- ✅ Improved error handling and loading states
+- ✅ Made UI consistent with other pages in the site
+
+### Latest Updates: SEO & CTA Enhancement
+
+#### SEO Optimization
+- ✅ Added comprehensive SEO metadata for main games page with targeted keywords
+- ✅ Optimized for "BTS games", "ARMY games", "free BTS games", "BTS mini games"
+- ✅ BTS Whack-a-Mole: Specific keywords for all 7 members and game mechanics
+- ✅ Purple Hearts Collector: Heart catching game focused keywords
+- ✅ Added OpenGraph and Twitter Card metadata for social sharing
+- ✅ Implemented proper canonical URLs and robot directives
+
+#### GamesCTA Simplification
+- ✅ Removed excessive gradients and background animations
+- ✅ Simplified to clean white background with black borders
+- ✅ Removed floating hearts and decorative elements  
+- ✅ Used consistent BTS brand colors (black bg, yellow text)
+- ✅ Cleaner game preview cards with border styling
+- ✅ Simplified stats section with more relevant info
+
+### Technical Notes:
+- SEO keywords focus on high-volume search terms like "free BTS games", "ARMY games"
+- Included member-specific keywords for Whack-a-Mole game discoverability
+- GamesCTA now matches site-wide design language (white bg, black borders)
+- Maintained functionality while reducing visual clutter
+- Used consistent icon colors matching BTS brand guidelines
+
+## Completed Task: Homepage Container Sequence & ARMY Card Maker CTA
+
+User requested to reorganize the homepage container sequence and create a new BTS ARMY Card Maker Generator CTA.
+
+### Plan:
+[X] Reorganize homepage components according to specified sequence
+[X] Create new ARMYCardMakerCTA component
+[X] Route new CTA to /army-card page
+[X] Match existing site styling (white bg, black borders)
+[X] Keep styling engaging but not excessive
+
+### Completed Features:
+
+#### Homepage Reorganization
+- ✅ Reordered components according to user's sequence:
+  1. BTS Calendar
+  2. BTS Military Discharge Countdown
+  3. Meet the members
+  4. BTS Musical Journey
+  5. Latest from BTS
+  6. BTS Mini Games CTA
+  7. Leave a message for BTS form
+  8. BTS ARMY Card Maker Generator CTA (new)
+  9. Explore ARMY Community
+  10. Countdown CTA
+  11. Support CTA
+- ✅ Removed duplicate ARMYLove component
+- ✅ Added proper section comments for clarity
+
+#### New ARMY Card Maker CTA Component
+- ✅ Created ARMYCardMakerCTA component with consistent styling
+- ✅ Used white background with black borders (2px) and rounded corners
+- ✅ Added engaging features preview (Choose Bias, Add Photo, Customize Design)
+- ✅ Implemented BTS brand colors (black bg, yellow text for button)
+- ✅ Added appropriate icons (CreditCard, Star, Sparkles) from Lucide React
+- ✅ Routes to /army-card page as requested
+- ✅ Maintains site-wide design consistency
+
+### Technical Implementation:
+- Component follows established pattern with white bg, black borders, rounded corners
+- Uses BTS brand colors (#FFDE00 yellow) for button text
+- Includes purple heart emoji for BTS branding
+- Features grid layout for mobile responsiveness
+- Hover effects with subtle transitions
+- Clear call-to-action button with icon

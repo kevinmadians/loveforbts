@@ -28,7 +28,9 @@ export async function saveWhackAMoleScore(scoreData: Omit<WhackAMoleScore, 'id' 
       .single()
 
     if (error) {
-      console.error('Error saving score:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving score:', error)
+      }
       throw new Error('Failed to save score. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -50,7 +52,9 @@ export async function getTopScores(limit = 10): Promise<WhackAMoleScore[]> {
       .limit(limit)
 
     if (error) {
-      console.error('Error fetching top scores:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching top scores:', error)
+      }
       throw new Error('Failed to fetch leaderboard. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -75,7 +79,9 @@ export async function getPlayerBestScore(playerName: string): Promise<WhackAMole
       .single()
 
     if (error && error.code !== 'PGRST116') { // PGRST116 is "not found" error
-      console.error('Error fetching player best score:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching player best score:', error)
+      }
       throw new Error('Failed to fetch player score. Database tables may not exist. Please run the SQL schema first.')
     }
 
@@ -97,7 +103,9 @@ export async function getPlayerRank(score: number): Promise<number> {
       .gt('score', score)
 
     if (error) {
-      console.error('Error getting player rank:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting player rank:', error)
+      }
       return 0
     }
 
@@ -123,7 +131,9 @@ export async function getRecentScores(limit = 5): Promise<WhackAMoleScore[]> {
       .limit(limit)
 
     if (error) {
-      console.error('Error fetching recent scores:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching recent scores:', error)
+      }
       throw new Error('Failed to fetch recent scores. Database tables may not exist. Please run the SQL schema first.')
     }
 

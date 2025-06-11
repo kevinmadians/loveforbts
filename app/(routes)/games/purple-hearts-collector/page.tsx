@@ -1,19 +1,26 @@
 import { PurpleHeartsCollector } from "@/app/components/games/PurpleHeartsCollector"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Trophy } from "lucide-react"
 
 export default function PurpleHeartsCollectorPage() {
   return (
     <div className="container max-w-4xl mx-auto px-4 py-6 md:py-8">
       {/* Header */}
       <div className="mb-6 md:mb-8">
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center gap-4 mb-4">
           <Link 
             href="/games" 
             className="inline-flex items-center bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium px-4 py-2 rounded-full transition-colors border-2 border-purple-300 hover:border-purple-400"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Games
+          </Link>
+          <Link 
+            href="/games/purple-hearts-collector/leaderboard" 
+            className="inline-flex items-center bg-yellow-100 hover:bg-yellow-200 text-yellow-700 font-medium px-4 py-2 rounded-full transition-colors border-2 border-yellow-300 hover:border-yellow-400"
+          >
+            <Trophy className="h-4 w-4 mr-2" />
+            Leaderboard
           </Link>
         </div>
         

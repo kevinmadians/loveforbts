@@ -71,21 +71,21 @@ export function DischargeCelebrationCTA() {
           </div>
 
           {/* Main Headline */}
-          <h2 className="text-2xl md:text-3xl font-bold mb-2 black-han-sans text-green-700">
+          <h2 className="text-2xl md:text-xl font-bold mb-2 black-han-sans text-green-700">
             {isMultipleMembers 
               ? `${dischargedMembers.join(" & ")} Are Home!`
               : `Welcome Home ${dischargedMembers[0]}!`}
           </h2>
 
           {/* Subheading */}
-          <p className="text-lg md:text-xl mb-4 text-green-600 font-medium">
+          <p className="text-lg md:text-l mb-4 text-green-600 font-medium">
             {isMultipleMembers 
               ? "Both members have successfully completed their military service!"
               : "They have successfully completed their military service!"}
           </p>
 
           {/* Description */}
-          <p className="text-base md:text-lg mb-6 text-gray-700 max-w-2xl mx-auto">
+          <p className="text-base md:text-l mb-6 text-gray-700 max-w-2xl mx-auto">
             This is a special day for ARMY! Join fellow fans around the world in celebrating 
             {isMultipleMembers ? " their " : ` ${dischargedMembers[0]}'s `}
             safe return. Send your congratulations and love messages!
