@@ -58,6 +58,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - For date and time displays that need to work across different user timezones, implement client-side timezone handling using the browser's Date API instead of server-side fixed timezones.
 - When working with third-party APIs like Spotify that have rate limits, implement these strategies to prevent 429 errors: 1) Add local caching, 2) Use exponential backoff for retries, 3) Process batch requests sequentially with delays, 4) Add client-side throttling, and 5) Provide clear user feedback during retries.
 - When Supabase operations fail with empty error objects `{}`, it usually means the database tables don't exist yet. Always provide helpful error messages that mention "Database tables may not exist. Please run the SQL schema first." instead of just logging the empty error object.
+- When implementing like/love counters in Supabase, ensure the main table's like_count field is properly updated when likes are added/removed from the likes junction table. Don't just read the existing like_count - calculate the actual count from the likes table and update the main table to keep it synchronized.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries

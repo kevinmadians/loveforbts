@@ -53,8 +53,36 @@ export async function getMessages(): Promise<SupabaseMessage[]> {
       console.error('Error fetching messages:', error)
       return []
     }
+
+    // Ensure each message has correct like_count by calculating it from likes table
+    const messagesWithCorrectCounts = await Promise.all(
+      (data || []).map(async (message) => {
+        // Get actual like count from likes table
+        const { count, error: countError } = await supabase
+          .from('message_likes')
+          .select('*', { count: 'exact', head: true })
+          .eq('message_id', message.message_id)
+        
+        if (countError) {
+          console.error('Error counting likes for message:', countError)
+          return { ...message, like_count: message.like_count || 0 }
+        }
+        
+        const actualLikeCount = count || 0
+        
+        // Update the database if the count is different
+        if (actualLikeCount !== (message.like_count || 0)) {
+          await supabase
+            .from('messages')
+            .update({ like_count: actualLikeCount })
+            .eq('message_id', message.message_id)
+        }
+        
+        return { ...message, like_count: actualLikeCount }
+      })
+    )
     
-    return data || []
+    return messagesWithCorrectCounts
   } catch (error) {
     console.error('Error in getMessages:', error)
     return []
@@ -139,8 +167,36 @@ export async function getArmyStories(page: number = 1, pageSize: number = 10): P
       console.error('Error fetching ARMY stories:', error);
       return { data: [], total: 0 };
     }
+
+    // Ensure each story has correct like_count by calculating it from likes table
+    const storiesWithCorrectCounts = await Promise.all(
+      (data || []).map(async (story) => {
+        // Get actual like count from likes table
+        const { count: likeCount, error: likeCountError } = await supabase
+          .from('story_likes')
+          .select('*', { count: 'exact', head: true })
+          .eq('story_id', story.story_id)
+        
+        if (likeCountError) {
+          console.error('Error counting likes for story:', likeCountError)
+          return { ...story, like_count: story.like_count || 0 }
+        }
+        
+        const actualLikeCount = likeCount || 0
+        
+        // Update the database if the count is different
+        if (actualLikeCount !== (story.like_count || 0)) {
+          await supabase
+            .from('army_stories')
+            .update({ like_count: actualLikeCount })
+            .eq('story_id', story.story_id)
+        }
+        
+        return { ...story, like_count: actualLikeCount }
+      })
+    )
     
-    return { data: data || [], total: count || 0 };
+    return { data: storiesWithCorrectCounts, total: count || 0 };
   } catch (error) {
     console.error('Error in getArmyStories:', error);
     return { data: [], total: 0 };
@@ -163,7 +219,28 @@ export async function getArmyStoryById(storyId: string): Promise<SupabaseArmySto
       return null
     }
     
-    return data
+    // Get actual like count from likes table
+    const { count: likeCount, error: likeCountError } = await supabase
+      .from('story_likes')
+      .select('*', { count: 'exact', head: true })
+      .eq('story_id', storyId)
+    
+    if (likeCountError) {
+      console.error('Error counting likes for story:', likeCountError)
+      return { ...data, like_count: data.like_count || 0 }
+    }
+    
+    const actualLikeCount = likeCount || 0
+    
+    // Update the database if the count is different
+    if (actualLikeCount !== (data.like_count || 0)) {
+      await supabase
+        .from('army_stories')
+        .update({ like_count: actualLikeCount })
+        .eq('story_id', storyId)
+    }
+    
+    return { ...data, like_count: actualLikeCount }
   } catch (error) {
     console.error('Error in getArmyStoryById:', error)
     return null
@@ -345,8 +422,36 @@ export async function getPaginatedMessages(page: number = 1, pageSize: number = 
       console.error('Error fetching paginated messages:', error);
       return { data: [], total: 0 };
     }
+
+    // Ensure each message has correct like_count by calculating it from likes table
+    const messagesWithCorrectCounts = await Promise.all(
+      (data || []).map(async (message) => {
+        // Get actual like count from likes table
+        const { count: likeCount, error: likeCountError } = await supabase
+          .from('message_likes')
+          .select('*', { count: 'exact', head: true })
+          .eq('message_id', message.message_id)
+        
+        if (likeCountError) {
+          console.error('Error counting likes for message:', likeCountError)
+          return { ...message, like_count: message.like_count || 0 }
+        }
+        
+        const actualLikeCount = likeCount || 0
+        
+        // Update the database if the count is different
+        if (actualLikeCount !== (message.like_count || 0)) {
+          await supabase
+            .from('messages')
+            .update({ like_count: actualLikeCount })
+            .eq('message_id', message.message_id)
+        }
+        
+        return { ...message, like_count: actualLikeCount }
+      })
+    )
     
-    return { data: data || [], total: count || 0 };
+    return { data: messagesWithCorrectCounts, total: count || 0 };
   } catch (error) {
     console.error('Error in getPaginatedMessages:', error);
     return { data: [], total: 0 };
@@ -525,7 +630,29 @@ export async function getMessageByMessageId(message_id: string): Promise<Supabas
     if (error) {
       return null;
     }
-    return data;
+    
+    // Get actual like count from likes table
+    const { count: likeCount, error: likeCountError } = await supabase
+      .from('message_likes')
+      .select('*', { count: 'exact', head: true })
+      .eq('message_id', message_id)
+    
+    if (likeCountError) {
+      console.error('Error counting likes for message:', likeCountError)
+      return { ...data, like_count: data.like_count || 0 }
+    }
+    
+    const actualLikeCount = likeCount || 0
+    
+    // Update the database if the count is different
+    if (actualLikeCount !== (data.like_count || 0)) {
+      await supabase
+        .from('messages')
+        .update({ like_count: actualLikeCount })
+        .eq('message_id', message_id)
+    }
+    
+    return { ...data, like_count: actualLikeCount };
   } catch {
     return null;
   }
@@ -618,21 +745,33 @@ export async function likeMessage(messageId: string): Promise<{ success: boolean
       }
     }
     
-    // Get updated like count
-    const { data: messageData, error: messageError } = await supabase
-      .from('messages')
-      .select('like_count')
-      .eq('message_id', messageId)
-      .single();
+    // Calculate updated like count by counting actual likes
+    const { count: likeCount, error: countError } = await supabase
+      .from('message_likes')
+      .select('*', { count: 'exact', head: true })
+      .eq('message_id', messageId);
     
-    if (messageError) {
-      console.error('Error getting message like count:', messageError);
+    if (countError) {
+      console.error('Error counting message likes:', countError);
       return { success: false, likeCount: 0, isLiked: !existingLike };
+    }
+    
+    const actualLikeCount = likeCount || 0;
+    
+    // Update the like_count in the messages table to keep it synchronized
+    const { error: updateError } = await supabase
+      .from('messages')
+      .update({ like_count: actualLikeCount })
+      .eq('message_id', messageId);
+    
+    if (updateError) {
+      console.error('Error updating message like count:', updateError);
+      // Continue anyway, at least return the correct count
     }
     
     const result = {
       success: true,
-      likeCount: messageData.like_count || 0,
+      likeCount: actualLikeCount,
       isLiked: !existingLike
     };
     
@@ -694,21 +833,33 @@ export async function likeStory(storyId: string): Promise<{ success: boolean; li
       }
     }
     
-    // Get updated like count
-    const { data: storyData, error: storyError } = await supabase
-      .from('army_stories')
-      .select('like_count')
-      .eq('story_id', storyId)
-      .single();
+    // Calculate updated like count by counting actual likes
+    const { count: likeCount, error: countError } = await supabase
+      .from('story_likes')
+      .select('*', { count: 'exact', head: true })
+      .eq('story_id', storyId);
     
-    if (storyError) {
-      console.error('Error getting story like count:', storyError);
+    if (countError) {
+      console.error('Error counting story likes:', countError);
       return { success: false, likeCount: 0, isLiked: !existingLike };
+    }
+    
+    const actualLikeCount = likeCount || 0;
+    
+    // Update the like_count in the army_stories table to keep it synchronized
+    const { error: updateError } = await supabase
+      .from('army_stories')
+      .update({ like_count: actualLikeCount })
+      .eq('story_id', storyId);
+    
+    if (updateError) {
+      console.error('Error updating story like count:', updateError);
+      // Continue anyway, at least return the correct count
     }
     
     return {
       success: true,
-      likeCount: storyData.like_count || 0,
+      likeCount: actualLikeCount,
       isLiked: !existingLike
     };
   } catch (error) {
