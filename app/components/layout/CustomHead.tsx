@@ -18,6 +18,7 @@ const pageTitles: Record<string, string> = {
   "/leaderboard": "BTS ARMY Leaderboard - Love for BTS",
   "/leaderboard/purple-hearts-collector": "Purple Hearts Collector Leaderboard - Love for BTS",
   "/leaderboard/bts-whack-a-mole": "BTS Whack-a-Mole Leaderboard - Love for BTS",
+  "/bts-cards-generator": "BTS Quote Cards Generator - Love for BTS",
   "/support": "Support Us - Love for BTS",
   "/quotes": "Daily BTS Quotes - Love for BTS",
   "/history": "BTS History Timeline - Love for BTS",
