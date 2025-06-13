@@ -94,7 +94,7 @@ export function Navbar() {
                 <NavDropdown 
                   label="ARMY" 
                   icon={<Image src="/images/army-bomb.svg" alt="ARMY Bomb" width={22} height={22} />} 
-                  active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary" || pathname === "/quiz" || pathname.startsWith("/games") || pathname === "/bts-cards-generator"}
+                  active={pathname === "/messages" || pathname.startsWith("/army-story") || pathname === "/army-card" || pathname === "/bias-test" || pathname === "/vocabulary" || pathname === "/quiz" || pathname.startsWith("/games") || pathname === "/bts-cards-generator" || pathname === "/bts-playlist"}
                   items={[
                     { href: "/messages", label: "Messages", icon: <MessageSquare size={16} /> },
                     { href: "/army-story", label: "Story", icon: <Heart size={16} /> },
@@ -104,6 +104,7 @@ export function Navbar() {
                     { href: "/vocabulary", label: "Vocabulary", icon: <BookOpen size={16} /> },
                     { href: "/quiz", label: "Quiz", icon: <HelpCircle size={16} /> },
                     { href: "/games", label: "Games", icon: <Gamepad2 size={16} /> },
+                    { href: "/bts-playlist", label: "Playlists", icon: <Music size={16} /> },
                   ]}
                 />
                 
@@ -277,10 +278,18 @@ export function Navbar() {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/games" className={`block px-3 py-2 rounded text-sm ${pathname.startsWith("/games") ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
+                          <Link href="/games" className={`block px-3 py-2 rounded text-sm ${pathname === "/games" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
                             <span className="flex items-center">
                               <Gamepad2 size={16} className="mr-2" />
                               Games
+                            </span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/bts-playlist" className={`block px-3 py-2 rounded text-sm ${pathname === "/bts-playlist" ? 'font-medium text-purple-600' : `${mobileMenuTextClass} ${mobileMenuHoverBgClass}`}`}>
+                            <span className="flex items-center">
+                              <Music size={16} className="mr-2" />
+                              Playlists
                             </span>
                           </Link>
                         </li>

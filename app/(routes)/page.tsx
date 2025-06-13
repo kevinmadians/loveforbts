@@ -6,6 +6,9 @@ import { HomepageCTA } from "@/app/components/features/HomepageCTA"
 import { BTSEras } from "@/app/components/features/BTSEras"
 import { ARMYLove } from "@/app/components/features/ARMYLove"
 import { MembersCTA } from "@/app/components/features/MembersCTA"
+import { GamesCTA } from '@/app/components/features/GamesCTA'
+import PlaylistCTA from '@/app/components/features/playlist-cta'
+import { LeaveMessageForm } from '@/app/components/features/message-form'
 
 export default function Home() {
   return (
@@ -47,6 +50,10 @@ export default function Home() {
         
         {/* CTA Section moved to bottom */}
         <HomepageCTA />
+        
+        <GamesCTA />
+        <PlaylistCTA />
+        <LeaveMessageForm />
       </main>
     </div>
   )

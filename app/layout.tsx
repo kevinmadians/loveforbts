@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { Toaster } from "sonner"
 import { MessageProvider } from "./lib/message-context"
 import { ArmyStoryProvider } from "./lib/army-story-context"
+import { PlaylistProvider } from "./lib/playlist-context"
 import { NotificationProvider } from "./lib/notification-context"
 import { ThemeProvider } from "./lib/themes/theme-context"
 import { Navbar } from "./components/layout/navbar"
@@ -106,28 +107,30 @@ export default function RootLayout({
           <NotificationProvider>
             <ArmyStoryProvider>
               <MessageProvider>
-                <div className="flex flex-col min-h-screen">
-                  <Navbar />
-                  <main className="flex-grow pt-4 md:pt-8 flex justify-center w-full">
-                    {children}
-                  </main>
-                  <Footer />
-                </div>
-                
-                <FanChantButtonWrapper />
-                <CelebrationEffects />
-                
-                <Toaster 
-                  position="bottom-right"
-                  toastOptions={{
-                    style: {
-                      background: 'white',
-                      border: '2px solid black',
-                      borderRadius: '12px',
-                    },
-                    className: 'font-medium',
-                  }}
-                />
+                <PlaylistProvider>
+                  <div className="flex flex-col min-h-screen">
+                    <Navbar />
+                    <main className="flex-grow pt-4 md:pt-8 flex justify-center w-full">
+                      {children}
+                    </main>
+                    <Footer />
+                  </div>
+                  
+                  <FanChantButtonWrapper />
+                  <CelebrationEffects />
+                  
+                  <Toaster 
+                    position="bottom-right"
+                    toastOptions={{
+                      style: {
+                        background: 'white',
+                        border: '2px solid black',
+                        borderRadius: '12px',
+                      },
+                      className: 'font-medium',
+                    }}
+                  />
+                </PlaylistProvider>
               </MessageProvider>
             </ArmyStoryProvider>
           </NotificationProvider>
