@@ -24,8 +24,11 @@ const albumCovers: { [key: string]: string } = {
   "Run": "/images/albums/hyyh-pt2.jpg",
   "Butterfly": "/images/albums/hyyh-pt2.jpg",
   "Fire": "/images/albums/young-forever.jpg",
+  "HANGSANG": "/images/albums/hope-world.jpg",
   "Save Me": "/images/albums/young-forever.jpg",
   "Blood Sweat & Tears": "/images/albums/wings.jpg",
+  "Attack on Bangtan": "/images/albums/orul82.jpg",
+  "Paldogangsan": "/images/albums/orul82.jpg",
   "Spring Day": "/images/albums/you-never-walk-alone.jpg",
   "Not Today": "/images/albums/you-never-walk-alone.jpg",
   "DNA": "/images/albums/love-yourself-her.jpg",
@@ -48,6 +51,7 @@ const albumCovers: { [key: string]: string } = {
   "Friends": "/images/albums/map-of-the-soul-7.jpg",
   "Respect": "/images/albums/map-of-the-soul-7.jpg",
   "Dynamite": "/images/albums/dynamite.jpg",
+  "Magic Shop": "/images/albums/love-yourself-tear.jpg",
   "Life Goes On": "/images/albums/be.jpg",
   "Blue & Grey": "/images/albums/be.jpg",
   "Telepathy": "/images/albums/be.jpg",
@@ -61,9 +65,9 @@ const albumCovers: { [key: string]: string } = {
   "Take Two": "/images/albums/take-two.jpg",
   
   // Solo Works
-  "The Astronaut": "/images/albums/jin-astronaut.jpg",
+  "The Astronaut": "/images/albums/astronaut.jpg",
   "Super Tuna": "/images/albums/jin-super-tuna.jpg",
-  "Awake": "/images/albums/jin-awake.jpg",
+  "Awake": "/images/albums/wings.jpg",
   "Agust D": "/images/albums/suga-agust-d.jpg",
   "Daechwita": "/images/albums/suga-d-2.jpg",
   "That That": "/images/albums/suga-d-2.jpg",
@@ -84,7 +88,7 @@ const albumCovers: { [key: string]: string } = {
   "Moonchild": "/images/albums/rm-mono.jpg",
   "RM": "/images/albums/rm-mixtape.jpg",
   "Do You": "/images/albums/rm-mixtape.jpg",
-  "Like Crazy": "/images/albums/jimin-face.jpg",
+  "Like Crazy": "/images/albums/facebyjimin.jpg",
   "Set Me Free Pt.2": "/images/albums/jimin-face.jpg",
   "Promise": "/images/albums/jimin-promise.jpg",
   "Christmas Love": "/images/albums/jimin-christmas-love.jpg",
@@ -249,7 +253,7 @@ export default function PlaylistDetailPage() {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Playlist Info */}
             <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 black-han-sans">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 black-han-sans">
                 {playlist.name}
               </h1>
               
@@ -277,7 +281,7 @@ export default function PlaylistDetailPage() {
 
             {/* Album Covers Preview */}
             <div className="lg:w-80">
-              <h3 className="text-lg font-bold mb-4">Featured Albums</h3>
+              <h3 className="text-lg font-bold mb-4 black-han-sans">Featured Albums</h3>
               <div className="grid grid-cols-4 gap-2">
                 {songs.slice(0, 8).map((song, index) => (
                   <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
@@ -298,7 +302,7 @@ export default function PlaylistDetailPage() {
         {/* Songs List */}
         <div className="bg-white border-2 border-black rounded-2xl p-6 md:p-8 shadow-lg">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
+            <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3 black-han-sans">
               <Play size={28} className="text-purple-600" />
               Playlist Songs
             </h2>

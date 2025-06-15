@@ -23,6 +23,7 @@ interface PlaylistContextType {
   isLoading: boolean
   createPlaylist: (name: string, description: string, creatorName: string, songs: BTSSong[]) => Promise<boolean>
   refreshPlaylists: (page?: number, pageSize?: number) => Promise<void>
+  searchPlaylists: (query: string, page?: number) => Promise<{ data: Playlist[], total: number }>
   currentPage: number
   setCurrentPage: (page: number) => void
   totalPages: number
@@ -50,6 +51,39 @@ export function PlaylistProvider({ children }: { children: React.ReactNode }) {
   
   // Calculate total pages
   const totalPages = Math.max(1, Math.ceil(totalPlaylists / pageSize))
+
+  // Search playlists by name or creator name
+  const searchPlaylists = async (query: string, page: number = 1): Promise<{ data: Playlist[], total: number }> => {
+    try {
+      const from = (page - 1) * pageSize
+      const to = from + pageSize - 1
+
+      // Search in both name and creator_name fields
+      const { data, error, count } = await supabase
+        .from('playlists')
+        .select('*', { count: 'exact' })
+        .or(`name.ilike.%${query}%, creator_name.ilike.%${query}%`)
+        .order('created_at', { ascending: false })
+        .range(from, to)
+
+      if (error) {
+        throw error
+      }
+
+      return {
+        data: data || [],
+        total: count || 0
+      }
+    } catch (error) {
+      console.error('Error searching playlists:', error)
+      if (typeof error === 'object' && error !== null && Object.keys(error).length === 0) {
+        toast.error('Database tables may not exist. Please run the SQL schema first.')
+      } else {
+        toast.error('Failed to search playlists')
+      }
+      return { data: [], total: 0 }
+    }
+  }
 
   // Fetch all playlists with pagination
   const refreshPlaylists = async (page: number = currentPage, size: number = pageSize) => {
@@ -146,8 +180,6 @@ export function PlaylistProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-
-
   // Load playlists on mount
   useEffect(() => {
     refreshPlaylists()
@@ -159,6 +191,7 @@ export function PlaylistProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     createPlaylist,
     refreshPlaylists,
+    searchPlaylists,
     currentPage,
     setCurrentPage: (page: number) => {
       setCurrentPage(page)

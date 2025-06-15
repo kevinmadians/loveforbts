@@ -1,266 +1,212 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { Music, Heart, MessageCircle, Book, User, Clock, Play, ArrowRight } from 'lucide-react'
+import { Music } from 'lucide-react'
 import { usePlaylist } from '@/app/lib/playlist-context'
 import { CTAContainer } from '@/app/components/ui/cta-container'
 import { PageCTA } from '@/app/components/ui/page-cta'
-import { formatDistanceToNow } from 'date-fns'
-import { BTSSong } from '@/app/data/bts-songs'
 import { PlaylistList } from '@/app/components/features/playlist-list'
-
-// Function to generate a color palette based on song titles
-const generateCoverColors = (songs: BTSSong[]): string[] => {
-  const colorPalettes = [
-    ['#FF6B9D', '#A855F7', '#3B82F6'], // Pink to Purple to Blue
-    ['#F59E0B', '#EF4444', '#EC4899'], // Yellow to Red to Pink
-    ['#10B981', '#3B82F6', '#8B5CF6'], // Green to Blue to Purple
-    ['#F97316', '#DC2626', '#9333EA'], // Orange to Red to Purple
-    ['#06B6D4', '#3B82F6', '#6366F1'], // Cyan to Blue to Indigo
-    ['#84CC16', '#22C55E', '#059669'], // Lime to Green to Emerald
-    ['#EF4444', '#F97316', '#FBBF24'], // Red to Orange to Yellow
-    ['#8B5CF6', '#A855F7', '#EC4899'], // Purple to Violet to Pink
-  ]
-  
-  if (songs.length === 0) return colorPalettes[0]
-  
-  // Use first song title to determine color palette
-  const firstSongCode = songs[0].title.charCodeAt(0)
-  const paletteIndex = firstSongCode % colorPalettes.length
-  return colorPalettes[paletteIndex]
-}
-
-// Album Cover Mosaic Component
-const AlbumCoverMosaic = ({ songs, size = 'medium' }: { songs: BTSSong[], size?: 'small' | 'medium' | 'large' }) => {
-  const colors = generateCoverColors(songs)
-  const displaySongs = songs.slice(0, 4) // Show up to 4 songs in the mosaic
-  
-  const sizeClasses = {
-    small: 'w-24 h-24',
-    medium: 'w-32 h-32',
-    large: 'w-40 h-40'
-  }
-  
-  return (
-    <div className={`relative ${sizeClasses[size]} rounded-xl overflow-hidden shadow-lg flex-shrink-0`}>
-      <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent z-10"></div>
-      <div className="grid grid-cols-2 h-full">
-        {displaySongs.map((song, index) => {
-          const colorIndex = index % colors.length
-          return (
-            <div
-              key={index}
-              className="relative flex items-center justify-center text-white font-bold text-xs p-2"
-              style={{
-                background: `linear-gradient(135deg, ${colors[colorIndex]} 0%, ${colors[(colorIndex + 1) % colors.length]} 100%)`
-              }}
-            >
-              <div className="text-center">
-                <div className="text-xs opacity-80 mb-1">#{index + 1}</div>
-                <div className="line-clamp-2 leading-tight">
-                  {song.title.length > 20 ? song.title.substring(0, 20) + '...' : song.title}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-        {/* Fill empty spaces if less than 4 songs */}
-        {displaySongs.length < 4 && Array.from({ length: 4 - displaySongs.length }).map((_, index) => (
-          <div
-            key={`empty-${index}`}
-            className="bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center"
-          >
-            <Music size={16} className="text-gray-500" />
-          </div>
-        ))}
-      </div>
-      
-      {/* Play button overlay */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <div className="bg-white/90 rounded-full p-2 shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-200">
-          <Play size={16} className="text-black ml-0.5" />
-        </div>
-      </div>
-    </div>
-  )
-}
+import { PlaylistSearch } from '@/app/components/features/playlist-search'
+import { Pagination } from '@/app/components/ui/pagination'
+import { Heart, MessageCircle, Book } from 'lucide-react'
+import { type Playlist } from '@/app/lib/playlist-context'
 
 export default function PlaylistPage() {
-  const { playlists, isLoading, totalPlaylists } = usePlaylist()
-  const [featuredPlaylists, setFeaturedPlaylists] = useState<any[]>([])
+  const { 
+    playlists, 
+    isLoading, 
+    refreshPlaylists,
+    totalPlaylists, 
+    currentPage, 
+    setCurrentPage, 
+    totalPages,
+    searchPlaylists
+  } = usePlaylist()
 
+  const [searchResults, setSearchResults] = useState<{ 
+    data: Playlist[], 
+    total: number
+  } | null>(null)
+  
+  const [searchPage, setSearchPage] = useState(1)
+  const [localLoading, setLocalLoading] = useState(true)
+  
+  // Calculate search total pages
+  const searchTotalPages = searchResults ? 
+    Math.max(1, Math.ceil(searchResults.total / 10)) : 1;
+  
+  // Handle initial loading
   useEffect(() => {
-    // Get featured playlists (first 5)
-    const featured = playlists.slice(0, 5)
-    setFeaturedPlaylists(featured)
-  }, [playlists])
+    // On mount, show local loading state
+    setLocalLoading(true)
+    
+    // If playlists is not empty, we don't need to show loading
+    if (playlists && playlists.length > 0) {
+      setLocalLoading(false)
+      return
+    }
+    
+    // Otherwise, fetch playlists
+    const loadData = async () => {
+      await refreshPlaylists(1)
+      setLocalLoading(false)
+    }
+    
+    loadData()
+  }, [refreshPlaylists, playlists])
+  
+  // Handle search results
+  const handleSearch = useCallback((results: { data: Playlist[], total: number } | null) => {
+    setSearchResults(results)
+    setSearchPage(1) // Reset to first page when new search is performed
+  }, [])
+  
+  // Handle search pagination
+  const handleSearchPageChange = useCallback(async (page: number) => {
+    if (!searchResults) return;
+    
+    setLocalLoading(true);
+    try {
+      // Get the current search query from the input field
+      const searchInput = document.getElementById('playlist-search') as HTMLInputElement;
+      const query = searchInput?.value || '';
+      
+      if (query.trim()) {
+        const results = await searchPlaylists(query, page);
+        setSearchResults(results);
+        setSearchPage(page);
+      }
+    } catch (error) {
+      console.error('Error changing search page:', error);
+    } finally {
+      setLocalLoading(false);
+    }
+  }, [searchResults, searchPlaylists]);
+  
+  // Handle normal pagination
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page)
+  }, [setCurrentPage]);
+  
+  // Display playlists - search results or all playlists
+  const displayPlaylists = searchResults ? searchResults.data : playlists
+  const isSearchMode = searchResults !== null
+  const showLoading = isLoading && localLoading
 
   return (
     <div className="w-full max-w-6xl mx-auto">
-      {/* Hero Section */}
-      <div className="mb-8 md:mb-12 text-center pt-0 mt-0">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 md:mb-6 text-center black-han-sans">
+      {/* Hero Section - Match army-story style */}
+      <div className="mb-6 md:mb-12 text-center pt-0 mt-0">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 md:mb-6 text-center black-han-sans">
           BTS ARMY Playlists
         </h1>
         
-        <p className="text-lg mb-6 md:mb-8 text-center max-w-3xl mx-auto">
+        <p className="text-lg mb-4 md:mb-8 text-center max-w-3xl mx-auto">
           Create and share your favorite BTS playlists with the ARMY community. 
           Discover new songs and connect with fellow fans through music!
         </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link
-            href="/bts-playlist/create"
-            className="inline-flex items-center gap-2 bg-black text-[#FFDE00] py-3 px-6 rounded-lg font-bold text-lg hover:bg-gray-800 transition-colors duration-200"
-          >
-            <Music size={20} />
-            Create Your Playlist
-          </Link>
-        </div>
       </div>
-
-      {/* Featured Playlists Section */}
-      {featuredPlaylists.length > 0 && (
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold">Featured Playlists</h2>
-            <Link
-              href="/bts-playlist/all"
-              className="text-purple-700 hover:text-purple-900 font-medium"
+      
+      {/* Search and Create Section - Match army-story style */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+        <PlaylistSearch onSearch={handleSearch} className="w-full md:max-w-md" />
+        
+        <Link 
+          href="/bts-playlist/create" 
+          className="flex items-center justify-center px-5 py-3 bg-bts-accent text-black border-2 border-black rounded-lg transition-colors hover:bg-navbar-hover black-han-sans mx-auto md:mx-0 min-w-[200px] shadow-md"
+        >
+          <Music size={18} className="mr-2" />
+          <span>Create Your Playlist</span>
+        </Link>
+      </div>
+      
+      {/* Search Results Indicator */}
+      {isSearchMode && (
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <p className="text-lg">
+              {searchResults.data.length === 0 
+                ? "No playlists found" 
+                : `Found ${searchResults.total} playlist${searchResults.total === 1 ? '' : 's'}`}
+            </p>
+            <button 
+              onClick={() => setSearchResults(null)} 
+              className="text-sm font-medium hover:text-purple-700"
             >
-              View All →
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredPlaylists.map((playlist) => {
-              const songs: BTSSong[] = typeof playlist.songs === 'string' ? JSON.parse(playlist.songs) : playlist.songs
-              return (
-                <Link
-                  key={playlist.id}
-                  href={`/bts-playlist/${playlist.id}`}
-                  className="group bg-white border-2 border-black rounded-2xl p-4 hover:shadow-xl transition-all duration-300 hover:border-purple-600 relative overflow-hidden"
-                >
-                  {/* Background gradient effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  <div className="relative z-10">
-                    {/* Album Cover Mosaic */}
-                    <AlbumCoverMosaic songs={songs} />
-                    
-                    {/* Playlist Info */}
-                    <div className="mb-4">
-                      <h3 className="text-xl font-bold mb-3 group-hover:text-purple-600 transition-colors line-clamp-1">
-                        {playlist.name}
-                      </h3>
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <User size={14} />
-                            <span className="font-medium">{playlist.creator_name}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Music size={14} />
-                            <span>{songs.length} songs</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-1 text-xs text-gray-500 mb-3">
-                        <Clock size={12} />
-                        <span>{formatDistanceToNow(new Date(playlist.created_at), { addSuffix: true })}</span>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    {playlist.description && (
-                      <p className="text-gray-700 text-sm mb-4 line-clamp-2 bg-gray-50 p-3 rounded-lg">
-                        {playlist.description}
-                      </p>
-                    )}
-
-                    {/* Songs Preview List */}
-                    <div className="space-y-3">
-                      <h4 className="font-medium text-sm text-gray-700 flex items-center gap-1">
-                        <Play size={14} />
-                        Top Songs
-                      </h4>
-                      <div className="space-y-2">
-                        {songs.slice(0, 3).map((song, index) => (
-                          <div key={index} className="flex items-center gap-3 text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
-                            <span className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                              {index + 1}
-                            </span>
-                            <span className="truncate flex-1 font-medium">{song.title}</span>
-                          </div>
-                        ))}
-                        {songs.length > 3 && (
-                          <div className="text-center">
-                            <span className="inline-block bg-purple-100 text-purple-700 text-xs font-medium px-3 py-1 rounded-full">
-                              +{songs.length - 3} more songs
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* View Details */}
-                    <div className="mt-6 pt-4 border-t border-gray-100">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500 font-medium">Click to view full playlist</span>
-                        <ArrowRight size={16} className="text-purple-600 group-hover:translate-x-2 transition-transform duration-300" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              )
-            })}
+              Clear search
+            </button>
           </div>
         </div>
       )}
-
-      {/* All Playlists Section */}
-      <div className="mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold">All Playlists</h2>
-          <div className="text-sm text-gray-500">
-            {totalPlaylists} {totalPlaylists === 1 ? 'playlist' : 'playlists'}
-          </div>
+      
+      {/* Loading State */}
+      {showLoading && (
+        <div className="text-center py-12">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+          <p className="mt-2">Loading playlists...</p>
         </div>
-
-        {isLoading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading playlists...</p>
-          </div>
-        ) : playlists.length === 0 ? (
-          <div className="text-center py-12 bg-white border-2 border-black rounded-2xl">
-            <Music size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium mb-2">No Playlists Found</h3>
-            <p className="text-gray-600 mb-6">
-              Be the first to create a BTS playlist and share your favorite songs!
-            </p>
-            <Link
-              href="/bts-playlist/create"
-              className="inline-flex items-center gap-2 bg-black text-[#FFDE00] py-3 px-6 rounded-lg font-bold hover:bg-gray-800 transition-colors"
+      )}
+      
+      {/* Empty State */}
+      {!showLoading && displayPlaylists.length === 0 && (
+        <div className="text-center py-12 bg-white rounded-2xl border-2 border-black p-6">
+          <h2 className="text-xl font-bold mb-2 black-han-sans">
+            {isSearchMode ? "No playlists found" : "Be the first to create a playlist!"}
+          </h2>
+          <p className="mb-6 text-gray-600">
+            {isSearchMode 
+              ? "Try different search terms or browse all playlists."
+              : "Share your favorite BTS songs and create the perfect playlist for fellow ARMY."}
+          </p>
+          
+          {!isSearchMode && (
+            <Link 
+              href="/bts-playlist/create" 
+              className="inline-flex items-center px-5 py-3 bg-black text-bts-accent rounded-lg transition-colors hover:bg-purple-900 black-han-sans"
             >
-              <Music size={20} />
-              Create First Playlist
+              <Music size={18} className="mr-2" />
+              <span>Create Your Playlist</span>
             </Link>
-          </div>
-        ) : (
+          )}
+        </div>
+      )}
+      
+      {/* Playlists Grid */}
+      {!showLoading && displayPlaylists.length > 0 && (
+        <>
           <PlaylistList
-            playlists={playlists}
-            onLike={() => {}} // Love button removed
-            onUnlike={() => {}} // Love button removed
+            playlists={displayPlaylists}
+            onLike={() => {}} // Love button functionality removed as requested
+            onUnlike={() => {}}
           />
-        )}
-      </div>
+          
+          {/* Pagination */}
+          <div className="mt-8">
+            {isSearchMode ? (
+              <Pagination
+                currentPage={searchPage}
+                totalPages={searchTotalPages}
+                onPageChange={handleSearchPageChange}
+              />
+            ) : (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+            
+            {/* Playlist Count */}
+            <p className="text-center text-sm text-gray-500 mt-2">
+              Showing {displayPlaylists.length} of {isSearchMode ? searchResults.total : totalPlaylists} playlists
+            </p>
+          </div>
+        </>
+      )}
 
-      {/* Cross-promotion CTAs */}
-      <CTAContainer title="Explore More ARMY Features">
+      {/* Cross-promotion CTAs - Match army-story style */}
+      <CTAContainer title="Explore More" className="mt-16 border-t-2 border-gray-100 pt-12">
         <PageCTA
           title="ARMY Card Maker"
           description="Create beautiful BTS-themed cards with your favorite photos and messages."

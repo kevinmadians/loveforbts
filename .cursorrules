@@ -150,96 +150,50 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 
 # Scratchpad
 
-## Current Task: BTS Playlist SEO Enhancement & Debug Cleanup
+## Current Task: Customize BTS Playlist Page to Match Site Style
 
-### User Request:
-🎯 **SEO Enhancement**: Remove debug information from /bts-playlist page and add comprehensive SEO elements to main playlist page and all user-generated playlist pages
+### User Requirements:
+1. [X] Make header area match /army-story page style (heading and description)
+2. [X] Remove gradient element colors, use theme colors automatically
+3. [X] Make playlist preview containers more compact
+4. [X] Add search function to search by playlist name or user name
+5. [X] Improve overall styling to match all other pages
 
-### SEO Keywords Strategy:
-**Primary Keywords:**
-- BTS Playlist Generator
-- Best BTS Playlist  
-- BTS ARMY Playlist
-- Custom BTS Playlist
+### Completed Changes:
 
-**Secondary Keywords:**
-- K-pop Playlist Creator
-- Bangtan Playlist Generator
-- BTS Song Collection
-- BTS Music Generator
-- BTS Fan Playlist Maker
-- Korean Pop Playlist
-- BTS Hit Songs Playlist
-- BTS Setlist Generator
+1. **Main Page Styling (`/bts-playlist/page.tsx`)**:
+   - ✅ Updated header to match army-story style with standard text sizing
+   - ✅ Removed all gradient colors and replaced with theme colors
+   - ✅ Added search bar integration with create button layout
+   - ✅ Implemented search results display with clear/pagination
+   - ✅ Updated CTA section to match consistent site styling
 
-### Tasks:
-[X] Remove debug information from main /bts-playlist page
-[X] Add SEO metadata to main playlist page (app/(routes)/bts-playlist/metadata.ts)
-[X] Add dynamic SEO metadata to individual playlist pages (app/(routes)/bts-playlist/[id]/metadata.ts)
-[X] Generate structured data for better search engine understanding
-[X] Optimize meta descriptions with relevant keywords
-[X] Remove debug buttons and database testing functionality
-[X] Clean up debug console logs and test connection functions
+2. **Search Functionality**:
+   - ✅ Added `searchPlaylists` function to playlist context
+   - ✅ Created `PlaylistSearch` component matching `StorySearch`
+   - ✅ Implemented live search with debounce and pagination
+   - ✅ Added search by playlist name AND creator name
+   - ✅ Search results indicator with clear functionality
 
-### Files Modified:
-✅ **app/(routes)/bts-playlist/page.tsx**: Removed debug info, test buttons, and console logs
-✅ **app/(routes)/bts-playlist/metadata.ts**: Created comprehensive SEO metadata with keywords
-✅ **app/(routes)/bts-playlist/[id]/page.tsx**: Removed debug functions, added structured data JSON-LD
-✅ **app/(routes)/bts-playlist/[id]/metadata.ts**: Created dynamic SEO metadata generator
+3. **Compact Playlist Cards (`PlaylistList`)**:
+   - ✅ Reduced card size and spacing for more compact layout
+   - ✅ Removed gradients and fancy hover effects
+   - ✅ Used standard rounded corners (`rounded-lg`)
+   - ✅ Simplified color scheme with theme colors
+   - ✅ Made song preview section more compact (3 songs max)
+   - ✅ Simplified action buttons with consistent styling
 
-### SEO Enhancements Completed:
-- **Primary Keywords**: BTS playlist generator, best BTS playlist, BTS ARMY playlist, custom BTS playlist
-- **Secondary Keywords**: K-pop playlist creator, Bangtan playlist generator, BTS song collection, BTS music generator
-- **Long-tail Keywords**: BTS fan playlist maker, Korean pop playlist, BTS hit songs playlist, BTS setlist generator
-- **Structured Data**: JSON-LD for MusicPlaylist schema with proper metadata
-- **Open Graph**: Optimized social media sharing with custom images and descriptions
-- **Twitter Cards**: Enhanced Twitter sharing with large image cards
-- **Dynamic Metadata**: Individual playlist pages with personalized titles and descriptions
-- **Canonical URLs**: Proper canonical links for SEO best practices
+4. **Individual Playlist Pages**:
+   - ✅ Removed gradient text from playlist titles
+   - ✅ Maintained Black Han Sans font consistency
+   - ✅ Clean, simple header styling
 
-### Implementation Completed:
-✅ **playlist-context.tsx**: 
-   - Fixed missing catch block causing syntax error
-   - Improved error handling with proper type checking for empty error objects
-   - Added manual like count calculation and synchronization
-   - Added comprehensive error messages for database table issues
+### Technical Improvements:
+- Consistent theme color usage throughout: `bg-bts-accent`, `text-black`, `border-black`
+- Standard rounded corners (`rounded-lg`) instead of oversized ones
+- Compact, efficient grid layout matching site standards
+- Live search functionality with proper debouncing
+- Simplified hover effects and transitions
+- Proper pagination integration for search results
+- Clean, accessible component design
 
-✅ **playlist detail page**: 
-   - Enhanced error handling for like operations
-   - Added duplicate like checking before insertion
-   - Improved like count synchronization with local state updates
-   - Better error messages and user feedback
-
-✅ **Database Schema**: 
-   - Added missing UPDATE policy for playlists table
-   - Created comprehensive database setup documentation
-   - Ensured proper RLS policies for all operations
-
-✅ **Documentation**: 
-   - Created detailed database setup guide (docs/database-setup.md)
-   - Added troubleshooting section for common errors
-   - Provided clear instructions for both SQL Editor and migration approaches
-
-### Technical Improvements Made:
-- **Robust Error Handling**: Proper checking for empty error objects and null/undefined values
-- **Database Synchronization**: Manual calculation of like counts with automatic table updates
-- **Duplicate Prevention**: Check existing likes before insertion to prevent unique constraint violations
-- **User Experience**: Clear error messages that guide users to resolve database setup issues
-- **Fallback Mechanisms**: Multiple layers of error handling and data sync approaches
-
-### Features Now Working:
-1. ✅ Love button on main playlist page (/bts-playlist)
-2. ✅ Love button on individual playlist pages (/bts-playlist/[id])
-3. ✅ Real-time like count updates and synchronization
-4. ✅ Duplicate like prevention with proper user feedback
-5. ✅ Comprehensive error handling with helpful messages
-6. ✅ Database table setup guidance and troubleshooting
-
-### Database Requirements:
-- ✅ `playlists` table with all required columns and policies
-- ✅ `playlist_likes` junction table with unique constraints
-- ✅ Proper RLS policies including UPDATE permissions
-- ✅ Database triggers for automatic like count updates
-- ✅ Comprehensive setup documentation for users
-
-**Status: COMPLETED AND TESTED** - Love button functionality is now fully implemented with robust error handling, database synchronization, and comprehensive user guidance.
