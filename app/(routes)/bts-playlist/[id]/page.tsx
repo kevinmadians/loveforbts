@@ -163,6 +163,11 @@ export default function PlaylistDetailPage() {
     return albumCovers[songTitle] || '/images/albums/placeholder-album.jpg'
   }
 
+  const getSpotifyLink = (songTitle: string): string => {
+    // For now, use search fallback. Will be updated with direct links later
+    return `https://open.spotify.com/search/${encodeURIComponent(songTitle + ' BTS')}`
+  }
+
   // Add structured data for SEO
   const generateStructuredData = (playlist: Playlist) => {
     const songs = playlist.songs
@@ -241,48 +246,51 @@ export default function PlaylistDetailPage() {
       
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
-        <div className="mb-6">
-          <Link href="/bts-playlist" className="inline-flex items-center text-purple-700 hover:text-purple-900 transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Playlists
+        <div className="mb-8 text-center">
+          <Link 
+            href="/bts-playlist" 
+            className="inline-flex items-center gap-3 bg-white border-2 border-black text-black py-3 px-6 rounded-xl font-bold hover:bg-black hover:text-[#FFDE00] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span className="black-han-sans text-lg">Back to Playlists</span>
           </Link>
         </div>
 
         {/* Playlist Header */}
-        <div className="bg-white border-2 border-black rounded-2xl p-6 md:p-8 mb-8 shadow-lg">
-          <div className="flex flex-col lg:flex-row gap-8">
+        <div className="bg-white border-2 border-black rounded-2xl p-4 sm:p-6 md:p-8 mb-8 shadow-lg">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
             {/* Playlist Info */}
             <div className="flex-1">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 black-han-sans">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 black-han-sans leading-tight">
                 {playlist.name}
               </h1>
               
-              <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-6">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-4 text-gray-600 mb-4 sm:mb-6">
                 <div className="flex items-center gap-2">
                   <User size={16} />
-                  <span className="font-medium">{playlist.creator_name}</span>
+                  <span className="font-medium text-sm sm:text-base">{playlist.creator_name}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock size={16} />
-                  <span>{formatDistanceToNow(new Date(playlist.created_at), { addSuffix: true })}</span>
+                  <span className="text-sm sm:text-base">{formatDistanceToNow(new Date(playlist.created_at), { addSuffix: true })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Music size={16} />
-                  <span>{songs.length} songs</span>
+                  <span className="text-sm sm:text-base">{songs.length} songs</span>
                 </div>
               </div>
 
               {playlist.description && (
-                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4 sm:mb-6">
                   {playlist.description}
                 </p>
               )}
             </div>
 
             {/* Album Covers Preview */}
-            <div className="lg:w-80">
+            <div className="w-full lg:w-80">
               <h3 className="text-lg font-bold mb-4 black-han-sans">Featured Albums</h3>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-2 sm:gap-3 max-w-xs mx-auto lg:max-w-none lg:mx-0">
                 {songs.slice(0, 8).map((song, index) => (
                   <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
                     <Image
@@ -290,7 +298,7 @@ export default function PlaylistDetailPage() {
                       alt={`${song.title} album cover`}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 60px, 80px"
+                      sizes="(max-width: 640px) 70px, (max-width: 1024px) 60px, 80px"
                     />
                   </div>
                 ))}
@@ -300,46 +308,56 @@ export default function PlaylistDetailPage() {
         </div>
 
         {/* Songs List */}
-        <div className="bg-white border-2 border-black rounded-2xl p-6 md:p-8 shadow-lg">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3 black-han-sans">
-              <Play size={28} className="text-purple-600" />
+        <div className="bg-white border-2 border-black rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold flex items-center gap-2 sm:gap-3 black-han-sans">
+              <Play size={24} className="text-purple-600 sm:text-[28px]" />
               Playlist Songs
             </h2>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 sm:text-right">
               {songs.length} {songs.length === 1 ? 'song' : 'songs'}
             </div>
           </div>
           
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             {songs.map((song, index) => (
               <div 
                 key={index}
-                className="group flex items-center gap-4 p-4 border-2 border-gray-100 rounded-xl hover:border-purple-200 hover:bg-purple-50/30 transition-all duration-200"
+                className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 border-2 border-gray-100 rounded-xl hover:border-purple-200 hover:bg-purple-50/30 transition-all duration-200"
               >
                 {/* Track Number */}
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-purple-700">{index + 1}</span>
+                <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                  <span className="text-xs sm:text-sm font-bold text-purple-700">{index + 1}</span>
                 </div>
 
                 {/* Album Cover */}
-                <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 group-hover:scale-105 transition-transform duration-200">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 group-hover:scale-105 transition-transform duration-200">
                   <Image
                     src={getAlbumCover(song.title)}
                     alt={`${song.title} album cover`}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 768px) 56px, 64px"
+                    sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 64px"
                   />
                 </div>
 
                 {/* Song Info */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-lg md:text-xl text-gray-900 truncate group-hover:text-purple-700 transition-colors">
-                    {song.title}
-                  </h3>
+                  <a 
+                    href={getSpotifyLink(song.title)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block group-hover:no-underline"
+                  >
+                    <h3 className="font-bold text-base sm:text-lg md:text-xl text-gray-900 group-hover:text-purple-700 transition-colors hover:underline flex items-center gap-1 sm:gap-2 leading-tight">
+                      <span className="line-clamp-2 sm:line-clamp-1">{song.title}</span>
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 opacity-60 group-hover:opacity-100 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/>
+                      </svg>
+                    </h3>
+                  </a>
                   {song.album && (
-                    <p className="text-gray-600 text-sm md:text-base truncate">
+                    <p className="text-gray-600 text-xs sm:text-sm md:text-base truncate mt-1">
                       {song.album} {song.year && `• ${song.year}`}
                     </p>
                   )}
@@ -347,8 +365,8 @@ export default function PlaylistDetailPage() {
 
                 {/* Play Icon */}
                 <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-                    <Play size={16} className="text-white ml-0.5" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                    <Play size={14} className="text-white ml-0.5 sm:w-4 sm:h-4" />
                   </div>
                 </div>
               </div>
@@ -357,24 +375,25 @@ export default function PlaylistDetailPage() {
         </div>
 
         {/* Playlist Stats */}
-        <div className="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-purple-700">{songs.length}</div>
-              <div className="text-sm text-purple-600">Songs</div>
+        <div className="mt-6 sm:mt-8 bg-white border-2 border-black rounded-2xl p-4 sm:p-6 shadow-lg">
+          <h3 className="text-lg sm:text-xl font-bold mb-4 text-center black-han-sans">Playlist Stats</h3>
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            <div className="text-center bg-gradient-to-br from-purple-50 to-pink-50 p-4 sm:p-6 rounded-xl border-2 border-purple-100">
+              <div className="text-2xl sm:text-3xl font-bold text-purple-700 mb-1">{songs.length}</div>
+              <div className="text-sm sm:text-base text-purple-600 font-medium">Total Songs</div>
             </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-700">
-                {new Set(songs.map(s => s.album).filter(Boolean)).size}
+            <div className="text-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4 sm:p-6 rounded-xl border-2 border-blue-100">
+              <div className="text-2xl sm:text-3xl font-bold text-blue-700 mb-1">
+                {Math.round(songs.length * 3.5)}
               </div>
-              <div className="text-sm text-purple-600">Albums</div>
+              <div className="text-sm sm:text-base text-blue-600 font-medium">Minutes</div>
             </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-700">
-                {Math.round(songs.length * 3.5)}min
-              </div>
-              <div className="text-sm text-purple-600">Est. Duration</div>
-            </div>
+          </div>
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-600">
+              Created by <span className="font-semibold text-black">{playlist.creator_name}</span> • 
+              {' '}{formatDistanceToNow(new Date(playlist.created_at), { addSuffix: true })}
+            </p>
           </div>
         </div>
       </div>

@@ -299,6 +299,161 @@ export const biasCompatibilityQuestions: Question[] = [
         traits: ["playful", "extroverted"]
       }
     ]
+  },
+  {
+    id: "q8",
+    text: "Which type of music resonates with you most?",
+    options: [
+      {
+        id: "q8-a",
+        text: "Complex, thoughtful lyrics with deep meaning",
+        traits: ["intellectual", "passionate"]
+      },
+      {
+        id: "q8-b",
+        text: "Upbeat, energetic songs that make you want to dance",
+        traits: ["playful", "extroverted"]
+      },
+      {
+        id: "q8-c",
+        text: "Emotional ballads that touch your heart",
+        traits: ["caring", "passionate"]
+      },
+      {
+        id: "q8-d",
+        text: "Unique, experimental sounds and artistic expression",
+        traits: ["creative", "introverted"]
+      },
+      {
+        id: "q8-e",
+        text: "Feel-good anthems that inspire positivity",
+        traits: ["optimistic", "disciplined"]
+      }
+    ]
+  },
+  {
+    id: "q9",
+    text: "How do you prefer to express your emotions?",
+    options: [
+      {
+        id: "q9-a",
+        text: "Through deep conversations and thoughtful words",
+        traits: ["intellectual", "caring"]
+      },
+      {
+        id: "q9-b",
+        text: "Through creative outlets like art, music, or writing",
+        traits: ["creative", "passionate"]
+      },
+      {
+        id: "q9-c",
+        text: "By being physically affectionate and supportive",
+        traits: ["caring", "extroverted"]
+      },
+      {
+        id: "q9-d",
+        text: "Through actions and dedication to my goals",
+        traits: ["disciplined", "realistic"]
+      },
+      {
+        id: "q9-e",
+        text: "With humor and playfulness to keep things light",
+        traits: ["playful", "optimistic"]
+      }
+    ]
+  },
+  {
+    id: "q10",
+    text: "What motivates you to work hard?",
+    options: [
+      {
+        id: "q10-a",
+        text: "The desire to learn and grow intellectually",
+        traits: ["intellectual", "disciplined"]
+      },
+      {
+        id: "q10-b",
+        text: "Passion for creating something meaningful",
+        traits: ["creative", "passionate"]
+      },
+      {
+        id: "q10-c",
+        text: "Making a positive impact on others' lives",
+        traits: ["caring", "optimistic"]
+      },
+      {
+        id: "q10-d",
+        text: "Personal satisfaction and achieving excellence",
+        traits: ["disciplined", "realistic"]
+      },
+      {
+        id: "q10-e",
+        text: "The joy of sharing success with others",
+        traits: ["playful", "extroverted"]
+      }
+    ]
+  },
+  {
+    id: "q11",
+    text: "In a group project, what role do you naturally take?",
+    options: [
+      {
+        id: "q11-a",
+        text: "The researcher who gathers information and analyzes data",
+        traits: ["intellectual", "introverted"]
+      },
+      {
+        id: "q11-b",
+        text: "The creative visionary who comes up with innovative ideas",
+        traits: ["creative", "passionate"]
+      },
+      {
+        id: "q11-c",
+        text: "The mediator who keeps everyone motivated and happy",
+        traits: ["caring", "extroverted"]
+      },
+      {
+        id: "q11-d",
+        text: "The organizer who ensures everything gets done on time",
+        traits: ["disciplined", "realistic"]
+      },
+      {
+        id: "q11-e",
+        text: "The energizer who keeps the mood light and fun",
+        traits: ["playful", "optimistic"]
+      }
+    ]
+  },
+  {
+    id: "q12",
+    text: "What's your approach to personal style and self-expression?",
+    options: [
+      {
+        id: "q12-a",
+        text: "Classic and thoughtful - I prefer timeless, meaningful choices",
+        traits: ["intellectual", "realistic"]
+      },
+      {
+        id: "q12-b",
+        text: "Artistic and unique - I love experimenting with creative looks",
+        traits: ["creative", "passionate"]
+      },
+      {
+        id: "q12-c",
+        text: "Warm and approachable - I choose styles that make others comfortable",
+        traits: ["caring", "optimistic"]
+      },
+      {
+        id: "q12-d",
+        text: "Clean and polished - I appreciate well-executed, refined aesthetics",
+        traits: ["disciplined", "introverted"]
+      },
+      {
+        id: "q12-e",
+        text: "Fun and expressive - I like styles that show my playful personality",
+        traits: ["playful", "extroverted"]
+      }
+    ]
   }
 ];
 
@@ -437,9 +592,13 @@ export function findCompatibilityMatch(
   primaryBias: string, 
   userTraits: string[]
 ): { 
-  primaryMatch: MemberCompatibility, 
+  primaryMatch: MemberCompatibility,
   secondaryMatch: MemberCompatibility,
-  traitSummary: string
+  tertiaryMatch: MemberCompatibility,
+  traitSummary: string,
+  compatibilityScore: number,
+  traitBreakdown: Record<string, number>,
+  allScores: Array<{member: MemberCompatibility, score: number, percentage: number}>
 } {
   // Get the user's primary bias member profile
   const primaryMember = memberCompatibilityProfiles.find(member => member.slug === primaryBias);
@@ -452,7 +611,7 @@ export function findCompatibilityMatch(
   const compatibilityScores = memberCompatibilityProfiles
     .filter(member => member.slug !== primaryBias)
     .map(member => {
-      // Calculate how many of the user's traits match this member's traits
+      // Count exact trait matches
       const primaryTraitMatches = member.primaryTraits.filter(trait => 
         userTraits.includes(trait)
       ).length;
@@ -461,19 +620,100 @@ export function findCompatibilityMatch(
         userTraits.includes(trait)
       ).length;
       
-      // Primary traits are weighted higher
-      const score = (primaryTraitMatches * 2) + secondaryTraitMatches;
+      // Calculate total traits for this member
+      const totalMemberTraits = member.primaryTraits.length + member.secondaryTraits.length;
+      const totalUserTraits = userTraits.length;
+      
+      // Weight primary traits more heavily
+      const weightedMatches = (primaryTraitMatches * 2) + secondaryTraitMatches;
+      const maxPossibleWeighted = (member.primaryTraits.length * 2) + member.secondaryTraits.length;
+      
+      // Calculate base compatibility
+      let baseCompatibility = 0;
+      if (maxPossibleWeighted > 0) {
+        baseCompatibility = (weightedMatches / maxPossibleWeighted) * 100;
+      }
+      
+      // Add member-specific personality factor (based on their unique characteristics)
+      let personalityBonus = 0;
+      
+      // Give different members different base compatibility ranges
+      switch (member.slug) {
+        case 'rm':
+          personalityBonus = userTraits.includes('intellectual') ? 15 : userTraits.includes('creative') ? 10 : 0;
+          break;
+        case 'jin':
+          personalityBonus = userTraits.includes('caring') ? 15 : userTraits.includes('playful') ? 12 : 0;
+          break;
+        case 'suga':
+          personalityBonus = userTraits.includes('realistic') ? 15 : userTraits.includes('introverted') ? 10 : 0;
+          break;
+        case 'j-hope':
+          personalityBonus = userTraits.includes('optimistic') ? 15 : userTraits.includes('disciplined') ? 12 : 0;
+          break;
+        case 'jimin':
+          personalityBonus = userTraits.includes('passionate') ? 15 : userTraits.includes('caring') ? 12 : 0;
+          break;
+        case 'v':
+          personalityBonus = userTraits.includes('creative') ? 15 : userTraits.includes('playful') ? 10 : 0;
+          break;
+        case 'jungkook':
+          personalityBonus = userTraits.includes('disciplined') ? 15 : userTraits.includes('passionate') ? 10 : 0;
+          break;
+      }
+      
+      // Calculate final percentage with realistic distribution
+      let finalPercentage = Math.round(baseCompatibility + personalityBonus);
+      
+      // Ensure realistic ranges with variance for each member
+      const memberVariance = {
+        'rm': Math.floor(Math.random() * 15) + 5, // 5-20 variance
+        'jin': Math.floor(Math.random() * 12) + 3, // 3-15 variance  
+        'suga': Math.floor(Math.random() * 18) + 2, // 2-20 variance
+        'j-hope': Math.floor(Math.random() * 14) + 4, // 4-18 variance
+        'jimin': Math.floor(Math.random() * 16) + 3, // 3-19 variance
+        'v': Math.floor(Math.random() * 13) + 6, // 6-19 variance
+        'jungkook': Math.floor(Math.random() * 17) + 4 // 4-21 variance
+      }[member.slug] || 10;
+      
+      // Apply member-specific variance
+      finalPercentage += memberVariance;
+      
+      // Ensure realistic bounds (30-92% to avoid extremes)
+      finalPercentage = Math.max(30, Math.min(92, finalPercentage));
+      
+      // Ensure no ties by adding small member-specific adjustments
+      const tieBreaker = {
+        'rm': 2,
+        'jin': -1, 
+        'suga': 3,
+        'j-hope': 1,
+        'jimin': -2,
+        'v': 0,
+        'jungkook': 1
+      }[member.slug] || 0;
+      
+      finalPercentage += tieBreaker;
+      finalPercentage = Math.max(25, Math.min(95, finalPercentage));
       
       return {
         member,
-        score
+        score: weightedMatches,
+        percentage: finalPercentage
       };
     })
-    .sort((a, b) => b.score - a.score);
+    .sort((a, b) => {
+      // Sort by percentage, then by score as tiebreaker
+      if (b.percentage !== a.percentage) {
+        return b.percentage - a.percentage;
+      }
+      return b.score - a.score;
+    });
   
-  // Get primary and secondary matches
+  // Get primary, secondary, and tertiary matches
   const primaryMatch = compatibilityScores[0]?.member || memberCompatibilityProfiles[0];
   const secondaryMatch = compatibilityScores[1]?.member || memberCompatibilityProfiles[1];
+  const tertiaryMatch = compatibilityScores[2]?.member || memberCompatibilityProfiles[2];
   
   // Get the most common traits for the user
   const traitCounts: Record<string, number> = {};
@@ -481,18 +721,32 @@ export function findCompatibilityMatch(
     traitCounts[trait] = (traitCounts[trait] || 0) + 1;
   });
   
-  // Sort traits by frequency
+  // Sort traits by frequency and get personality trait names
   const sortedTraits = Object.entries(traitCounts)
     .sort((a, b) => b[1] - a[1])
-    .map(([traitId]) => personalityTraits.find(t => t.id === traitId)?.trait || "");
+    .map(([traitId]) => personalityTraits.find(t => t.id === traitId)?.trait || "")
+    .filter(trait => trait !== "");
   
-  // Generate trait summary
-  const topTraits = sortedTraits.slice(0, 3);
-  const traitSummary = `You tend to be ${topTraits.join(", ").toLowerCase()} in your approach to life, which aligns well with ${primaryMatch.name}'s personality.`;
+  // Generate more realistic trait summary
+  const topTraits = sortedTraits.slice(0, 2);
+  const compatibilityScore = compatibilityScores[0]?.percentage || 0;
+  
+  let traitSummary = "";
+  if (topTraits.length >= 2) {
+    traitSummary = `Your ${topTraits[0].toLowerCase()} and ${topTraits[1].toLowerCase()} nature shows ${compatibilityScore}% compatibility with ${primaryMatch.name}'s personality.`;
+  } else if (topTraits.length === 1) {
+    traitSummary = `Your ${topTraits[0].toLowerCase()} personality aligns well with ${primaryMatch.name}, showing ${compatibilityScore}% compatibility.`;
+  } else {
+    traitSummary = `Your unique personality traits create a ${compatibilityScore}% compatibility match with ${primaryMatch.name}.`;
+  }
   
   return {
     primaryMatch,
     secondaryMatch,
-    traitSummary
+    tertiaryMatch,
+    traitSummary,
+    compatibilityScore,
+    traitBreakdown: traitCounts,
+    allScores: compatibilityScores
   };
 } 

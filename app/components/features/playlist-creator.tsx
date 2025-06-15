@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Music, Search, X, Plus, Heart, User, FileText } from 'lucide-react'
 import { toast } from 'sonner'
-import { BTSSong, btsSongs, searchBTSSongs } from '@/app/data/bts-songs'
+import { BTSSong, btsArraySongs, searchBTSSongs } from '@/app/data/bts-songs'
 import { usePlaylist } from '@/app/lib/playlist-context'
 import Image from 'next/image'
 

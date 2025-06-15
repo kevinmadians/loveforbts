@@ -61,6 +61,7 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - When implementing like/love counters in Supabase, ensure the main table's like_count field is properly updated when likes are added/removed from the likes junction table. Don't just read the existing like_count - calculate the actual count from the likes table and update the main table to keep it synchronized.
 - For generating visual album covers from text data, use deterministic color palette selection based on song title character codes to ensure consistent colors across sessions while providing variety between different playlists.
 - **BTS Playlist Love Button Fix**: When implementing playlist like functionality, always include proper error handling for empty error objects, duplicate like prevention, and manual like count synchronization as a fallback to triggers. Use try-catch blocks with specific error type checking and provide helpful user feedback.
+- **BTS Bias Test Scoring Fix**: When implementing compatibility scoring systems, avoid using pure random variance that applies the same logic to all items. Instead, use member-specific personality bonuses, different variance ranges per member, and tie-breaker adjustments to ensure realistic, varied results. Never let all items receive the same score.
 
 ## Cursor learned
 - Handle UTF-8 encoding properly for international search queries
@@ -149,51 +150,4 @@ venv/bin/python3 ./tools/search_engine.py "your search keywords"
 - **Mobile Responsive**: Optimized for all screen sizes and devices
 
 # Scratchpad
-
-## Current Task: Customize BTS Playlist Page to Match Site Style
-
-### User Requirements:
-1. [X] Make header area match /army-story page style (heading and description)
-2. [X] Remove gradient element colors, use theme colors automatically
-3. [X] Make playlist preview containers more compact
-4. [X] Add search function to search by playlist name or user name
-5. [X] Improve overall styling to match all other pages
-
-### Completed Changes:
-
-1. **Main Page Styling (`/bts-playlist/page.tsx`)**:
-   - ✅ Updated header to match army-story style with standard text sizing
-   - ✅ Removed all gradient colors and replaced with theme colors
-   - ✅ Added search bar integration with create button layout
-   - ✅ Implemented search results display with clear/pagination
-   - ✅ Updated CTA section to match consistent site styling
-
-2. **Search Functionality**:
-   - ✅ Added `searchPlaylists` function to playlist context
-   - ✅ Created `PlaylistSearch` component matching `StorySearch`
-   - ✅ Implemented live search with debounce and pagination
-   - ✅ Added search by playlist name AND creator name
-   - ✅ Search results indicator with clear functionality
-
-3. **Compact Playlist Cards (`PlaylistList`)**:
-   - ✅ Reduced card size and spacing for more compact layout
-   - ✅ Removed gradients and fancy hover effects
-   - ✅ Used standard rounded corners (`rounded-lg`)
-   - ✅ Simplified color scheme with theme colors
-   - ✅ Made song preview section more compact (3 songs max)
-   - ✅ Simplified action buttons with consistent styling
-
-4. **Individual Playlist Pages**:
-   - ✅ Removed gradient text from playlist titles
-   - ✅ Maintained Black Han Sans font consistency
-   - ✅ Clean, simple header styling
-
-### Technical Improvements:
-- Consistent theme color usage throughout: `bg-bts-accent`, `text-black`, `border-black`
-- Standard rounded corners (`rounded-lg`) instead of oversized ones
-- Compact, efficient grid layout matching site standards
-- Live search functionality with proper debouncing
-- Simplified hover effects and transitions
-- Proper pagination integration for search results
-- Clean, accessible component design
 
